@@ -1,0 +1,57 @@
+{
+  "name": "#projectName#",
+  "version": "1.0.0",
+  "description": "#projectName#项目描述",
+  "author": "yourName",
+  "license": "MIT",
+  "scripts": {
+    "dev": "akfun dev",
+    "build": "akfun build",
+    "build2lib": "akfun build2lib",
+    "lint": "eslint --ext .js,.vue src",
+    "lintFix": "eslint --ext .js,.vue src --fix",
+    "format": "prettier --write \"src/**/**/*.{js,vue,tsx,ts,scss,json}\""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "src/**/**/*.{js,vue,tsx,ts,scss,json}": [
+      "eslint --ext --fix"
+    ],
+    "src/**/**/*.{js,vue,tsx,ts,scss,json}": [
+      "prettier --write"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+http://git@github.com:yourGithub/#projectName#.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourGithub/#projectName#/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "akfun": "^1.0.1",
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^9.1.1",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.9",
+    "prettier": "^2.0.5"
+  },
+  "engines": {
+    "node": ">= 10.13.0",
+    "npm": ">= 6.4.1"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8",
+    "iOS >= 8",
+    "Firefox >= 20",
+    "Android > 4.4"
+  ]
+}

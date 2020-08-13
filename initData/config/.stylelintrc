@@ -1,0 +1,26 @@
+{
+    "defaultSeverity": "warning",
+	  "processors": ["@mapbox/stylelint-processor-arbitrary-tags"],
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "string-quotes": "single",
+      "no-empty-source": null,
+      "at-rule-no-unknown": null,
+      "property-no-unknown": [
+        true,
+        {
+          "ignoreProperties": [
+            "composes"
+          ]
+        }
+      ],
+      "selector-pseudo-class-no-unknown": [
+        true,
+        {
+          "ignorePseudoClasses": [
+            "global"
+          ]
+        }
+      ]
+    }
+}
