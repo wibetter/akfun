@@ -8,7 +8,7 @@
 - 📤 支持单页面和多页面
 - 💪 提供三种构建场景: 本地开发调试模式(包含热更新、接口代理等功能)、构建生产环境代码、library库的构建(统一以UMD进行输出)
 - ❤️ 开放配置能力: 可配置构建入口文件、是否开启ESLint代码规范检测、resolve和externals配置、接口代理配置等
-- 👍 支持 [Sass](https://sass-lang.com/)、[params-replace-loader](https://www.npmjs.com/package/params-replace-loader)、[ESLint](http://eslint.cn/)、[StyleLint](https://github.com/stylelint)
+- 👍 支持 [Sass](https://sass-lang.com/)、[ESLint](http://eslint.cn/)、[StyleLint](https://github.com/stylelint)、[params-replace-loader](https://www.npmjs.com/package/params-replace-loader)
 - 😀 提供完整的Vue和React项目模板
 
 ## 快速开始 / 使用方法一
@@ -219,7 +219,15 @@ module.exports = {
 module.exports = {
   ...
   envParams: {
-    sassResources: '',
+    common: { // 通用参数
+      '#version#': '20200810.1',
+    },
+    local: { // 本地开发环境
+      '#dataApiBase#': 'http://localhost:1024', // 数据接口根地址
+      '#assetsPublicPath#': 'http://localhost:1024', // 静态资源根地址
+      '#routeBasePath#': '/', // 路由根地址
+    },
+  }
   ...
 }
 ```
@@ -232,6 +240,7 @@ module.exports = {
   dev: {
     proxyTable: {
     },
+  }
   ...
 }
 ```
