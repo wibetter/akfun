@@ -34,15 +34,20 @@ let argv = yargs
           describe: '项目类型（vue技术栈/react技术栈，默认react技术栈）',
           default: 'react',
         })
-        .option('projectName', {
+        .option('dir', {
+          alias: 'd',
+          describe: '项目路径',
+          default: './',
+        })
+        .option('name', {
           alias: 'n',
           describe: '项目名称',
-          default: 'testProject',
+          default: 'myProject',
         })
         .alias('h', 'help');
     },
     (argv) => {
-      akfunInit(argv.type, argv.projectName);
+      akfunInit(argv.type, argv.dir, argv.name);
     },
   )
   .command(

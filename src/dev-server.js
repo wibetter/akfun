@@ -104,7 +104,7 @@ module.exports = function () {
   const portfinder = require('portfinder');
   portfinder.basePort = port;
 
-  console.log('> Starting dev server...');
+  console.log('\n> Starting dev server...');
 
   devMiddleware.waitUntilValid(() => {
     portfinder.getPort((err, port) => {

@@ -17,15 +17,15 @@
 $ npm i -g akfun
 ```
 
-- **2、初始化项目(需要先创建一个新目录，用于存放新项目)**
+- **2、初始化项目**
 
 ```bash
 $ akfun init -t=vue
 
-#可选择初始化的项目类型：vue或者react，默认react类型的项目
+#可选择初始化的项目类型：vue或者react，默认react类型的项目，也可通过--dir参数指定存放项目模板的目录
 ```
 
-- **3、使用：以全局命令方式构建项目**
+- **3、使用：以全局命令方式构建项目（确保已yarn install或者npm install）**
 
 ```bash
 # 1、开启本地调试模式
@@ -56,11 +56,11 @@ $ npm i akfun --save-dev
 ```bash
 # 打开package.json，在scripts新增三条可执行命令
 # 用于开启本地调试模式
-$ "dev": "akfun dev"
+"dev": "akfun dev"
 # 用于构建生产环境代码
-$ "build": "akfun build"
+"build": "akfun build"
 # 用于构建第三方功能包
-$ "build2lib": "akfun build2lib"
+"build2lib": "akfun build2lib"
 ```
 
 - **2.3、构建项目**
