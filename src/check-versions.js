@@ -1,6 +1,6 @@
-const chalk = require('chalk');
-const semver = require('semver');
-const shell = require('shelljs');
+const chalk = require('chalk'); // 带样式的log输出
+const semver = require('semver'); // 版本号检测
+const shell = require('shelljs'); // 命令执行
 const packageConfig = require('../package.json');
 
 function exec(cmd) {

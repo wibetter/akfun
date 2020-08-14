@@ -1,9 +1,9 @@
 /**
  * 命令式参数识别
  */
-const figlet = require('figlet');
+const figlet = require('figlet'); // 用于输出图形文字
 const yargs = require('yargs'); // 命令行工具
-const chalk = require('chalk'); // 样式
+const chalk = require('chalk'); // 带样式的log输出
 
 // 引入本地脚本模块
 const akfunInit = require('./akfunInit.js');
