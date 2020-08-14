@@ -20,7 +20,7 @@ Object.keys(baseWebpackConfig.entry).forEach((name) => {
 });
 
 module.exports = merge(baseWebpackConfig, {
-  mode: 'development', // development模式，会启动NamedChunksPlugin、NamedModulesPlugin服务
+  mode: config.dev.NODE_ENV, // development模式，会启动NamedChunksPlugin、NamedModulesPlugin服务
   output: {
     globalObject: "window",
     publicPath: config.dev.assetsPublicPath, // 引用地址：配置发布到线上资源的URL前缀

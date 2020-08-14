@@ -31,10 +31,6 @@ module.exports = function () {
   // automatically open browser, if not set will be false
   // 是否自动打开浏览器
   const autoOpenBrowser = !!config.dev.autoOpenBrowser;
-  // Define HTTP proxies to your custom API backend
-  // https://github.com/chimurai/http-proxy-middleware
-  // 使用 config.dev.proxyTable 的配置作为 proxyTable 的代理配置
-  const proxyTable = config.dev.proxyTable;
 
   // 使用 express 启动一个服务
   const app = express();
@@ -65,15 +61,21 @@ module.exports = function () {
   // compilation error display
   app.use(hotMiddleware);
 
-  // 将 proxyTable 中的请求配置挂在到启动的 express 服务上
-  // proxy api requests
-  Object.keys(proxyTable).forEach((context) => {
-    let options = proxyTable[context];
-    if (typeof options === 'string') {
-      options = { target: options };
-    }
-    app.use(context, createProxyMiddleware(options));
-  });
+  // Define HTTP proxies to your custom API backend
+  // https://github.com/chimurai/http-proxy-middleware
+  // 使用 config.dev.proxyTable 的配置作为 proxyTable 的代理配置
+  const proxyTable = config.dev.proxyTable;
+  if (proxyTable && JSON.stringify(proxyTable) !== '{}') {
+    // 将 proxyTable 中的请求配置挂在到启动的 express 服务上
+    // proxy api requests
+    Object.keys(proxyTable).forEach((context) => {
+      let options = proxyTable[context];
+      if (typeof options === 'string') {
+        options = { target: options };
+      }
+      app.use(context, createProxyMiddleware(options));
+    });
+  }
 
   // 使用 connect-history-api-fallback 匹配资源，如果不匹配就可以重定向到指定地址
   // handle fallback for HTML5 history API

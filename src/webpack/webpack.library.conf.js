@@ -14,7 +14,7 @@ const config = require('../config/index');
 const baseWebpackConfig = require('./webpack.base.conf');
 
 const webpackConfig = merge(baseWebpackConfig, {
-  mode: config.build2lib.productionSourceMap ? 'development' : 'production', // production 模式，会启动UglifyJsPlugin服务
+  mode: config.build2lib.NODE_ENV, // production 模式，会启动UglifyJsPlugin服务
   output: {
     path: config.build2lib.assetsRoot, // 输出文件的存放在本地的目录
     filename: '[name].umd.js',
