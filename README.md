@@ -12,9 +12,6 @@
 - 👍 支持 [Sass](https://sass-lang.com/)、[params-replace-loader](https://www.npmjs.com/package/params-replace-loader)、[ESLint](http://eslint.cn/)、[StyleLint](https://github.com/stylelint)
 - 😀 提供完整的Vue和React项目模板
 
-
-[TOC]
-
 ## 快速开始/使用方法一
 > 全局安装AKFun，用于同时管理多个前端项目代码，可使用AKFun创建一个新项目
 
@@ -89,14 +86,17 @@ $ npm run build2lib
 ## AKFun使用说明
 
 1. **使用AKFun新建一个新项目**
+
     1.1. 创建一个react项目
     ```bash
     $ akfun init
     ```
+
     1.2. 创建一个vue类型项目
     ```bash
     $ akfun init -t=vue
     ```
+
     1.3. 在指定的目录中创建一个新项目
     ```bash
     $ akfun init -t=vue --dir=myTest1
@@ -118,6 +118,7 @@ $ npm run build2lib
     ```bash
     $ akfun config init
     ```
+
     4.3. akfun.config.js为当前项目的配置文件，优先级最高（可覆盖AKFun提供的默认配置）
 5. **配置构建入口文件（webpack.entry）**
     5.1. 默认的构建入口文件: ./src/index.js
