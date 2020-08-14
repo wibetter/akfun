@@ -131,7 +131,7 @@ $ npm i akfun --save-dev 或者 yarn add akfun --dev
     4. 多页面模式时，如果pages下存在对应的html页面（与入口文件同名的html文件），会自动将其设置为页面模板
 
 ## AKFun开放的配置能力
-> AKFun配置文件（akfun.config.js），以下使用AKFunConfig代表akfun.config.js配置文件
+> AKFun配置文件（akfun.config.js），以下使用AKFunConfig代表akfun.config.js配置对象
 1. 开启/关闭 ESLint代码规范检测: AKFunConfig.settings.enableEslint
 ```bash
 module.exports = {
@@ -142,6 +142,7 @@ module.exports = {
 }
 ```
 2. 配置构建入口文件: 关于配置优先级请查看 AKFun使用说明 / 配置构建入口文件
+> 备注：具体配置方法，请查看Webpack官网 ([关于entry的配置方法](https://www.webpackjs.com/configuration/entry-context/#entry))
 ```bash
 module.exports = {
   ...
@@ -149,15 +150,21 @@ module.exports = {
     entry: {}
   },
   ...
+  dev: {
+    entry: {}
+  }
   build: {
+    entry: {}
+  }
+  build2lib: {
     entry: {}
   }
   ...
 }
 ```
-#备注：具体配置方法，请查看Webpack官网 ([关于entry的配置方法](https://www.webpackjs.com/configuration/entry-context/#entry))
 
 3. 解析(resolve) / extensions配置: 自动解析确定的扩展（配置可识别的文件后缀）
+> 备注：具体配置方法，请查看Webpack官网 ([关于resolve-extensions的配置方法](https://www.webpackjs.com/configuration/resolve/#resolve-extensions))
 ```bash
 module.exports = {
   ...
@@ -169,9 +176,9 @@ module.exports = {
   ...
 }
 ```
-#备注：具体配置方法，请查看Webpack官网 ([关于resolve-extensions的配置方法](https://www.webpackjs.com/configuration/resolve/#resolve-extensions))
 
 4. 解析(resolve) / alias配置: 创建 import 或 require 的别名，来确保模块引入变得更简单
+> 备注：具体配置方法，请查看Webpack官网 ([关于resolve-alias的配置方法](https://www.webpackjs.com/configuration/resolve/#resolve-alias))
 ```bash
 module.exports = {
   ...
@@ -183,8 +190,6 @@ module.exports = {
   ...
 }
 ```
-#备注：具体配置方法，请查看Webpack官网 ([关于resolve-alias的配置方法](https://www.webpackjs.com/configuration/resolve/#resolve-alias))
-
 5. 页面模板路径配置：关于页面模板请查看 AKFun使用说明 / 关于页面模板
 ```bash
 module.exports = {
@@ -195,10 +200,9 @@ module.exports = {
   ...
 }
 ```
-#备注：esolve-alias))
-
 
 6. 注入公共的SASS文件
+> 备注：为项目中每个.scss后缀的样式文件注入公共的SASS内容（变量、mixin、function等）
 ```bash
 module.exports = {
   ...
@@ -208,9 +212,9 @@ module.exports = {
   ...
 }
 ```
-#备注：为项目中每个.scss后缀的样式文件注入公共的SASS内容（变量、mixin、function等）
 
 7. 项目源码环境变量批量替换
+> 备注：[关于params-replace-loader的使用方法](https://www.npmjs.com/package/params-replace-loader)
 ```bash
 module.exports = {
   ...
@@ -219,9 +223,9 @@ module.exports = {
   ...
 }
 ```
-#备注：[关于params-replace-loader的使用方法](https://www.npmjs.com/package/params-replace-loader)
 
 7. 接口代理配置：目前只有dev本地开发调试模式下会启动
+> 备注：[关于proxyTable的配置方法](https://www.webpackjs.com/configuration/dev-server/#devserver-proxy)
 ```bash
 module.exports = {
   ...
@@ -231,7 +235,6 @@ module.exports = {
   ...
 }
 ```
-#备注：[关于proxyTable的配置方法](https://www.webpackjs.com/configuration/dev-server/#devserver-proxy)
 
 8、用于开启本地调试模式的相关配置信息
 ```bash
