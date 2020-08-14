@@ -13,7 +13,7 @@ const utils = require('./loaderUtils');
 const config = require('../config/index');
 const baseWebpackConfig = require('./webpack.base.conf');
 
-const webpackConfig = merge(baseWebpackConfig, {
+const webpackLibConfig = merge(baseWebpackConfig, {
   mode: config.build2lib.NODE_ENV, // production 模式，会启动UglifyJsPlugin服务
   output: {
     path: config.build2lib.assetsRoot, // 输出文件的存放在本地的目录
@@ -52,7 +52,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 
 // 是否开启Gzip
 if (config.build2lib.productionGzip) {
-  webpackConfig.plugins.push(
+  webpackLibConfig.plugins.push(
     new CompressionWebpackPlugin({
       test: new RegExp(
         `\\.(${config.build2lib.productionGzipExtensions.join('|')})$`,
@@ -66,7 +66,12 @@ if (config.build2lib.productionGzip) {
 }
 
 if (config.build2lib.bundleAnalyzerReport) {
-  webpackConfig.plugins.push(new BundleAnalyzerPlugin());
+  webpackLibConfig.plugins.push(new BundleAnalyzerPlugin());
 }
 
-module.exports = webpackConfig;
+// 集成构建入口相关的配置
+if (config.build2lib.entry) {
+  webpackLibConfig.entry = config.build2lib.entry; // 会覆盖config.webpack.entry的配置
+}
+
+module.exports = webpackLibConfig;

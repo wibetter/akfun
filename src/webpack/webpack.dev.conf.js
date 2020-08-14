@@ -18,8 +18,7 @@ Object.keys(baseWebpackConfig.entry).forEach((name) => {
     baseWebpackConfig.entry[name],
   );
 });
-
-module.exports = merge(baseWebpackConfig, {
+const webpackDevConfig = {
   mode: config.dev.NODE_ENV, // development模式，会启动NamedChunksPlugin、NamedModulesPlugin服务
   output: {
     globalObject: "window",
@@ -55,4 +54,12 @@ module.exports = merge(baseWebpackConfig, {
     new FriendlyErrorsPlugin(),
     new ProgressBarPlugin(),
   ],
-});
+};
+
+// 集成构建入口相关的配置
+if (config.dev.entry) {
+  webpackDevConfig.entry = config.dev.entry; // 会覆盖config.webpack.entry的配置
+}
+
+module.exports =  merge(baseWebpackConfig, webpackDevConfig);
+

@@ -17,7 +17,7 @@ const { resolve } = require('../utils/pathUtils'); // 统一路径解析
 const config = require('../config/index');
 const baseWebpackConfig = require('./webpack.base.conf');
 
-const webpackConfig = merge(baseWebpackConfig, {
+const webpackProdConfig = merge(baseWebpackConfig, {
   mode: config.build2lib.NODE_ENV, // production 模式，会启动UglifyJsPlugin服务
   output: {
     path: config.build.assetsRoot, // 输出文件的存放在本地的目录
@@ -48,14 +48,6 @@ const webpackConfig = merge(baseWebpackConfig, {
           priority: -20,
           chunks: 'initial',
           reuseExistingChunk: true,
-        },
-        styles: {
-          test: /\.(scss|css)$/,
-          name: 'styles',
-          chunks: 'all',
-          minChunks: 1,
-          reuseExistingChunk: true,
-          enforce: true,
         },
       },
     },
@@ -114,7 +106,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 
 // 是否要进行压缩工作
 if (config.build.productionGzip) {
-  webpackConfig.plugins.push(
+  webpackProdConfig.plugins.push(
     new CompressionWebpackPlugin({
       test: new RegExp(
         `\\.(${config.build.productionGzipExtensions.join('|')})$`,
@@ -128,7 +120,12 @@ if (config.build.productionGzip) {
 }
 
 if (config.build.bundleAnalyzerReport) {
-  webpackConfig.plugins.push(new BundleAnalyzerPlugin());
+  webpackProdConfig.plugins.push(new BundleAnalyzerPlugin());
 }
 
-module.exports = webpackConfig;
+// 集成构建入口相关的配置
+if (config.build.entry) {
+  webpackProdConfig.entry = config.build.entry; // 会覆盖config.webpack.entry的配置
+}
+
+module.exports = webpackProdConfig;

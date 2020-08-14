@@ -11,12 +11,8 @@ const defultAKFunConfig = {
     enableEslint: true, // 调试模式是否开启ESLint，默认开启ESLint检测代码格式
   },
   webpack: {
-    /**
-     * entry的路径及其依赖的模块的路径默认相对于context的路径来描述，
-     * 其中context默认为执行启动webpack时的所在当前工作目录
-     * */
     entry: {
-      // webpack构建入口
+      // webpack构建入口（优先级低于于dev、build和build2lib中的entry配置）
       index: './src/index.js',
     },
     resolve: {
