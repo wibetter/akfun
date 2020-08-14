@@ -9,6 +9,7 @@ const utils = require('./loaderUtils');
 // 引入当前项目配置文件
 const config = require('../config/index');
 const baseWebpackConfig = require('./webpack.base.conf');
+const { resolve } = require('../utils/pathUtils'); // 统一路径解析
 
 const devClientPath = path.resolve(__dirname, '../dev-client'); // 从akfun中获取
 
@@ -18,6 +19,13 @@ Object.keys(baseWebpackConfig.entry).forEach((name) => {
     baseWebpackConfig.entry[name],
   );
 });
+
+// 获取页面模板地址
+let curHtmlTemplate = resolve('../initData/template/index.html');
+if (config.webpack.template) {
+  curHtmlTemplate = config.webpack.template; // akfun.config.js中的webpack配置
+}
+
 const webpackDevConfig = {
   mode: config.dev.NODE_ENV, // development模式，会启动NamedChunksPlugin、NamedModulesPlugin服务
   output: {
@@ -47,9 +55,9 @@ const webpackDevConfig = {
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: config.webpack.template,
+      template: curHtmlTemplate,
       inject: true,
-      minify: false,
+      minify: false,  // mode: 'production'模式下会自定压缩html代码，优先级比minify高
     }),
     new FriendlyErrorsPlugin(),
     new ProgressBarPlugin(),

@@ -7,6 +7,7 @@ const chalk = require('chalk'); // 带样式的log输出
 
 // 引入本地脚本模块
 const akfunInit = require('./akfunInit.js');
+const akfunConfigInit = require('./akfunConfigInit.js');
 const inspect = require('./inspect.js');
 const mainAction = require('./main.js'); // 功能入口
 
@@ -48,6 +49,19 @@ let argv = yargs
     },
     (argv) => {
       akfunInit(argv.type, argv.dir, argv.name);
+    },
+  )
+  .command(
+    'config init',
+    '初始化AKFun配置文件',
+    (yargs) => {
+      yargs
+        .reset()
+        .usage(titleTip('Usage') + ': $0 dev')
+        .alias('h', 'help');
+    },
+    () => {
+      akfunConfigInit();
     },
   )
   .command(

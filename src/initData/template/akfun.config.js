@@ -10,7 +10,7 @@ function resolve(dir) {
 // 包括生产和开发的环境配置信息
 module.exports = {
   settings: {
-    enableEslint: true, // 调试模式是否开启ESLint，默认开启ESLint检测代码格式
+    enableEslint: false, // 调试模式是否开启ESLint，默认关闭ESLint检测代码格式
   },
   webpack: {
     entry: {

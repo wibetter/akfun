@@ -17,6 +17,12 @@ const { resolve } = require('../utils/pathUtils'); // 统一路径解析
 const config = require('../config/index');
 const baseWebpackConfig = require('./webpack.base.conf');
 
+// 获取页面模板地址
+let curHtmlTemplate = resolve('../initData/template/index.html');
+if (config.webpack.template) {
+  curHtmlTemplate = config.webpack.template; // akfun.config.js中的webpack配置
+}
+
 const webpackProdConfig = merge(baseWebpackConfig, {
   mode: config.build2lib.NODE_ENV, // production 模式，会启动UglifyJsPlugin服务
   output: {
@@ -84,7 +90,7 @@ const webpackProdConfig = merge(baseWebpackConfig, {
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: config.build.index,
-      template: config.webpack.template,
+      template: curHtmlTemplate,
       inject: true, // 当传递true或body时，所有javascript资源都将放置在body元素的底部。
       minify: false, // mode: 'production'模式下会自定压缩html代码，优先级比minify高
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin

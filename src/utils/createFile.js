@@ -18,12 +18,12 @@ const createFile = function (configPath, configDist, projectName) {
       if (!exist) {
         fs.mkdir(configFileDir, function () {
           // 创建目录
-          suceessTip('创建目录：' + configFileDir);
+          suceessTip('已创建目录：' + configFileDir);
           fs.writeFile(configDist, newConfigText, (err) => {
             if (err) {
               throw Error(err);
             }
-            suceessTip('创建配置文件：' + configDist);
+            suceessTip('已创建配置文件：' + configDist);
           });
         });
       } else {
@@ -31,7 +31,7 @@ const createFile = function (configPath, configDist, projectName) {
           if (err) {
             throw Error(err);
           }
-          suceessTip('创建配置文件：' + configDist);
+          suceessTip('已创建配置文件：' + configDist);
         });
       }
     });

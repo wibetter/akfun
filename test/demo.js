@@ -1,3 +1,7 @@
-const inspect = require('../build/inspect');
+const akfunConfigInit = require('../build/akfunConfigInit.js');
+akfunConfigInit();
 
-inspect('dev');
+
+let curHtmlTemplate = resolve('../initData/template/index.html');
+
+console.log(curHtmlTemplate);
