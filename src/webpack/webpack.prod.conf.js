@@ -2,7 +2,6 @@ const fs = require('fs');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const ExtractTextPlugin = require('extract-text-webpack-plugin'); // 不支持webpack4.0
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 替换extract-text-webpack-plugin
@@ -15,6 +14,7 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const utils = require('./loaderUtils');
 const { resolve } = require('../utils/pathUtils'); // 统一路径解析
 const getJsEntries = require('../utils/jsEntries');
+const entrys2htmlWebpackPlugin = require('../utils/entrys2htmlWebpackPlugin');
 // 引入当前项目配置文件
 const config = require('../config/index');
 const baseWebpackConfig = require('./webpack.base.conf');
@@ -101,11 +101,10 @@ const webpackProdConfig = merge(baseWebpackConfig, {
   ],
 });
 
-
 // 多页面支持能力
 if (webpackProdConfig.entry) {
 
-  const entryConfig = webpackProdConfig.entry || {};
+  let entryConfig = webpackProdConfig.entry || {};
   const entryFiles = Object.keys(entryConfig);
 
   if (!webpackProdConfig.entry) {
@@ -119,33 +118,20 @@ if (webpackProdConfig.entry) {
       if (!exist) {
         // 自动从'./src/pages/'中获取入口文件
         webpackProdConfig.entry = getJsEntries();
+        // 重新获取webpackProdConfig.entry
+        entryConfig = webpackProdConfig.entry || {};
+        const htmlWebpackPluginList = entrys2htmlWebpackPlugin(entryConfig, curHtmlTemplate);
+        htmlWebpackPluginList.forEach(htmlWebpackPlugin => {
+          webpackProdConfig.plugins.push(htmlWebpackPlugin);
+        });
       }
+    });
+  } else {
+    const htmlWebpackPluginList = entrys2htmlWebpackPlugin(entryConfig, curHtmlTemplate);
+    htmlWebpackPluginList.forEach(htmlWebpackPlugin => {
+      webpackProdConfig.plugins.push(htmlWebpackPlugin);
     });
   }
-
-  Object.keys(webpackProdConfig.entry).forEach(filename => {
-    let curPageTemplate = curHtmlTemplate;
-    // 判断是否有对应的页面模板
-    const htmlPath = entryConfig[filename].replace(/\.[tj]sx?$/, '.html');
-    const htmlAbsPath = resolve(htmlPath);
-    fs.exists(htmlAbsPath, function (exist) {
-      if (exist) {
-        curPageTemplate = htmlAbsPath; // 将当前对应的页面设置为html模板
-      }
-    });
-    // generate dist index.html with correct asset hash for caching.
-    // you can customize output by editing /index.html
-    // see https://github.com/ampedandwired/html-webpack-plugin
-    webpackProdConfig.plugins.push(
-      new HtmlWebpackPlugin({
-        filename: `${filename}.html`,
-        template: curPageTemplate,
-        inject: true, // 当传递true或body时，所有javascript资源都将放置在body元素的底部。
-        minify: false, // mode: 'production'模式下会自定压缩html代码，优先级比minify高
-        // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-        chunksSortMode: 'auto',
-      }),);
-  });
 }
 
 // 是否要进行压缩工作

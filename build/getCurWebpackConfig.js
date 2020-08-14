@@ -8,7 +8,7 @@ module.exports = (type) => {
   } else if (type === 'lib') {
     curConfig = require('../src/webpack/webpack.library.conf');
   } else if (type === 'build') {
-    curConfig = require('../src/webpack/webpack.build.conf');
+    curConfig = require('../src/webpack/webpack.prod.conf');
   } else if (type === 'base') {
     curConfig = require('../src/webpack/webpack.base.conf');
   }

@@ -121,7 +121,7 @@ $ npm i akfun --save-dev 或者 yarn add akfun --dev
         2. 在dev.entry、build.entry、build2lib.entry中配置对应执行环境的构建入口，优先级高于webpack.entry
 
 6. **关于多页面**
-    1. 当./src/index.js不存在，且在akfun.config.js中没有对应的entry配置时，AKFun会自动从src/pages中获取构建入口（支持多页面多模板）
+    1. 当akfun.config.js的entry只有一个入口配置，且对应的构建入口文件不存在时，AKFun会自动从src/pages中获取构建入口（支持多页面多模板）
     2. 多页面模式下，会自动将src/pages中以.ts、.tsx、.js、.jsx结尾（对应的匹配正则：/\.[tj]sx?$/）的文件作为构建入口文件
 
 7. **关于多页面多模板**
