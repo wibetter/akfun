@@ -66,6 +66,7 @@ $ npm i akfun --save-dev 或者 yarn add akfun --dev
 ```
 
 3. **开始构建当前项目**
+
    3.1 开启本地调试模式
     ```bash
     $ npm run dev
@@ -82,6 +83,7 @@ $ npm i akfun --save-dev 或者 yarn add akfun --dev
 ## AKFun使用说明
 
 1. **使用AKFun新建一个新项目**
+
     1.1 创建一个react项目
     ```bash
     $ akfun init
