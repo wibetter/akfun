@@ -1,3 +1,4 @@
+const fs = require('fs');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -13,6 +14,7 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 const utils = require('./loaderUtils');
 const { resolve } = require('../utils/pathUtils'); // 统一路径解析
+const getJsEntries = require('../utils/jsEntries');
 // 引入当前项目配置文件
 const config = require('../config/index');
 const baseWebpackConfig = require('./webpack.base.conf');
@@ -85,17 +87,6 @@ const webpackProdConfig = merge(baseWebpackConfig, {
         safe: true,
       },
     }),
-    // generate dist index.html with correct asset hash for caching.
-    // you can customize output by editing /index.html
-    // see https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: config.build.index,
-      template: curHtmlTemplate,
-      inject: true, // 当传递true或body时，所有javascript资源都将放置在body元素的底部。
-      minify: false, // mode: 'production'模式下会自定压缩html代码，优先级比minify高
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'auto',
-    }),
     // copy custom public assets
     new CopyWebpackPlugin({
       patterns: [
@@ -109,6 +100,53 @@ const webpackProdConfig = merge(baseWebpackConfig, {
     new ProgressBarPlugin(),
   ],
 });
+
+
+// 多页面支持能力
+if (webpackProdConfig.entry) {
+
+  const entryConfig = webpackProdConfig.entry || {};
+  const entryFiles = Object.keys(entryConfig);
+
+  if (!webpackProdConfig.entry) {
+    // 自动从'./src/pages/'中获取入口文件
+    webpackProdConfig.entry = getJsEntries();
+  } else if (entryFiles.length === 1) {
+    // webpackProdConfig.entryAKFun提供的默认入口文件不存在
+    const filename = entryFiles[0];
+    const entryFilePath = entryConfig[filename];
+    fs.exists(entryFilePath, function (exist) {
+      if (!exist) {
+        // 自动从'./src/pages/'中获取入口文件
+        webpackProdConfig.entry = getJsEntries();
+      }
+    });
+  }
+
+  Object.keys(webpackProdConfig.entry).forEach(filename => {
+    let curPageTemplate = curHtmlTemplate;
+    // 判断是否有对应的页面模板
+    const htmlPath = entryConfig[filename].replace(/\.[tj]sx?$/, '.html');
+    const htmlAbsPath = resolve(htmlPath);
+    fs.exists(htmlAbsPath, function (exist) {
+      if (exist) {
+        curPageTemplate = htmlAbsPath; // 将当前对应的页面设置为html模板
+      }
+    });
+    // generate dist index.html with correct asset hash for caching.
+    // you can customize output by editing /index.html
+    // see https://github.com/ampedandwired/html-webpack-plugin
+    webpackProdConfig.plugins.push(
+      new HtmlWebpackPlugin({
+        filename: `${filename}.html`,
+        template: curPageTemplate,
+        inject: true, // 当传递true或body时，所有javascript资源都将放置在body元素的底部。
+        minify: false, // mode: 'production'模式下会自定压缩html代码，优先级比minify高
+        // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+        chunksSortMode: 'auto',
+      }),);
+  });
+}
 
 // 是否要进行压缩工作
 if (config.build.productionGzip) {

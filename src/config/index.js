@@ -74,7 +74,6 @@ const defultAKFunConfig = {
   build: {
     // 用于构建生产环境代码的相关配置信息
     NODE_ENV: 'production', // production 模式，会启动UglifyJsPlugin服务
-    index: 'index.html',
     assetsRoot: resolve('dist'), // 编译完成的文件存放路径
     assetsPublicPath: '/', // 设置静态资源的引用路径（根域名+路径）
     assetsSubDirectory: '', // 资源引用二级路径
