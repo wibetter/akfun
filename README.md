@@ -1,5 +1,4 @@
 # AKFun 前端脚手架
-
 > AKFun 是一个基于 Webpack4.0 的打包工具，支持多种技术栈：Vue技术栈、React技术栈、React&TS技术栈(开发中)
 - 技术栈：node/webpack4.0/express/babel/eslint/stylelint
 
@@ -118,7 +117,7 @@ $ npm i akfun --save-dev 或者 yarn add akfun --dev
 5. **配置构建入口文件（webpack.entry）**
     1. 默认的构建入口文件: ./src/index.js
     2. 自定义构建入口(akfun.config.js中提供对应的配置入口)
-        1. 在webpack.entry配置构建入口，dev\build\build2lib都会以此为构建入口 [关于entry的配置方法](https://www.webpackjs.com/configuration/entry-context/#entry)
+        1. 在webpack.entry配置构建入口，dev\build\build2lib都会以此为构建入口 ([关于entry的配置方法](https://www.webpackjs.com/configuration/entry-context/#entry))
         2. 在dev.entry、build.entry、build2lib.entry中配置对应执行环境的构建入口，优先级高于webpack.entry
 
 6. **关于多页面**
@@ -132,4 +131,165 @@ $ npm i akfun --save-dev 或者 yarn add akfun --dev
     4. 多页面模式时，如果pages下存在对应的html页面（与入口文件同名的html文件），会自动将其设置为页面模板
 
 ## AKFun开放的配置能力
+> AKFun配置文件（akfun.config.js），以下使用AKFunConfig代表akfun.config.js配置文件
+1. 开启/关闭 ESLint代码规范检测: AKFunConfig.settings.enableEslint
+```bash
+module.exports = {
+  settings: {
+    enableEslint: true,
+  },
+  ...
+}
+```
+2. 配置构建入口文件: 关于配置优先级请查看 AKFun使用说明 / 配置构建入口文件
+```bash
+module.exports = {
+  ...
+  webpack: {
+    entry: {}
+  },
+  ...
+  build: {
+    entry: {}
+  }
+  ...
+}
+```
+#备注：具体配置方法，请查看Webpack官网 ([关于entry的配置方法](https://www.webpackjs.com/configuration/entry-context/#entry))
 
+3. 解析(resolve) / extensions配置: 自动解析确定的扩展（配置可识别的文件后缀）
+```bash
+module.exports = {
+  ...
+  webpack: {
+    resolve: {
+        extensions: ['.js', '.jsx', '.vue', 'json'],
+    }
+  },
+  ...
+}
+```
+#备注：具体配置方法，请查看Webpack官网 ([关于resolve-extensions的配置方法](https://www.webpackjs.com/configuration/resolve/#resolve-extensions))
+
+4. 解析(resolve) / alias配置: 创建 import 或 require 的别名，来确保模块引入变得更简单
+```bash
+module.exports = {
+  ...
+  webpack: {
+    resolve: {
+        alias: {},
+    }
+  },
+  ...
+}
+```
+#备注：具体配置方法，请查看Webpack官网 ([关于resolve-alias的配置方法](https://www.webpackjs.com/configuration/resolve/#resolve-alias))
+
+5. 页面模板路径配置：关于页面模板请查看 AKFun使用说明 / 关于页面模板
+```bash
+module.exports = {
+  ...
+  webpack: {
+    template: '',
+  }
+  ...
+}
+```
+#备注：esolve-alias))
+
+
+6. 注入公共的SASS文件
+```bash
+module.exports = {
+  ...
+  webpack: {
+    sassResources: [],
+  }
+  ...
+}
+```
+#备注：为项目中每个.scss后缀的样式文件注入公共的SASS内容（变量、mixin、function等）
+
+7. 项目源码环境变量批量替换
+```bash
+module.exports = {
+  ...
+  envParams: {
+    sassResources: '',
+  ...
+}
+```
+#备注：[关于params-replace-loader的使用方法](https://www.npmjs.com/package/params-replace-loader)
+
+7. 接口代理配置：目前只有dev本地开发调试模式下会启动
+```bash
+module.exports = {
+  ...
+  dev: {
+    proxyTable: {
+    },
+  ...
+}
+```
+#备注：[关于proxyTable的配置方法](https://www.webpackjs.com/configuration/dev-server/#devserver-proxy)
+
+8、用于开启本地调试模式的相关配置信息
+```bash
+module.exports = {
+  ...
+    dev: {
+      NODE_ENV: 'development', // development 模式，不会启动UglifyJsPlugin服务
+      port: 80, // 启动server服务的端口
+      autoOpenBrowser: true, // 是否自动打开页面
+      assetsPublicPath: '/', // 设置静态资源的引用路径（根域名+路径）
+      assetsSubDirectory: '', // 资源引用二级路径
+      hostname: 'localhost', // 自动打开的页面主机
+      proxyTable: { // 接口代理
+        '/apiTest': {
+          target: 'http://api-test.com.cn', // 不支持跨域的接口根地址
+          ws: true,
+          changeOrigin: true
+        }
+      },
+      cssSourceMap: false,
+    },
+  ...
+}
+```
+
+9、用于构建生产环境代码的相关配置信息
+```bash
+module.exports = {
+  ...
+    build: {
+      NODE_ENV: 'production', // production 模式，会启动UglifyJsPlugin服务
+      assetsRoot: resolve('./dist'), // 打包后的文件绝对路径（物理路径）
+      assetsPublicPath: '/', // 设置静态资源的引用路径（根域名+路径）
+      assetsSubDirectory: '', // 资源引用二级路径
+      productionSourceMap: false, // 是否显示原始源代码
+      productionGzip: false, // 是否开启Gzip服务
+      productionGzipExtensions: ['js', 'css', 'json'], // Gzip识别的文件后缀
+      bundleAnalyzerReport: false, // 开启打包分析功能
+    }
+  ...
+}
+```
+
+10、用于构建第三方功能包的配置
+```bash
+module.exports = {
+  ...
+    build2lib: {
+      NODE_ENV: 'production', // production 模式，会启动UglifyJsPlugin服务
+      libraryName: '', // 构建第三方功能包时最后导出的引用变量名
+      assetsRoot: resolve('dist'), // 编译完成的文件存放路径
+      assetsPublicPath: '/', // 设置静态资源的引用路径（根域名+路径）
+      assetsSubDirectory: '', // 资源引用二级路径
+      productionSourceMap: false, // 是否显示原始源代码
+      productionGzip: false, // 是否开启Gzip服务
+      productionGzipExtensions: ['js', 'css', 'json'], // Gzip识别的文件后缀
+      bundleAnalyzerReport: false, // 开启打包分析功能
+    },
+  ...
+}
+```
