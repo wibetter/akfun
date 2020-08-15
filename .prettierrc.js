@@ -3,10 +3,39 @@
   更多配置信息：https://prettier.io/docs/en/options.html
  */
 module.exports = {
-  semi: true, // Semicolons 分号，默认需要分号
-  tabWidth: 2, // 空格，默认 2,
-	useTabs: false,
+  // 一行最多 100 字符
+  printWidth: 100,
+  // 使用 4 个空格缩进
+  tabWidth: 2,
+  // 不使用缩进符，而使用空格
+  useTabs: false,
+  // 行尾需要有分号
+  semi: true,
+  // 使用单引号
   singleQuote: true, // 单引号还是双引号，默认为false 双引号
-  trailingComma: "all", // 逗号
-  jsxBracketSameLine: false, // 默认为false，Put the > of a multi-line JSX element at the end of the last line instead of being alone on the next line (does not apply to self closing elements).
+  // 对象的 key 仅在必要时用引号
+  quoteProps: 'as-needed',
+  // jsx 不使用单引号，而使用双引号
+  jsxSingleQuote: false,
+  // 末尾不需要逗号
+  trailingComma: 'none', // 逗号
+  // 大括号内的首尾需要空格
+  bracketSpacing: true,
+  // jsx 标签的反尖括号需要换行
+  jsxBracketSameLine: false,
+  // 箭头函数，只有一个参数的时候，也需要括号
+  arrowParens: 'always',
+  // 每个文件格式化的范围是文件的全部内容
+  rangeStart: 0,
+  rangeEnd: Infinity,
+  // 不需要写文件开头的 @prettier
+  requirePragma: false,
+  // 不需要自动在文件开头插入 @prettier
+  insertPragma: false,
+  // 使用默认的折行标准
+  proseWrap: 'preserve',
+  // 根据显示样式决定 html 要不要折行
+  htmlWhitespaceSensitivity: 'css',
+  // 换行符使用 lf
+  endOfLine: 'lf'
 };

@@ -1,3 +1,4 @@
+const tsImportPluginFactory = require('ts-import-plugin'); // 按需加载lib库组件代码
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const utils = require('./loaderUtils');
 const vueLoaderConfig = require('./vue-loader.conf');
@@ -33,6 +34,22 @@ const webpackConfig = {
           },
         ],
       },
+      // 关于ts的检测：https://ts.xcatliu.com/engineering/lint.html
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        options: {
+          transpileOnly: true,
+          getCustomTransformers: () => ({
+            before: [ tsImportPluginFactory( /** options */) ]
+          }),
+          compilerOptions: {
+            module: 'es2015'
+          }
+        },
+        include: [resolve('src'), resolve('test')],
+        exclude: /node_modules/,
+      },
       {
         test: /\.(js|jsx|ts|tsx)$/,
         use: [
@@ -41,6 +58,7 @@ const webpackConfig = {
           },
         ],
         include: [resolve('src'), resolve('test')],
+        exclude: /node_modules/,
       },
       {
         // 图片资源
@@ -82,7 +100,7 @@ const webpackConfig = {
         test: /\.(js|ts|tsx|jsx|vue|css|html)$/,
         loader: 'params-replace-loader',
         include: [resolve('src'), resolve('test')],
-        exclude: [resolve('src/mock/data')], // 排除不需要进行校验的文件夹
+        exclude: [/node_modules/, resolve('src/mock/data')], // 排除不需要进行校验的文件夹
         options: config.envParams,
       },
     ],
@@ -100,6 +118,7 @@ if (config.settings.enableEslint) {
     loader: 'eslint-loader',
     enforce: 'pre',
     include: [resolve('src'), resolve('public')],
+    exclude: /node_modules/,
     options: {
       formatter: require('eslint-friendly-formatter'),
     },
