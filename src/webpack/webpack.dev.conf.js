@@ -10,6 +10,8 @@ const utils = require('./loaderUtils');
 const config = require('../config/index');
 const baseWebpackConfig = require('./webpack.base.conf');
 const { resolve } = require('../utils/pathUtils'); // 统一路径解析
+const getJsEntries = require('../utils/jsEntries');
+const entrys2htmlWebpackPlugin = require('../utils/entrys2htmlWebpackPlugin');
 
 const devClientPath = path.resolve(__dirname, '../dev-client'); // 从akfun中获取
 
@@ -52,21 +54,47 @@ const webpackDevConfig = {
       syntax: 'scss',
       files: ['src/**/*.vue', 'src/**/*.scss', 'src/**/*.css'],
     }),
-    // https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: curHtmlTemplate,
-      inject: true,
-      minify: false,  // mode: 'production'模式下会自定压缩html代码，优先级比minify高
-    }),
     new FriendlyErrorsPlugin(),
     new ProgressBarPlugin(),
   ],
 };
 
-// 集成构建入口相关的配置
+// 集成dev配置中的构建入口
 if (config.dev.entry) {
   webpackDevConfig.entry = config.dev.entry; // 会覆盖config.webpack.entry的配置
+}
+
+// 多页面支持能力
+if (webpackDevConfig.entry) {
+
+  let entryConfig = webpackDevConfig.entry || {};
+  const entryFiles = Object.keys(entryConfig);
+
+  if (!webpackDevConfig.entry) {
+    // 自动从'./src/pages/'中获取入口文件
+    webpackDevConfig.entry = getJsEntries();
+  } else if (entryFiles.length === 1) {
+    // webpackDevConfig.entryAKFun提供的默认入口文件不存在
+    const filename = entryFiles[0];
+    const entryFilePath = entryConfig[filename];
+    fs.exists(entryFilePath, function (exist) {
+      if (!exist) {
+        // 自动从'./src/pages/'中获取入口文件
+        webpackDevConfig.entry = getJsEntries();
+        // 重新获取webpackDevConfig.entry
+        entryConfig = webpackDevConfig.entry || {};
+        const htmlWebpackPluginList = entrys2htmlWebpackPlugin(entryConfig, curHtmlTemplate);
+        htmlWebpackPluginList.forEach(htmlWebpackPlugin => {
+          webpackDevConfig.plugins.push(htmlWebpackPlugin);
+        });
+      }
+    });
+  } else {
+    const htmlWebpackPluginList = entrys2htmlWebpackPlugin(entryConfig, curHtmlTemplate);
+    htmlWebpackPluginList.forEach(htmlWebpackPlugin => {
+      webpackDevConfig.plugins.push(htmlWebpackPlugin);
+    });
+  }
 }
 
 module.exports =  merge(baseWebpackConfig, webpackDevConfig);

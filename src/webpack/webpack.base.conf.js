@@ -34,7 +34,7 @@ const webpackConfig = {
         ],
       },
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         use: [
           {
             loader: 'babel-loader',
@@ -79,7 +79,7 @@ const webpackConfig = {
         },
       },
       {
-        test: /\.(js|vue|css|html)$/,
+        test: /\.(js|ts|tsx|jsx|vue|css|html)$/,
         loader: 'params-replace-loader',
         include: [resolve('src'), resolve('test')],
         exclude: [resolve('src/mock/data')], // 排除不需要进行校验的文件夹

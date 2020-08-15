@@ -101,6 +101,12 @@ const webpackProdConfig = merge(baseWebpackConfig, {
   ],
 });
 
+// 集成build配置中的构建入口
+if (config.build.entry) {
+  // 会覆盖config.webpack.entry的配置
+  webpackProdConfig.entry = config.build.entry;
+}
+
 // 多页面支持能力
 if (webpackProdConfig.entry) {
 
@@ -151,11 +157,6 @@ if (config.build.productionGzip) {
 
 if (config.build.bundleAnalyzerReport) {
   webpackProdConfig.plugins.push(new BundleAnalyzerPlugin());
-}
-
-// 集成构建入口相关的配置
-if (config.build.entry) {
-  webpackProdConfig.entry = config.build.entry; // 会覆盖config.webpack.entry的配置
 }
 
 module.exports = webpackProdConfig;
