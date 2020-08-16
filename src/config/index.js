@@ -8,12 +8,12 @@ const getConfigObj = require('../utils/getConfigObj');
  */
 const defultAKFunConfig = {
   settings: {
-    enableEslint: true, // 调试模式是否开启ESLint，默认开启ESLint检测代码格式
+    enableEslint: true // 调试模式是否开启ESLint，默认开启ESLint检测代码格式
   },
   webpack: {
     entry: {
       // webpack构建入口（优先级低于于dev、build和build2lib中的entry配置）
-      index: './src/index.js',
+      index: './src/index.js'
     },
     resolve: {
       // webpack的resolve配置
@@ -23,31 +23,31 @@ const defultAKFunConfig = {
         $components: resolve('src/components'),
         $pages: resolve('src/pages'),
         $plugins: resolve('src/plugins'),
-        $utils: resolve('src/utils'),
-      },
+        $utils: resolve('src/utils')
+      }
     },
     externals: [], // 从输出的 bundle 中排除依赖
     template: resolve('src/index.html'), // 默认使用的页面模板
-    sassResources: [],
+    sassResources: []
   },
   envParams: {
     // 项目系统环境变量
     common: {
       // 通用参数
-      '#version#': '20200810.1',
+      '#version#': '20200810.1'
     },
     local: {
       // 本地开发环境
       '#dataApiBase#': 'http://localhost:1024', // 数据接口根地址
       '#assetsPublicPath#': 'http://localhost:1024', // 静态资源根地址
-      '#routeBasePath#': '/', // 路由根地址
+      '#routeBasePath#': '/' // 路由根地址
     },
     online: {
       // 线上正式环境配置参数
       '#dataApiBase#': '/', // 数据接口根地址 "//xxx.cn/"格式
       '#assetsPublicPath#': '', // 静态资源根地址 "//xxx.cn/_spa/projectName"格式
-      '#routeBasePath#': '/', // 路由根地址 "/_spa/projectName/"格式
-    },
+      '#routeBasePath#': '/' // 路由根地址 "/_spa/projectName/"格式
+    }
   },
   dev: {
     // 用于开启本地调试模式的相关配置信息
@@ -61,15 +61,15 @@ const defultAKFunConfig = {
       '/apiTest': {
         target: 'http://api-test.com.cn', // 不支持跨域的接口根地址
         ws: true,
-        changeOrigin: true,
-      },
+        changeOrigin: true
+      }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
-    cssSourceMap: false,
+    cssSourceMap: false
   },
   build: {
     // 用于构建生产环境代码的相关配置信息
@@ -88,7 +88,7 @@ const defultAKFunConfig = {
     // View the bundle analyzer report after build finishes:
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
-    bundleAnalyzerReport: false,
+    bundleAnalyzerReport: false
   },
   build2lib: {
     // 用于构建第三方功能包的配置文件
@@ -100,8 +100,8 @@ const defultAKFunConfig = {
     productionSourceMap: false,
     productionGzip: false,
     productionGzipExtensions: ['js', 'css', 'json'],
-    bundleAnalyzerReport: false,
-  },
+    bundleAnalyzerReport: false
+  }
 };
 
 // 从项目根目录获取当前项目的配置文件

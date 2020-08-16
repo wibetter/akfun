@@ -11,8 +11,8 @@ const versionRequirements = [
   {
     name: 'node',
     currentVersion: semver.clean(process.version),
-    versionRequirement: packageConfig.engines.node,
-  },
+    versionRequirement: packageConfig.engines.node
+  }
 ];
 
 // 判定npm命令是否可用
@@ -20,7 +20,7 @@ if (shell.which('npm')) {
   versionRequirements.push({
     name: 'npm',
     currentVersion: exec('npm --version'),
-    versionRequirement: packageConfig.engines.npm,
+    versionRequirement: packageConfig.engines.npm
   });
 }
 
@@ -33,17 +33,15 @@ module.exports = function () {
     if (!semver.satisfies(mod.currentVersion, mod.versionRequirement)) {
       warnings.push(
         `${mod.name}: ${chalk.red(mod.currentVersion)} should be ${chalk.green(
-          mod.versionRequirement,
-        )}`,
+          mod.versionRequirement
+        )}`
       );
     }
   }
 
   if (warnings.length) {
     console.log('');
-    console.log(
-      chalk.yellow('To use this src, you must update following to modules:'),
-    );
+    console.log(chalk.yellow('To use this src, you must update following to modules:'));
     console.log();
     for (let i = 0; i < warnings.length; i++) {
       const warning = warnings[i];

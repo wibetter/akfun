@@ -10,7 +10,7 @@ function gitClone(gitUrl, dist, callback) {
     gitUrl,
     resolveToCurrentRoot(dist),
     {
-      checkout: 'master',
+      checkout: 'master'
     },
     (err) => {
       if (err === undefined) {
@@ -21,7 +21,7 @@ function gitClone(gitUrl, dist, callback) {
         console.log(err);
         callback(err);
       }
-    },
+    }
   );
 }
 module.exports = gitClone;

@@ -28,8 +28,8 @@ exports.cssLoaders = function (options) {
   const cssLoader = {
     loader: 'css-loader',
     options: {
-      sourceMap: options.sourceMap,
-    },
+      sourceMap: options.sourceMap
+    }
   };
 
   // generate loader string to be used with extract text plugin
@@ -42,10 +42,10 @@ exports.cssLoaders = function (options) {
         {
           loader: MiniCssExtractPlugin.loader,
           options: {
-            esModule: true,
-          },
+            esModule: true
+          }
         },
-        cssLoader,
+        cssLoader
       ];
     } else {
       loaders = [cssLoader];
@@ -54,7 +54,7 @@ exports.cssLoaders = function (options) {
     if (loader) {
       loaders.push({
         loader: `${loader}-loader`,
-        options: { ...loaderOptions, sourceMap: options.sourceMap },
+        options: { ...loaderOptions, sourceMap: options.sourceMap }
       });
     }
     return ['style-loader'].concat(loaders);
@@ -68,12 +68,12 @@ exports.cssLoaders = function (options) {
     scss: generateLoaders('sass').concat({
       loader: 'sass-resources-loader',
       options: {
-        resources: config.webpack.sassResources,
-      },
+        resources: config.webpack.sassResources
+      }
     }),
     less: generateLoaders('less'),
     stylus: generateLoaders('stylus'),
-    styl: generateLoaders('stylus'),
+    styl: generateLoaders('stylus')
   };
 };
 
@@ -85,7 +85,7 @@ exports.styleLoaders = function (options) {
     const loader = loaders[extension];
     output.push({
       test: new RegExp(`\\.${extension}$`),
-      use: loader,
+      use: loader
     });
   }
   return output;

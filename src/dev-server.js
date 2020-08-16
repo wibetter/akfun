@@ -8,7 +8,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const { resolve } = require('./utils/pathUtils');
 // 引入当前项目配置文件
 const config = require('./config/index');
-const webpackConfig = require('./webpack/webpack.dev.conf');
+const getDevWebpackConfig = require('./webpack/webpack.dev.conf');
 
 // 构建脚本：一般用于构建开发环境的代码（包含热更新、接口代理等功能）
 module.exports = function () {
@@ -34,18 +34,20 @@ module.exports = function () {
 
   // 使用 express 启动一个服务
   const app = express();
+  // 获取开发环境的webpack基本配置
+  const webpackConfig = getDevWebpackConfig();
   const compiler = webpack(webpackConfig); // 启动 webpack 进行编译
 
   // 启动 webpack-dev-middleware，将 编译后的文件暂存到内存中
   const devMiddleware = require('webpack-dev-middleware')(compiler, {
     publicPath: webpackConfig.output.publicPath,
-    quiet: true,
+    quiet: true
   });
 
   // 启动 webpack-hot-middleware，也就是我们常说的 Hot-reload
   const hotMiddleware = require('webpack-hot-middleware')(compiler, {
     log: false,
-    heartbeat: 2000,
+    heartbeat: 2000
   });
   // force page reload when html-webpack-plugin src changes
   // currently disabled until this is resolved:
@@ -86,10 +88,7 @@ module.exports = function () {
 
   // serve pure public assets
   // 拼接 public 文件夹的静态资源路径
-  const staticPath = path.posix.join(
-    config.dev.assetsPublicPath,
-    config.dev.assetsSubDirectory,
-  );
+  const staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory);
 
   app.use(staticPath, express.static(resolve('public')));
 

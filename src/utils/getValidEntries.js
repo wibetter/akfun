@@ -9,10 +9,7 @@ const getEntriesByExt = (basePath, extReg) => {
 
     files.forEach((file) => {
       if (file.match(extReg)) {
-        result[path.basename(file).replace(extReg, '')] = path.resolve(
-          fullPath,
-          file,
-        );
+        result[path.basename(file).replace(extReg, '')] = path.resolve(fullPath, file);
       }
     });
     return result;
@@ -30,7 +27,7 @@ const getValidEntries = (basePath) => {
     if (htmlEntries[entry]) {
       result[entry] = {
         js: jsEntries[entry],
-        html: htmlEntries[entry],
+        html: htmlEntries[entry]
       };
     }
   });

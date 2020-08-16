@@ -14,27 +14,25 @@ const createFile = function (configPath, configDist, projectName) {
     }
     const configFile = path.parse(configDist);
     const configFileDir = configFile.dir.replace(/\\/g, '/');
-    fs.exists(configFileDir, function (exist) {
-      if (!exist) {
-        fs.mkdir(configFileDir, function () {
-          // 创建目录
-          suceessTip('已创建目录：' + configFileDir);
-          fs.writeFile(configDist, newConfigText, (err) => {
-            if (err) {
-              throw Error(err);
-            }
-            suceessTip('已创建配置文件：' + configDist);
-          });
-        });
-      } else {
+    if (fs.existsSync(configFileDir)) {
+      fs.writeFile(configDist, newConfigText, (err) => {
+        if (err) {
+          throw Error(err);
+        }
+        suceessTip('已创建配置文件：' + configDist);
+      });
+    } else {
+      fs.mkdir(configFileDir, function () {
+        // 创建目录
+        suceessTip('已创建目录：' + configFileDir);
         fs.writeFile(configDist, newConfigText, (err) => {
           if (err) {
             throw Error(err);
           }
           suceessTip('已创建配置文件：' + configDist);
         });
-      }
-    });
+      });
+    }
   });
 };
 

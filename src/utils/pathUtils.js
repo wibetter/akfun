@@ -4,8 +4,7 @@ const fs = require('fs');
 // 当前命令执行的路径
 const currentRoot = () => fs.realpathSync(process.cwd());
 
-const resolveToCurrentRoot = (filePath) =>
-  path.resolve(currentRoot(), filePath);
+const resolveToCurrentRoot = (filePath) => path.resolve(currentRoot(), filePath);
 
 const currentSrc = () => resolveToCurrentRoot('src');
 const currentBuild = () => resolveToCurrentRoot('build');
@@ -17,5 +16,5 @@ module.exports = {
   resolve: resolveToCurrentRoot,
   currentSrc,
   currentBuild,
-  currentPackageJson,
+  currentPackageJson
 };
