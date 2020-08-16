@@ -25,7 +25,7 @@ module.exports = () => {
   });
 
   // 获取页面模板地址
-  let curHtmlTemplate = resolve('../initData/template/index.html');
+  let curHtmlTemplate = path.resolve(__dirname, '../initData/template/index.html');
   if (config.webpack.template) {
     curHtmlTemplate = config.webpack.template; // akfun.config.js中的webpack配置
   }
