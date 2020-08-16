@@ -1,3 +1,4 @@
+const path = require('path');
 const tsImportPluginFactory = require('ts-import-plugin'); // 按需加载lib库组件代码
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const utils = require('./loaderUtils');
@@ -118,14 +119,40 @@ module.exports = () => {
 
   // 是否开启ESLint
   if (config.settings.enableEslint) {
+    // 通用js类型
     webpackConfig.module.rules.push({
-      test: /\.(js|ts|tsx|jsx|vue)$/,
+      test: /\.jsx?$/,
       loader: 'eslint-loader',
       enforce: 'pre',
       include: [resolve('src'), resolve('public')],
       exclude: /node_modules/,
       options: {
-        formatter: require('eslint-friendly-formatter')
+        formatter: require('eslint-friendly-formatter'),
+        configFile: path.resolve(__dirname, '../initData/config/.eslintrc.js')
+      }
+    });
+    // vue单文件类型
+    webpackConfig.module.rules.push({
+      test: /\.vue$/,
+      loader: 'eslint-loader',
+      enforce: 'pre',
+      include: [resolve('src'), resolve('public')],
+      exclude: /node_modules/,
+      options: {
+        formatter: require('eslint-friendly-formatter'),
+        configFile: path.resolve(__dirname, '../initData/config/.eslintrc.vue.js')
+      }
+    });
+    // ts类型
+    webpackConfig.module.rules.push({
+      test: /\.tsx?$/,
+      loader: 'eslint-loader',
+      enforce: 'pre',
+      include: [resolve('src'), resolve('public')],
+      exclude: /node_modules/,
+      options: {
+        formatter: require('eslint-friendly-formatter'),
+        configFile: path.resolve(__dirname, '../initData/config/.eslintrc.ts.js')
       }
     });
   }

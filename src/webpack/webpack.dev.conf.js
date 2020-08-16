@@ -52,8 +52,7 @@ module.exports = () => {
       new webpack.NoEmitOnErrorsPlugin(),
       // stylelint插件@用于验证scss文件里面的style规范
       new StyleLintPlugin({
-        syntax: 'scss',
-        files: ['src/**/*.vue', 'src/**/*.scss', 'src/**/*.css']
+        syntax: 'scss'
       }),
       new FriendlyErrorsPlugin(),
       new ProgressBarPlugin()
