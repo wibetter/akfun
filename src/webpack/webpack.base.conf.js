@@ -127,6 +127,7 @@ module.exports = () => {
       include: [resolve('src'), resolve('public')],
       exclude: /node_modules/,
       options: {
+        fix: config.settings.enableEslintFix || false,
         formatter: require('eslint-friendly-formatter'),
         configFile: path.resolve(__dirname, '../initData/config/.eslintrc.js')
       }
@@ -139,6 +140,7 @@ module.exports = () => {
       include: [resolve('src'), resolve('public')],
       exclude: /node_modules/,
       options: {
+        fix: config.settings.enableEslintFix || false,
         formatter: require('eslint-friendly-formatter'),
         configFile: path.resolve(__dirname, '../initData/config/.eslintrc.vue.js')
       }
@@ -151,6 +153,7 @@ module.exports = () => {
       include: [resolve('src'), resolve('public')],
       exclude: /node_modules/,
       options: {
+        fix: config.settings.enableEslintFix || false,
         formatter: require('eslint-friendly-formatter'),
         configFile: path.resolve(__dirname, '../initData/config/.eslintrc.ts.js')
       }
