@@ -11,7 +11,7 @@ function resolve(dir) {
 module.exports = {
   settings: {
     enableEslint: false, // 调试模式是否开启ESLint，默认关闭ESLint检测代码格式
-    enableEslintFix: false // 是否自动修正代码格式
+    enableEslintFix: false // 是否自动修正代码格式，默认不自动修正
   },
   webpack: {
     entry: {

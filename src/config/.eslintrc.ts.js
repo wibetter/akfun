@@ -1,11 +1,13 @@
-// 仅作为项目的eslint配置文件使用
-const { curWebpackBaseConfPath } = require('akfun');
+const getCurWebpackConfig = require('../utils/getCurWebpackConfig.js'); // 用于获取当前webpack配置的方法
+const curWebpackBaseConfPath = getCurWebpackConfig('base');
 
 module.exports = {
   root: true,
-  parser: 'babel-eslint', // 指定eslint解析器的，解析器必须符合规则
+  parser: '@typescript-eslint/parser',
+  // parser: 'vue-eslint-parser', // 指定eslint解析器的，解析器必须符合规则
   // 此项是用来指定javaScript语言类型和风格，sourceType用来指定js导入的方式，默认是script，此处设置为module，指某块导入方式
   parserOptions: {
+    parser: 'babel-eslint', // babel-eslint解析器是对babel解析器的包装使其与ESLint解析
     ecmaVersion: 6,
     sourceType: 'module', // 支持的ES语法版本，默认为5。注意只是语法，不包括ES的全局变量
     ecmaFeatures: {

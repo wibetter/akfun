@@ -6,6 +6,7 @@ const vueLoaderConfig = require('./vue-loader.conf');
 const { resolve } = require('../utils/pathUtils');
 // 引入当前项目配置文件
 const config = require('../config/index');
+const babelConfig = require('../config/babel.config'); // Babel的配置文件
 
 module.exports = () => {
   const webpackConfig = {
@@ -60,7 +61,8 @@ module.exports = () => {
           test: /\.(js|jsx|ts|tsx)$/,
           use: [
             {
-              loader: 'babel-loader'
+              loader: 'babel-loader',
+              options: babelConfig
             }
           ],
           include: [resolve('src'), resolve('test')],
@@ -129,7 +131,7 @@ module.exports = () => {
       options: {
         fix: config.settings.enableEslintFix || false,
         formatter: require('eslint-friendly-formatter'),
-        configFile: path.resolve(__dirname, '../initData/config/.eslintrc.js')
+        configFile: path.resolve(__dirname, '../config/.eslintrc.js')
       }
     });
     // vue单文件类型
@@ -142,7 +144,7 @@ module.exports = () => {
       options: {
         fix: config.settings.enableEslintFix || false,
         formatter: require('eslint-friendly-formatter'),
-        configFile: path.resolve(__dirname, '../initData/config/.eslintrc.vue.js')
+        configFile: path.resolve(__dirname, '../config/.eslintrc.vue.js')
       }
     });
     // ts类型
@@ -155,7 +157,7 @@ module.exports = () => {
       options: {
         fix: config.settings.enableEslintFix || false,
         formatter: require('eslint-friendly-formatter'),
-        configFile: path.resolve(__dirname, '../initData/config/.eslintrc.ts.js')
+        configFile: path.resolve(__dirname, '../config/.eslintrc.ts.js')
       }
     });
   }
