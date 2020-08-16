@@ -37,16 +37,20 @@ const webpackConfig = {
       // 关于ts的检测：https://ts.xcatliu.com/engineering/lint.html
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
-        options: {
-          transpileOnly: true,
-          getCustomTransformers: () => ({
-            before: [ tsImportPluginFactory( /** options */) ]
-          }),
-          compilerOptions: {
-            module: 'es2015'
-          }
-        },
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+              getCustomTransformers: () => ({
+                before: [ tsImportPluginFactory( /** options */) ]
+              }),
+              compilerOptions: {
+                module: 'es2015'
+              }
+            },
+          },
+        ],
         include: [resolve('src'), resolve('test')],
         exclude: /node_modules/,
       },
