@@ -17,12 +17,6 @@ module.exports = () => {
   // 获取webpack基本配置
   const baseWebpackConfig = getBaseWebpackConfig();
 
-  const devClientPath = path.resolve(__dirname, '../dev-client'); // 从akfun中获取
-  // add hot-reload related code to entry chunks
-  Object.keys(baseWebpackConfig.entry).forEach((name) => {
-    baseWebpackConfig.entry[name] = [devClientPath].concat(baseWebpackConfig.entry[name]);
-  });
-
   // 获取页面模板地址
   let curHtmlTemplate = path.resolve(__dirname, '../initData/template/index.html');
   if (config.webpack.template) {
@@ -98,6 +92,15 @@ module.exports = () => {
     const htmlWebpackPluginList = entrys2htmlWebpackPlugin(entryConfig, curHtmlTemplate);
     htmlWebpackPluginList.forEach((htmlWebpackPlugin) => {
       webpackDevConfig.plugins.push(htmlWebpackPlugin);
+    });
+  }
+
+  // 开启热更新能力
+  const devClientPath = path.resolve(__dirname, '../dev-client'); // 从akfun中获取
+  // add hot-reload related code to entry chunks
+  if (webpackDevConfig.entry) {
+    Object.keys(webpackDevConfig.entry).forEach((name) => {
+      webpackDevConfig.entry[name] = [devClientPath].concat(webpackDevConfig.entry[name]);
     });
   }
 

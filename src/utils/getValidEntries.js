@@ -23,14 +23,16 @@ const getValidEntries = (basePath) => {
 
   const result = {};
 
-  Object.keys(jsEntries).forEach((entry) => {
-    if (htmlEntries[entry]) {
-      result[entry] = {
-        js: jsEntries[entry],
-        html: htmlEntries[entry]
-      };
-    }
-  });
+  if (jsEntries) {
+    Object.keys(jsEntries).forEach((entry) => {
+      if (htmlEntries[entry]) {
+        result[entry] = {
+          js: jsEntries[entry],
+          html: htmlEntries[entry]
+        };
+      }
+    });
+  }
 
   return result;
 };
