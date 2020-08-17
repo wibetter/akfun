@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 替换extrac
 // const ExtractTextPlugin = require('extract-text-webpack-plugin'); // 不支持webpack4.0
 // 引入当前项目配置文件
 const config = require('../config/index');
+const postCssConfig = require('../config/postcss.config'); // PostCss的配置文件
 
 exports.assetsPath = function (_path) {
   const assetsSubDirectory =
@@ -32,12 +33,17 @@ exports.cssLoaders = function (options) {
     }
   };
 
+  const postCssLoader = {
+    loader: 'postcss-loader',
+    options: postCssConfig // 同babel-loader的option
+  };
+
   // generate loader string to be used with extract text plugin
   function generateLoaders(loader, loaderOptions) {
     let loaders = [];
-
-    // 使用MiniCssExtractPlugin提取css内容
+    // 生产环境使用MiniCssExtractPlugin提取css内容，用于提取css内容到一个独立的文件中
     if (options.environment === 'prod') {
+      // MiniCssExtractPlugin.loader需要配合MiniCssExtractPlugin使用
       loaders = [
         {
           loader: MiniCssExtractPlugin.loader,
@@ -48,7 +54,7 @@ exports.cssLoaders = function (options) {
         cssLoader
       ];
     } else {
-      loaders = [cssLoader];
+      loaders = [cssLoader, postCssLoader];
     }
 
     if (loader) {
@@ -63,7 +69,6 @@ exports.cssLoaders = function (options) {
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {
     css: generateLoaders(),
-    postcss: generateLoaders(),
     sass: generateLoaders('sass', { indentedSyntax: true }),
     scss: generateLoaders('sass').concat({
       loader: 'sass-resources-loader',

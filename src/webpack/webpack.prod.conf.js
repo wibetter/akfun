@@ -65,14 +65,11 @@ module.exports = () => {
       }
     },
     plugins: [
-      require('autoprefixer'),
       // http://vuejs.github.io/vue-loader/en/workflow/production.html
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(config.build.NODE_ENV) // vue-router中根据此变量判断执行环境
       }),
       new MiniCssExtractPlugin({
-        // Options similar to the same options in webpackOptions.output
-        // all options are optional
         filename: utils.assetsPath('css/[name].[contenthash:8].css'),
         ignoreOrder: false // Enable to remove warnings about conflicting order
       }),

@@ -35,7 +35,6 @@ module.exports = () => {
     devtool: config.build2lib.productionSourceMap ? '#source-map' : false, // '#source-map': 源码，false：压缩代码
     externals: config.webpack.externals,
     plugins: [
-      require('autoprefixer'),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(config.build2lib.NODE_ENV)
       }),
