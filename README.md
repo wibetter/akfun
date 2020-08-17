@@ -133,11 +133,14 @@ $ npm i akfun --save-dev 或者 yarn add akfun --dev
 
 ## AKFun开放的配置能力
 > AKFun配置文件（akfun.config.js），以下使用AKFunConfig代表akfun.config.js配置对象
-1. 开启/关闭 ESLint代码规范检测: AKFunConfig.settings.enableEslint
+1. 开启/关闭 ESLint代码规范检测: AKFunConfig.settings.enableEslint (也可配置StyleLint的使用)
 ```bash
 module.exports = {
   settings: {
-    enableEslint: true,
+    enableESLint: true, // 是否开启ESLint，默认开启ESLint检测代码格式
+    enableESLintFix: false, // 是否ESLint自动修正代码格式
+    enableStyleLint: true, // 是否开启StyleLint，默认开启ESLint检测代码格式
+    enableStyleLintFix: false // 是否需要StyleLint自动修正代码格式
   },
   ...
 }
