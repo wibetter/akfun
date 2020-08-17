@@ -15,8 +15,6 @@
   "main": "build/main.js",
   "scripts": {
     "akfun": "akfun",
-    "lint": "eslint --ext .js,.vue src",
-    "lintFix": "eslint --ext .js,.vue src --fix",
     "format": "prettier --write \"src/**/**/*.{js,vue,tsx,ts,scss,json}\""
   },
   "files": [
@@ -31,10 +29,7 @@
     }
   },
   "lint-staged": {
-    "src/**/**/*.{js,vue,tsx,ts,scss,json}": [
-      "eslint --ext --fix"
-    ],
-    "src/**/**/*.{js,vue,tsx,ts,scss,json}": [
+    "src/**/**/*.{js,jsx,ts,tsx,vue,scss,json}": [
       "prettier --write"
     ]
   },

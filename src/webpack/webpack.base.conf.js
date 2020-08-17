@@ -1,5 +1,6 @@
 const path = require('path');
 const tsImportPluginFactory = require('ts-import-plugin'); // 按需加载lib库组件代码
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const utils = require('./loaderUtils');
 const vueLoaderConfig = require('./vue-loader.conf');
@@ -120,7 +121,7 @@ module.exports = () => {
   };
 
   // 是否开启ESLint
-  if (config.settings.enableEslint) {
+  if (config.settings.enableESLint) {
     // 通用js类型
     webpackConfig.module.rules.push({
       test: /\.jsx?$/,
@@ -129,7 +130,7 @@ module.exports = () => {
       include: [resolve('src'), resolve('public')],
       exclude: /node_modules/,
       options: {
-        fix: config.settings.enableEslintFix || false,
+        fix: config.settings.enableESLintFix || false,
         formatter: require('eslint-friendly-formatter'),
         configFile: path.resolve(__dirname, '../config/.eslintrc.js')
       }
@@ -142,7 +143,7 @@ module.exports = () => {
       include: [resolve('src'), resolve('public')],
       exclude: /node_modules/,
       options: {
-        fix: config.settings.enableEslintFix || false,
+        fix: config.settings.enableESLintFix || false,
         formatter: require('eslint-friendly-formatter'),
         configFile: path.resolve(__dirname, '../config/.eslintrc.vue.js')
       }
@@ -155,11 +156,32 @@ module.exports = () => {
       include: [resolve('src'), resolve('public')],
       exclude: /node_modules/,
       options: {
-        fix: config.settings.enableEslintFix || false,
+        fix: config.settings.enableESLintFix || false,
         formatter: require('eslint-friendly-formatter'),
         configFile: path.resolve(__dirname, '../config/.eslintrc.ts.js')
       }
     });
+  }
+  // 是否开启StyleLint: 用于验证scss文件里面的style规范
+  if (config.settings.enableStyleLint) {
+    // 校验vue单文件里面的样式规范
+    webpackConfig.plugins.push(
+      new StyleLintPlugin({
+        syntax: 'scss',
+        files: ['src/**/*.vue'],
+        fix: config.settings.enableStyleLintFix,
+        configFile: path.resolve(__dirname, '../config/.stylelintrc-vue')
+      })
+    );
+    // 校验scss等样式文件里面的样式规范
+    webpackConfig.plugins.push(
+      new StyleLintPlugin({
+        syntax: 'scss',
+        files: 'src/**/*.s?(a|c)ss',
+        fix: config.settings.enableStyleLintFix,
+        configFile: path.resolve(__dirname, '../config/.stylelintrc')
+      })
+    );
   }
 
   return webpackConfig;

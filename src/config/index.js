@@ -8,8 +8,10 @@ const getConfigObj = require('../utils/getConfigObj');
  */
 const defultAKFunConfig = {
   settings: {
-    enableEslint: true, // 调试模式是否开启ESLint，默认开启ESLint检测代码格式
-    enableEslintFix: false // 是否自动修正代码格式
+    enableESLint: true, // 是否开启ESLint，默认开启ESLint检测代码格式
+    enableESLintFix: false, // 是否ESLint自动修正代码格式
+    enableStyleLint: true, // 是否开启StyleLint，默认开启ESLint检测代码格式
+    enableStyleLintFix: false // 是否需要StyleLint自动修正代码格式
   },
   webpack: {
     entry: {

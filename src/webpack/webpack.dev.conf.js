@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const path = require('path');
 const merge = require('webpack-merge');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
-const StyleLintPlugin = require('stylelint-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const utils = require('./loaderUtils');
 // 引入当前项目配置文件
@@ -50,10 +49,6 @@ module.exports = () => {
       // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoEmitOnErrorsPlugin(),
-      // stylelint插件@用于验证scss文件里面的style规范
-      new StyleLintPlugin({
-        syntax: 'scss'
-      }),
       new FriendlyErrorsPlugin(),
       new ProgressBarPlugin()
     ]
