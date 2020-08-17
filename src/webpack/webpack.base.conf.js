@@ -4,7 +4,8 @@ const StyleLintPlugin = require('stylelint-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const utils = require('./loaderUtils');
 const vueLoaderConfig = require('./vue-loader.conf');
-const { resolve } = require('../utils/pathUtils');
+const { resolve, resolveToCurrentRoot } = require('../utils/pathUtils');
+const catchVuePages = require('../utils/catchVuePages'); // 用于获取当前项目中的vue单文件
 // 引入当前项目配置文件
 const config = require('../config/index');
 const babelConfig = require('../config/babel.config'); // Babel的配置文件
@@ -130,6 +131,7 @@ module.exports = () => {
       include: [resolve('src'), resolve('public')],
       exclude: /node_modules/,
       options: {
+        cache: true, // the cache is written to the ./node_modules/.cache/eslint-loader director
         fix: config.settings.enableESLintFix || false,
         formatter: require('eslint-friendly-formatter'),
         configFile: path.resolve(__dirname, '../config/.eslintrc.js')
@@ -143,6 +145,7 @@ module.exports = () => {
       include: [resolve('src'), resolve('public')],
       exclude: /node_modules/,
       options: {
+        cache: true,
         fix: config.settings.enableESLintFix || false,
         formatter: require('eslint-friendly-formatter'),
         configFile: path.resolve(__dirname, '../config/.eslintrc.vue.js')
@@ -156,6 +159,7 @@ module.exports = () => {
       include: [resolve('src'), resolve('public')],
       exclude: /node_modules/,
       options: {
+        cache: true,
         fix: config.settings.enableESLintFix || false,
         formatter: require('eslint-friendly-formatter'),
         configFile: path.resolve(__dirname, '../config/.eslintrc.ts.js')
@@ -164,20 +168,28 @@ module.exports = () => {
   }
   // 是否开启StyleLint: 用于验证scss文件里面的style规范
   if (config.settings.enableStyleLint) {
-    // 校验vue单文件里面的样式规范
-    webpackConfig.plugins.push(
-      new StyleLintPlugin({
-        syntax: 'scss',
-        files: ['src/**/*.vue'],
-        fix: config.settings.enableStyleLintFix,
-        configFile: path.resolve(__dirname, '../config/.stylelintrc-vue')
-      })
-    );
+    const vuePagesObj = catchVuePages();
+    // 判断项目中是否有vue文件
+    if (vuePagesObj && Object.keys(vuePagesObj).length > 0) {
+      // 校验vue单文件里面的样式规范
+      webpackConfig.plugins.push(
+        new StyleLintPlugin({
+          files: ['src/**/*.vue'],
+          quiet: true,
+          cache: true,
+          cacheLocation: resolveToCurrentRoot('./node_modules/stylelint/.vue-cache'),
+          fix: config.settings.enableStyleLintFix,
+          configFile: path.resolve(__dirname, '../config/.stylelintrc-vue')
+        })
+      );
+    }
     // 校验scss等样式文件里面的样式规范
     webpackConfig.plugins.push(
       new StyleLintPlugin({
-        syntax: 'scss',
         files: 'src/**/*.s?(a|c)ss',
+        quiet: true,
+        cache: true,
+        cacheLocation: resolveToCurrentRoot('./node_modules/stylelint/.cache'),
         fix: config.settings.enableStyleLintFix,
         configFile: path.resolve(__dirname, '../config/.stylelintrc')
       })
