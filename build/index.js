@@ -38,7 +38,7 @@ let argv = yargs
         .option('dir', {
           alias: 'd',
           describe: '项目路径',
-          default: './',
+          default: 'akfunProject',
         })
         .option('name', {
           alias: 'n',

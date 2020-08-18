@@ -8,9 +8,9 @@ const templateList = {
   'pigNews': 'git@github.com:wibetter/pigNews.git',
 };
 
-const createDefaultConfig = function (type, dist, projectName) {
+const akfunInit = function (type, dist, projectName) {
   const currentTemplateUrl = templateList[type || 'react'];
-  gitClone(currentTemplateUrl, dist || './', () => {});
+  gitClone(currentTemplateUrl, dist || 'akfunProject', () => {});
 };
 
-module.exports = createDefaultConfig;
+module.exports = akfunInit;
