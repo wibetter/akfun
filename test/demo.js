@@ -1,10 +1,10 @@
-const path = require('path');
+/*const path = require('path');
+const fs = require('fs');
 
-const createFile = require('../src/utils/createFile.js'); // 创建配置文件
+const currentRoot = () => fs.realpathSync(process.cwd());
+const resolveToCurrentRoot = (filePath) => path.resolve(currentRoot(), filePath);
 
-const createDefaultConfig = function(configFileName) {
-  createFile(path.resolve(__dirname, `../src/initData/config/${configFileName}`),
-    path.resolve(process.cwd(), `./${configFileName}`));
-};
+console.log(resolveToCurrentRoot('./'));*/
 
-createDefaultConfig('.babelrc')
+const akfunInit = require('../build/akfunInit');
+akfunInit('vue', '');
