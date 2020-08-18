@@ -16,9 +16,8 @@
 > 全局安装AKFun，用于同时管理多个前端项目代码（可使用AKFun创建一个新项目）
 
 1. **全局安装**
-
 ```bash
-$ npm i -g akfun 或者 yarn add akfun global
+$ yarn global add akfun 或者  npm i -g akfun
 ```
 
 2. **初始化一个项目**
@@ -50,7 +49,7 @@ $ akfun build2lib
 1. **本地安装**
 
 ```bash
-$ npm i akfun --save-dev 或者 yarn add akfun --dev
+$ yarn add akfun --dev 或者 npm i akfun --save-dev
 ```
 
 2. **在package.json中创建可执行脚本**
