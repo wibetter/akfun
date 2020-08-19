@@ -66,16 +66,21 @@ exports.cssLoaders = function (options) {
     return ['style-loader'].concat(loaders);
   }
 
+  let scssLoader = generateLoaders('sass');
+  if (config.webpack.sassResources) {
+    scssLoader.concat({
+      loader: 'sass-resources-loader',
+      options: {
+        resources: config.webpack.sassResources || []
+      }
+    });
+  }
+
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {
     css: generateLoaders(),
     sass: generateLoaders('sass', { indentedSyntax: true }),
-    scss: generateLoaders('sass').concat({
-      loader: 'sass-resources-loader',
-      options: {
-        resources: config.webpack.sassResources
-      }
-    }),
+    scss: scssLoader,
     less: generateLoaders('less'),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
