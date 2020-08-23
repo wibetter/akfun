@@ -116,5 +116,12 @@ module.exports = {
     productionGzip: false,
     productionGzipExtensions: ['js', 'css', 'json'],
     bundleAnalyzerReport: false
+  },
+  build2esm: {
+    input: resolve('src/main.js'),
+    output: [
+      { file: resolve('dist/lib.js'), format: 'cjs' },
+      { file: resolve('dist/lib.esm.js'), format: 'esm' }
+    ]
   }
 };

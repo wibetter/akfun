@@ -104,6 +104,19 @@ let argv = yargs
     },
   )
   .command(
+    'build2esm',
+    '构建esm功能包',
+    (yargs) => {
+      yargs
+        .reset()
+        .usage(titleTip('Usage') + ': $0 online')
+        .alias('h', 'help');
+    },
+    (argv) => {
+      mainAction.build2esm(); // 构建esm
+    },
+  )
+  .command(
     'inspect',
     '输出当前配置文件',
     (yargs) => {

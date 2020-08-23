@@ -130,7 +130,13 @@
     "@typescript-eslint/eslint-plugin": "^3.9.0",
     "@typescript-eslint/parser": "^3.9.0",
     "@vue/eslint-config-typescript": "^5.0.2",
-    "ts-import-plugin": "^1.6.5"
+    "ts-import-plugin": "^1.6.5",
+    "@rollup/plugin-babel": "^5.2.0",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "rollup-plugin-terser": "^7.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "rollup": "^2.26.5"
   },
   "devDependencies": {
     "husky": "^4.2.5",
