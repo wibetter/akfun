@@ -4,6 +4,7 @@ import babel from '@rollup/plugin-babel';
 import resolve from '@rollup/plugin-node-resolve'; // 支持node中的文件导入
 import commonjs from '@rollup/plugin-commonjs'; // 识别cmd模块
 import json from '@rollup/plugin-json'; // 识别json类型文件
+import alias from '@rollup/plugin-alias'; // 简写配置
 import { terser } from 'rollup-plugin-terser'; // 压缩
 
 const babelConfig = require('./babel.config'); // Babel的配置文件
@@ -15,7 +16,7 @@ function resolveToCurrentRoot(filePath) {
 
 module.exports = {
   input: resolveToCurrentRoot('src/main.js'),
-  plugins: [commonjs(), babel(babelConfig), json(), resolve()],
+  plugins: [resolve(), commonjs(), babel(babelConfig), json()],
   output: [
     { file: resolveToCurrentRoot('lib.js'), format: 'cjs' },
     { file: resolveToCurrentRoot('lib.min.js'), format: 'cjs', plugins: [terser()] },

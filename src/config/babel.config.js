@@ -3,8 +3,8 @@ module.exports = {
     [
       '@babel/preset-env',
       {
-        loose: false,
-        modules: false,
+        loose: true,
+        modules: false, // 是否启用将ES6模块语法转换为其他模块类型的功能，当前设置为false，以便webpack进行tree shaking。
         targets: {
           browsers: ['> 1%', 'last 2 versions', 'not ie <= 8']
         }
