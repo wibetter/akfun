@@ -57,7 +57,7 @@ let argv = yargs
     (yargs) => {
       yargs
         .reset()
-        .usage(titleTip('Usage') + ': $0 dev')
+        .usage(titleTip('Usage') + ': $0 config init')
         .alias('h', 'help');
     },
     () => {
@@ -83,7 +83,7 @@ let argv = yargs
     (yargs) => {
       yargs
         .reset()
-        .usage(titleTip('Usage') + ': $0 online')
+        .usage(titleTip('Usage') + ': $0 build')
         .alias('h', 'help');
     },
     (argv) => {
@@ -96,7 +96,7 @@ let argv = yargs
     (yargs) => {
       yargs
         .reset()
-        .usage(titleTip('Usage') + ': $0 online')
+        .usage(titleTip('Usage') + ': $0 build2lib')
         .alias('h', 'help');
     },
     (argv) => {
@@ -109,11 +109,16 @@ let argv = yargs
     (yargs) => {
       yargs
         .reset()
-        .usage(titleTip('Usage') + ': $0 online')
+        .usage(titleTip('Usage') + ': $0 build2esm')
+        .option('fileName', {
+          alias: 'n',
+          describe: '输出的文件名',
+          default: 'lib',
+        })
         .alias('h', 'help');
     },
     (argv) => {
-      mainAction.build2esm(); // 构建esm
+      mainAction.build2esm(argv.fileName); // 构建esm
     },
   )
   .command(
@@ -122,7 +127,7 @@ let argv = yargs
     (yargs) => {
       yargs
         .reset()
-        .usage(titleTip('Usage') + ': $0 online')
+        .usage(titleTip('Usage') + ': $0 inspect')
         .option('type', {
           alias: 't',
           describe: '环境类型（本地调试环境/生产环境/library构建环境）',
