@@ -1,6 +1,6 @@
 {
   "name": "akfun",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "前端脚手架：支持Vue技术站和react技术栈",
   "keywords": [
     "前端工程",
@@ -61,6 +61,8 @@
     "@babel/preset-react": "^7.10.1",
     "@babel/register": "^7.10.1",
     "@mapbox/stylelint-processor-arbitrary-tags": "^0.3.0",
+    "rollup": "^2.26.5",
+    "rollup-plugin-terser": "^7.0.0",
     "@rollup/plugin-alias": "^3.1.1",
     "@rollup/plugin-babel": "^5.2.0",
     "@rollup/plugin-commonjs": "^15.0.0",
@@ -112,8 +114,6 @@
     "progress-bar-webpack-plugin": "^2.1.0",
     "qs": "^6.9.4",
     "rimraf": "^3.0.2",
-    "rollup": "^2.26.5",
-    "rollup-plugin-terser": "^7.0.0",
     "sass-loader": "^8.0.2",
     "sass-resources-loader": "^2.0.3",
     "semver": "^7.3.2",
@@ -142,6 +142,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^9.1.1",
+    "@rollup/plugin-image": "^2.0.5",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.9",
     "prettier": "^2.0.5"

@@ -1,9 +1,8 @@
-const ora = require('ora');
-const rollup = require('rollup');
-const config = require('./config/index'); // 引入当前项目配置文件
-// const rollupConfig = require('./config/rollup.config-v1.mjs'); // rollup的配置文件
+import ora from 'ora';
+import rollup from 'rollup';
+import config from './config/index'; // 引入当前项目配置文件
 import rollupConfig from './config/rollup.config-v1'; // rollup的配置文件
-const { isArray, isObject } = require('./utils/typeof');
+import { isArray, isObject } from './utils/typeof';
 
 async function build(options) {
   // create a bundle
@@ -11,11 +10,11 @@ async function build(options) {
     input: options.input,
     /** 直接使用webpack中的externals配置（避免再新增一个rollup对应的配置，增加用户的配置复杂度） */
     external: config.webpack.externals,
-    plugins: options.plugins
+    plugins: options.plugins,
   });
 
   if (isArray(options.output)) {
-    options.output.map((outputItem) => {
+    options.output.map(outputItem => {
       bundle.write(outputItem);
     });
   } else if (isObject(options.output)) {

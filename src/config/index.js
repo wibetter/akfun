@@ -20,7 +20,7 @@ const defultAKFunConfig = {
     },
     resolve: {
       // webpack的resolve配置
-      extensions: ['.js', '.jsx', '.vue', 'json'], // 用于配置webpack在尝试过程中用到的后缀列表
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue', '.json'], // 用于配置webpack在尝试过程中用到的后缀列表
       alias: {
         '@': resolve('src'),
         $components: resolve('src/components'),

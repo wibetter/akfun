@@ -8,7 +8,6 @@ const utils = require('./loaderUtils');
 // 引入当前项目配置文件
 const config = require('../config/index');
 const getBaseWebpackConfig = require('./webpack.base.conf');
-const { resolve } = require('../utils/pathUtils'); // 统一路径解析
 const getJsEntries = require('../utils/jsEntries');
 const entrys2htmlWebpackPlugin = require('../utils/entrys2htmlWebpackPlugin');
 const { isArray } = require('../utils/typeof');
