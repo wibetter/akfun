@@ -26,6 +26,13 @@ function getAssetsPath(url) {
 exports.cssLoaders = function (options) {
   options = options || {};
 
+  const VueCssLoader = {
+    loader: 'vue-style-loader',
+    options: {
+      sourceMap: options.sourceMap
+    }
+  };
+
   const cssLoader = {
     loader: 'css-loader',
     options: {
@@ -51,10 +58,12 @@ exports.cssLoaders = function (options) {
             esModule: true
           }
         },
-        cssLoader
+        VueCssLoader,
+        cssLoader,
+        postCssLoader
       ];
     } else {
-      loaders = [cssLoader, postCssLoader];
+      loaders = [VueCssLoader, cssLoader, postCssLoader];
     }
 
     if (loader) {
@@ -63,24 +72,29 @@ exports.cssLoaders = function (options) {
         options: { ...loaderOptions, sourceMap: options.sourceMap }
       });
     }
-    return ['style-loader'].concat(loaders);
-  }
 
-  let scssLoader = generateLoaders('sass');
-  if (config.webpack.sassResources) {
-    scssLoader.concat({
-      loader: 'sass-resources-loader',
-      options: {
-        resources: config.webpack.sassResources || []
-      }
-    });
+    // 如果是sass、scss文件，则增加sass-resources-loader
+    if (
+      (loader === 'sass' || loader === 'scss') &&
+      config.webpack.sassResources &&
+      config.webpack.sassResources.length > 0
+    ) {
+      loaders.push({
+        loader: 'sass-resources-loader',
+        options: {
+          resources: config.webpack.sassResources || []
+        }
+      });
+    }
+
+    return loaders;
   }
 
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {
     css: generateLoaders(),
     sass: generateLoaders('sass', { indentedSyntax: true }),
-    scss: scssLoader,
+    scss: generateLoaders('sass'),
     less: generateLoaders('less'),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
