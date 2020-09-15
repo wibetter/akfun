@@ -1,6 +1,5 @@
 // rollup.config.js
-const path = require('path');
-const { babel, getBabelOutputPlugin } = require('@rollup/plugin-babel');
+const { babel } = require('@rollup/plugin-babel');
 const { nodeResolve } = require('@rollup/plugin-node-resolve'); // 支持node中的文件导入
 const commonjs = require('@rollup/plugin-commonjs'); // 识别cmd模块
 const json = require('@rollup/plugin-json'); // 识别json类型文件
@@ -23,12 +22,25 @@ const babelConfig = require('./babel.config'); // Babel的配置文件
 const config = require('./index'); // 引入当前项目配置文件
 
 module.exports = function (fileName) {
-  const curFileName = fileName || 'index'; // 默认以"index.esm.js"输出
+  // 获取用户配置的构建入口文件
+  let rollupInput = resolveToCurrentRoot('src/main.js');
+  if (config.build2esm && config.build2esm.input) {
+    rollupInput = config.build2esm.input;
+  }
+  let curFileName = fileName || 'index'; // 默认以"index.esm.js"输出
+  // 获取用户配置的构建输出文件名
+  if (config.build2esm && config.build2esm.fileName) {
+    curFileName = config.build2esm.fileName;
+  }
+  // 增加babel配置
+  babelConfig.babelHelpers = 'runtime';
+
   return {
-    input: resolveToCurrentRoot('src/main.js'),
+    input: rollupInput,
     // external：将模块视为外部模块，不会打包在库中（在akfun.config.js中配置）
     plugins: [
       nodeResolve(),
+      babel(babelConfig), // 备注，需要先babel()再commjs()
       commonjs(),
       alias({
         extensions: config.webpack.resolve.extensions,
@@ -47,11 +59,7 @@ module.exports = function (fileName) {
         ]
       }),
       image(),
-      json(),
-      // babel(babelConfig),
-      getBabelOutputPlugin({
-        configFile: path.resolve(__dirname, './babel.config.js')
-      })
+      json()
     ],
     output: [
       {
