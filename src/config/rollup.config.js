@@ -2,6 +2,7 @@
 const { babel } = require('@rollup/plugin-babel');
 const { nodeResolve } = require('@rollup/plugin-node-resolve'); // 支持node中的文件导入
 const commonjs = require('@rollup/plugin-commonjs'); // 识别cmd模块
+const vue = require('rollup-plugin-vue');
 const json = require('@rollup/plugin-json'); // 识别json类型文件
 const image = require('@rollup/plugin-image'); // 图片处理器
 const { terser } = require('rollup-plugin-terser'); // 压缩
@@ -39,13 +40,17 @@ module.exports = function (fileName) {
     input: rollupInput,
     // external：将模块视为外部模块，不会打包在库中（在akfun.config.js中配置）
     plugins: [
-      nodeResolve(),
-      babel(babelConfig), // 备注，需要先babel()再commjs()
-      commonjs(),
       alias({
+        resolve: config.webpack.resolve.extensions,
         extensions: config.webpack.resolve.extensions,
         entries: config.webpack.resolve.alias
       }),
+      nodeResolve({
+        extensions: config.webpack.resolve.extensions
+      }),
+      babel(babelConfig), // 备注，需要先babel()再commjs()
+      vue(),
+      commonjs(),
       postcss({
         extensions: ['.css', '.scss', '.sass', '.styl', '.stylus', '.less'],
         // Or with custom file name, it will generate file relative to bundle.js in v3
