@@ -52,13 +52,13 @@ exports.cssLoaders = function (options) {
     if (options.environment === 'prod') {
       // MiniCssExtractPlugin.loader需要配合MiniCssExtractPlugin使用
       loaders = [
+        VueCssLoader,
         {
           loader: MiniCssExtractPlugin.loader,
           options: {
             esModule: true
           }
         },
-        VueCssLoader,
         cssLoader,
         postCssLoader
       ];
