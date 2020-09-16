@@ -119,9 +119,6 @@ module.exports = {
   },
   build2esm: {
     input: resolve('src/main.js'),
-    output: [
-      { file: resolve('dist/lib.js'), format: 'cjs' },
-      { file: resolve('dist/lib.esm.js'), format: 'esm' }
-    ]
+    fileName: 'index'
   }
 };

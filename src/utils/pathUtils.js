@@ -5,6 +5,7 @@ const fs = require('fs');
 const currentRoot = () => fs.realpathSync(process.cwd());
 
 const resolveToCurrentRoot = (filePath) => path.resolve(currentRoot(), filePath);
+const resolveToCurrentDist = (filePath) => path.resolve(currentRoot(), 'dist/', filePath);
 
 const currentSrc = () => resolveToCurrentRoot('src');
 const currentBuild = () => resolveToCurrentRoot('build');
@@ -13,6 +14,7 @@ const currentPackageJson = () => resolveToCurrentRoot('package.json');
 module.exports = {
   currentRoot,
   resolveToCurrentRoot,
+  resolveToCurrentDist,
   resolve: resolveToCurrentRoot,
   currentSrc,
   currentBuild,
