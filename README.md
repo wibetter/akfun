@@ -1,12 +1,12 @@
 # AKFun 前端脚手架
-> AKFun 是一个基于 Webpack4.0 的打包工具，支持多种技术栈：Vue技术栈、React技术栈、React&TS技术栈(开发中)
-- 技术栈：node/webpack4.0/express/babel/eslint/stylelint
+> AKFun 是一个基于 Webpack4.0 和 rollup 的前端项目打包工具，支持多种技术栈：Vue技术栈、React技术栈、React&TS技术栈(开发中)
+- 技术栈：node/webpack4.0/rollup/express/babel/eslint/stylelint
 
 ## 特性
 - ⚡️ 零配置，开箱即用
 - 👏 支持Vue和React项目的构建
 - 📤 支持单页面和多页面
-- 💪 提供三种构建场景: 本地开发调试模式(包含热更新、接口代理等功能)、构建生产环境代码、library库的构建(以umd进行输出)
+- 💪 提供三种构建场景: 本地开发调试模式(包含热更新、接口代理等功能)、构建生产环境代码、library库的构建(支持umd和esm的打包能力)
 - ❤️ 开放配置能力: 可配置构建入口文件、是否开启ESLint代码规范检测、接口代理配置等
 - 👍 支持 [Autoprefixer](https://github.com/postcss/autoprefixer#readme)、[Sass](https://sass-lang.com/)、[PostCSS](https://postcss.org/)、[ESLint](http://eslint.cn/)、[StyleLint](https://stylelint.io/)
 - ❤️ 支持项目系统参数自动批量替换 [params-replace-loader](https://www.npmjs.com/package/params-replace-loader)
@@ -39,8 +39,13 @@ $ akfun build
 ```
 
 ```bash
-# 3、构建第三方功能包
+# 3、构建第三方功能包（以umd格式输出）
 $ akfun build2lib
+```
+
+```bash
+# 4、构建第三方功能包的esm输出格式
+$ akfun build2esm
 ```
 
 ## 快速开始 / 使用方法二
@@ -60,8 +65,10 @@ $ yarn add akfun --dev 或者 npm i akfun --save-dev
 "dev": "akfun dev"
 # 用于构建生产环境代码
 "build": "akfun build"
-# 用于构建第三方功能包
+# 用于构建第三方功能包（以umd格式输出）
 "build2lib": "akfun build2lib"
+# 用于构建第三方功能包（以esm格式输出）
+"build2esm": "akfun build2esm"
 ```
 
 3. **开始构建当前项目**
@@ -74,9 +81,13 @@ $ yarn add akfun --dev 或者 npm i akfun --save-dev
    ```bash
    $ npm run build
    ```
-   3.3 构建第三方功能包
+   3.3 构建第三方功能包（以umd格式输出）
    ```bash
    $ npm run build2lib
+   ```
+   3.4 构建第三方功能包（以esm格式输出）
+   ```bash
+   $ npm run build2esm
    ```
 
 ## AKFun使用说明
@@ -104,7 +115,8 @@ $ yarn add akfun --dev 或者 npm i akfun --save-dev
 3. **关于AKFun提供三种构建场景**
     1. **dev**: 本地开发调试模式，用于本地开发和调试项目(包含热更新、接口代理等功能)，编译的代码没有压缩，默认会开启ESLint检测代码规范（可关闭）
     2. **build**: 用于构建生产环境代码，编译输出的代码会进行压缩优化
-    3. **build2lib**: 用于构建library库，目前统一以umd进行输出
+    3-1. **build2lib**: 用于构建library库，以umd进行输出
+    3-2. **build2esm**: 用于构建library库，以esm进行输出
 
 4. **关于AKFun的配置文件**
     1. AKFun会提供全量的默认配置，实现零配置、开箱即用的能力
@@ -165,6 +177,10 @@ module.exports = {
   build2lib: {
     entry: {}
   }
+  build2esm: {
+    input: resolve('src/main.js'),
+    fileName: 'index',
+  }
   ...
 }
 ```
@@ -176,7 +192,7 @@ module.exports = {
   ...
   webpack: {
     resolve: {
-        extensions: ['.js', '.jsx', '.vue', 'json'],
+      extensions: ['.js', '.jsx', '.vue', 'json'],
     }
   },
   ...
@@ -190,7 +206,7 @@ module.exports = {
   ...
   webpack: {
     resolve: {
-        alias: {},
+      alias: {},
     }
   },
   ...
@@ -293,7 +309,7 @@ module.exports = {
 }
 ```
 
-10、用于构建第三方功能包的配置
+10、用于构建第三方功能包的配置（以umd格式输出）
 ```bash
 module.exports = {
   ...
@@ -307,6 +323,18 @@ module.exports = {
       productionGzip: false, // 是否开启Gzip服务
       productionGzipExtensions: ['js', 'css', 'json'], // Gzip识别的文件后缀
       bundleAnalyzerReport: false, // 开启打包分析功能
+    },
+  ...
+}
+```
+
+11、用于构建esm格式的第三方功能包配置
+```bash
+module.exports = {
+  ...
+    build2esm: {
+      input: resolve('src/main.js'), // 入口文件
+      fileName: 'index', // 输出的文件名称
     },
   ...
 }
