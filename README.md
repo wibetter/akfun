@@ -115,8 +115,8 @@ $ yarn add akfun --dev 或者 npm i akfun --save-dev
 3. **关于AKFun提供三种构建场景**
     1. **dev**: 本地开发调试模式，用于本地开发和调试项目(包含热更新、接口代理等功能)，编译的代码没有压缩，默认会开启ESLint检测代码规范（可关闭）
     2. **build**: 用于构建生产环境代码，编译输出的代码会进行压缩优化
-    3-1. **build2lib**: 用于构建library库，以umd进行输出
-    3-2. **build2esm**: 用于构建library库，以esm进行输出
+    3. **build2lib**: 用于构建library库，以umd进行输出
+    4. **build2esm**: 用于构建library库，以esm进行输出
 
 4. **关于AKFun的配置文件**
     1. AKFun会提供全量的默认配置，实现零配置、开箱即用的能力
