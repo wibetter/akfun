@@ -59,17 +59,17 @@ let argv = yargs
             default : 'react',
             choices : [
               {
-                name : 'react项目模板',
+                name : 'react项目',
                 value : 'react',
                 short : 'react',
               },
               {
-                name : 'vue项目模板',
+                name : 'vue项目',
                 value : 'vue',
                 short : 'vue',
               },
               {
-                name : 'library库模板',
+                name : 'library库',
                 value : 'library',
                 short : 'library',
               },
