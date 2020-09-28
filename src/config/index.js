@@ -1,4 +1,5 @@
 'use strict';
+const deepMerge = require('deepmerge');
 // 统一路径解析：
 const { resolve } = require('../utils/pathUtils');
 const getConfigObj = require('../utils/getConfigObj');
@@ -111,4 +112,9 @@ const defultAKFunConfig = {
 // 从项目根目录获取当前项目的配置文件
 const curProjectConfg = getConfigObj(resolve('akfun.config.js'));
 
-module.exports = Object.assign(defultAKFunConfig, curProjectConfg);
+const overwriteMerge = (destinationArray, sourceArray, options) => sourceArray;
+
+// module.exports = Object.assign(defultAKFunConfig, curProjectConfg);
+
+// 备注：数组类型则直接覆盖
+module.exports = deepMerge(defultAKFunConfig, curProjectConfg, { arrayMerge: overwriteMerge });

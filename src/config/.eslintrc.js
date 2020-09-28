@@ -80,6 +80,7 @@ module.exports = {
     'no-lonely-if': 0, // 禁止else语句内只有if语句
     'no-eval': 1, // JavaScript的eval()功能具有潜在的危险，并且经常被滥用
     'object-curly-newline': 0, // 该规则在对象文字括号或销毁分配中强制使用一致的换行符
-    'operator-linebreak': [0, 'before'] // 换行时运算符在行尾还是行首
+    'operator-linebreak': [0, 'before'], // 换行时运算符在行尾还是行首
+    'max-len': ['warn', { code: 150 }]
   }
 };

@@ -1,10 +1,10 @@
 # AKFun 前端脚手架
-> AKFun 是一个基于 Webpack4.0 和 rollup 的前端项目打包工具，支持多种技术栈：Vue技术栈、React技术栈、React&TS技术栈(开发中)
+> AKFun 是一个基于 Webpack4.0 和 rollup 的前端多场景打包工具，支持多种技术栈：Vue技术栈、React技术栈、React&TS技术栈(开发中)
 - 技术栈：node/webpack4.0/rollup/express/babel/eslint/stylelint
 
 ## 特性
 - ⚡️ 零配置，开箱即用
-- 👏 支持Vue和React项目的构建
+- 👏 支持Vue和React项目的调试和构建
 - 📤 支持单页面和多页面
 - 💪 提供三种构建场景: 本地开发调试模式(包含热更新、接口代理等功能)、构建生产环境代码、library库的构建(支持umd和esm的打包能力)
 - ❤️ 开放配置能力: 可配置构建入口文件、是否开启ESLint代码规范检测、接口代理配置等
@@ -63,29 +63,38 @@ $ yarn add akfun --dev 或者 npm i akfun --save-dev
 ```bash
 # 用于开启本地调试模式
 "dev": "akfun dev"
+
 # 用于构建生产环境代码
 "build": "akfun build"
+
 # 用于构建第三方功能包（以umd格式输出）
 "build2lib": "akfun build2lib"
+
 # 用于构建第三方功能包（以esm格式输出）
 "build2esm": "akfun build2esm"
 ```
 
-3. **开始构建当前项目**
+3. **创建AKFun的配置文件**
+    ```bash
+    $ akfun config init
+    ```
+备注：需要根据实际情况调整配置文件内（比如：入口文件、路径缩写、接口代理等）
 
-   3.1 开启本地调试模式
+4. **开始构建当前项目**
+
+   4.1 开启本地调试模式
     ```bash
     $ npm run dev
     ```
-   3.2 构建生产环境代码
+   4.2 构建生产环境代码
    ```bash
    $ npm run build
    ```
-   3.3 构建第三方功能包（以umd格式输出）
+   4.3 构建第三方功能包（以umd格式输出）
    ```bash
    $ npm run build2lib
    ```
-   3.4 构建第三方功能包（以esm格式输出）
+   4.4 构建第三方功能包（以esm格式输出）
    ```bash
    $ npm run build2esm
    ```

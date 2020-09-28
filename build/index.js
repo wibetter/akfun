@@ -4,6 +4,7 @@
 const figlet = require('figlet'); // 用于输出图形文字
 const yargs = require('yargs'); // 命令行工具
 const chalk = require('chalk'); // 带样式的log输出
+const inquirer = require('inquirer'); // 问答式交互
 
 // 引入本地脚本模块
 const akfunInit = require('./akfunInit.js');
@@ -32,13 +33,11 @@ let argv = yargs
         .usage(titleTip('Usage') + ': $0 init [options]')
         .option('type', {
           alias: 't',
-          describe: '项目类型（vue技术栈/react技术栈，默认react技术栈）',
-          default: 'react',
+          describe: '项目类型（vue技术栈/react技术栈/library库',
         })
         .option('dir', {
           alias: 'd',
           describe: '项目路径',
-          default: 'akfunProject',
         })
         .option('name', {
           alias: 'n',
@@ -48,7 +47,47 @@ let argv = yargs
         .alias('h', 'help');
     },
     (argv) => {
-      akfunInit(argv.type, argv.dir, argv.name);
+      if (argv.type && argv.dir) {
+        akfunInit(argv.type, argv.dir, argv.name);
+      } else {
+        const questions = [];
+        if (!argv.type) {
+          questions.push({
+            name : 'type',
+            type : 'list',
+            message : '请选择您要创建的项目类型: ',
+            default : 'react',
+            choices : [
+              {
+                name : 'react项目模板',
+                value : 'react',
+                short : 'react',
+              },
+              {
+                name : 'vue项目模板',
+                value : 'vue',
+                short : 'vue',
+              },
+              {
+                name : 'library库模板',
+                value : 'library',
+                short : 'library',
+              },
+            ],
+          });
+        }
+        if (!argv.dir) {
+          questions.push({
+            name : 'dir',
+            type : 'input',
+            message : '请输入存放项目模板的目录名（默认存放在当前路径下）: ',
+            default : 'akfunProject',
+          });
+        }
+        inquirer.prompt(questions).then(ans=>{
+          akfunInit(ans.type, ans.dir, argv.name);
+        })
+      }
     },
   )
   .command(
