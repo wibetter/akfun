@@ -26,7 +26,7 @@ console.log(chalk.green(bigTip));
 let argv = yargs
   .command(
     'init [options]',
-    '项目初始化',
+    '创建一个项目',
     (yargs) => {
       yargs
         .reset()

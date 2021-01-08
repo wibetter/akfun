@@ -1,14 +1,27 @@
 const path = require('path');
+
+const webpack = require('webpack');
 const tsImportPluginFactory = require('ts-import-plugin'); // 按需加载lib库组件代码
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const utils = require('./loaderUtils');
 const vueLoaderConfig = require('./vue-loader.conf');
-const { resolve, resolveToCurrentRoot } = require('../utils/pathUtils');
+const { resolve, resolveToCurrentRoot, currentPackageJson } = require('../utils/pathUtils');
 const catchVuePages = require('../utils/catchVuePages'); // 用于获取当前项目中的vue单文件
 // 引入当前项目配置文件
 const config = require('../config/index');
 const babelConfig = require('../config/babel.config'); // Babel的配置文件
+
+const BannerPack = new webpack.BannerPlugin({
+  banner: [
+    `${currentPackageJson.name} v${currentPackageJson.version}`,
+    `author: ${currentPackageJson.author}`,
+    `build tool: AKFun`,
+    `build time: ${new Date().toString()}`,
+    `build info: https://github.com/wibetter/akfun`
+  ].join('\n'),
+  entryOnly: true // 只在入口 chunks 文件中添加
+});
 
 module.exports = () => {
   const webpackConfig = {
@@ -116,6 +129,7 @@ module.exports = () => {
       ]
     },
     plugins: [
+      BannerPack,
       // 请确保引入这个插件来施展魔法
       new VueLoaderPlugin()
     ]
