@@ -9,7 +9,7 @@ const resolveToCurrentDist = (filePath) => path.resolve(currentRoot(), 'dist/', 
 
 const currentSrc = () => resolveToCurrentRoot('src');
 const currentBuild = () => resolveToCurrentRoot('build');
-const currentPackageJson = () => resolveToCurrentRoot('package.json');
+const catchCurPackageJson = () => resolveToCurrentRoot('package.json');
 
 module.exports = {
   currentRoot,
@@ -18,5 +18,5 @@ module.exports = {
   resolve: resolveToCurrentRoot,
   currentSrc,
   currentBuild,
-  currentPackageJson
+  catchCurPackageJson
 };

@@ -1,17 +1,22 @@
 const path = require('path');
-
 const webpack = require('webpack');
 const tsImportPluginFactory = require('ts-import-plugin'); // 按需加载lib库组件代码
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const utils = require('./loaderUtils');
 const vueLoaderConfig = require('./vue-loader.conf');
-const { resolve, resolveToCurrentRoot, currentPackageJson } = require('../utils/pathUtils');
+const { resolve, resolveToCurrentRoot, catchCurPackageJson } = require('../utils/pathUtils');
+const getConfigObj = require('../utils/getConfigObj');
 const catchVuePages = require('../utils/catchVuePages'); // 用于获取当前项目中的vue单文件
 // 引入当前项目配置文件
 const config = require('../config/index');
 const babelConfig = require('../config/babel.config'); // Babel的配置文件
 
+// 获取当前项目的package文件
+const currentPackageJsonDir = catchCurPackageJson();
+const currentPackageJson = getConfigObj(currentPackageJsonDir);
+
+// 生成构建信息
 const BannerPack = new webpack.BannerPlugin({
   banner: [
     `${currentPackageJson.name} v${currentPackageJson.version}`,
@@ -22,6 +27,8 @@ const BannerPack = new webpack.BannerPlugin({
   ].join('\n'),
   entryOnly: true // 只在入口 chunks 文件中添加
 });
+
+console.log('author:' + currentPackageJson.name);
 
 module.exports = () => {
   const webpackConfig = {
