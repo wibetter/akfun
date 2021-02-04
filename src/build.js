@@ -51,12 +51,6 @@ module.exports = function (BuildType) {
       }
 
       console.log(chalk.cyan('  构建完成.\n'));
-      console.log(
-        chalk.yellow(
-          '  Tip: built files are meant to be served over an HTTP server.\n' +
-            "  Opening index.html over file:// won't work.\n"
-        )
-      );
     });
   });
 };

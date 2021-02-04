@@ -38,7 +38,7 @@ module.exports = function () {
   const webpackConfig = getDevWebpackConfig();
   const compiler = webpack(webpackConfig); // 启动 webpack 进行编译
 
-  // 启动 webpack-dev-middleware，将 编译后的文件暂存到内存中
+  // 启动 webpack-dev-middleware，将编译后的文件暂存到内存中
   const devMiddleware = require('webpack-dev-middleware')(compiler, {
     publicPath: webpackConfig.output.publicPath,
     quiet: true
@@ -49,15 +49,6 @@ module.exports = function () {
     log: false,
     heartbeat: 2000
   });
-  // force page reload when html-webpack-plugin src changes
-  // currently disabled until this is resolved:
-  // https://github.com/jantimon/html-webpack-plugin/issues/680
-  // compiler.plugin('compilation', function (compilation) {
-  //   compilation.plugin('html-webpack-plugin-after-emit', function (data, cb) {
-  //     hotMiddleware.publish({ action: 'reload' })
-  //     cb()
-  //   })
-  // })
 
   // enable hot-reload and state-preserving
   // compilation error display

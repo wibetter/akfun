@@ -11,7 +11,7 @@ module.exports = {
     sourceType: 'module', // 支持的ES语法版本，默认为5。注意只是语法，不包括ES的全局变量
     ecmaFeatures: {
       // Features是特征的意思，这里用于指定要使用其他那些语言对象
-      jsx: true
+      jsx: false
     }
   },
   env: {
@@ -24,11 +24,12 @@ module.exports = {
   // 此项是用来配置标准的js风格，就是说写代码的时候要规范的写，如果你使用vs-code我觉得应该可以避免出错
   extends: [
     'airbnb-base', // eslint-config-airbnb-base
-    '@vue/typescript' // @vue/eslint-config-typescript: https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin
+    '@vue/typescript', // @vue/eslint-config-typescript: https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin
+    'prettier' // eslint-config-prettier
   ],
   // 此项是用来提供插件的，插件名称省略了eslint-plugin-，下面这个配置是用来规范html的
   // required to lint *.src files
-  plugins: ['@typescript-eslint', 'prettier', 'html', 'react', 'vue'],
+  plugins: ['vue', '@typescript-eslint', 'prettier', 'html'],
   // check if imports actually resolve
   settings: {
     'import/resolver': {
@@ -53,8 +54,6 @@ module.exports = {
         vue: 'never'
       }
     ],
-    'react/jsx-uses-react': 'error',
-    'react/jsx-uses-vars': 'error',
     'import/first': 0,
     'arrow-parens': 0,
     'no-underscore-dangle': 'off',

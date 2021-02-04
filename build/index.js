@@ -12,6 +12,9 @@ const akfunConfigInit = require('../src/utils/akfunConfigInit.js');
 const inspect = require('./inspect.js');
 const mainAction = require('./main.js'); // 功能入口
 
+// akfun的package文件
+const akfunPackage = require('../package');
+
 const titleTip = function (msg) {
   return chalk.green(chalk.bold(msg));
 };
@@ -22,6 +25,7 @@ const bigTip = figlet.textSync('AKFun', {
 });
 
 console.log(chalk.green(bigTip));
+console.log(`当前版本：v${akfunPackage.version}.\n`);
 
 let argv = yargs
   .command(

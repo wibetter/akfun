@@ -40,14 +40,14 @@ module.exports = function () {
   }
 
   if (warnings.length) {
-    console.log('');
+    console.log('\n');
     console.log(chalk.yellow('To use this src, you must update following to modules:'));
-    console.log();
+    console.log('\n');
     for (let i = 0; i < warnings.length; i++) {
       const warning = warnings[i];
       console.log(`  ${warning}`);
     }
-    console.log();
+    console.log('\n');
     process.exit(1);
   }
 };

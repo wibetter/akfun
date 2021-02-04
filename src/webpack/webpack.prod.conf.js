@@ -120,7 +120,9 @@ module.exports = () => {
     // 自动从'./src/pages/'中获取入口文件
     webpackProdConfig.entry = getJsEntries();
   } else if (webpackProdConfig.entry && entryFiles.length === 1) {
-    // 只有一个构建入口文件，且项目中不存在此文件
+    /**
+     * 只有一个构建入口文件，且项目中不存在此文件，则自动从'./src/pages/'中获取构建入口文件
+     */
     const filename = entryFiles[0];
     let entryFilePath = entryConfig[filename];
     // 当前entryFilePath可能是一个地址字符串，也可能是一个存储多个文件地址的数组
@@ -132,21 +134,15 @@ module.exports = () => {
       // 如果仅有的构建入口文件不存在，则自动从'./src/pages/'中获取入口文件
       const curJsEntries = getJsEntries();
       webpackProdConfig.entry = curJsEntries ? curJsEntries : webpackProdConfig.entry;
-    } else {
-      // 重新获取webpackProdConfig.entry
-      entryConfig = webpackProdConfig.entry || {};
-      const htmlWebpackPluginList = entrys2htmlWebpackPlugin(entryConfig, curHtmlTemplate);
-      htmlWebpackPluginList.forEach((htmlWebpackPlugin) => {
-        webpackProdConfig.plugins.push(htmlWebpackPlugin);
-      });
     }
-  } else {
-    // 使用用户自定义的多入口配置，生产对应的多页面多模板
-    const htmlWebpackPluginList = entrys2htmlWebpackPlugin(entryConfig, curHtmlTemplate);
-    htmlWebpackPluginList.forEach((htmlWebpackPlugin) => {
-      webpackProdConfig.plugins.push(htmlWebpackPlugin);
-    });
   }
+
+  // 使用用户自定义的多入口配置，生产对应的多页面多模板
+  const htmlWebpackPluginList = entrys2htmlWebpackPlugin(webpackProdConfig.entry, curHtmlTemplate);
+
+  htmlWebpackPluginList.forEach((htmlWebpackPlugin) => {
+    webpackProdConfig.plugins.push(htmlWebpackPlugin);
+  });
 
   // 是否要进行压缩工作
   if (config.build.productionGzip) {

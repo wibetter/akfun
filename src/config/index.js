@@ -15,10 +15,6 @@ const defultAKFunConfig = {
     enableStyleLintFix: false // 是否需要StyleLint自动修正代码格式
   },
   webpack: {
-    entry: {
-      // webpack构建入口（优先级低于于dev、build和build2lib中的entry配置）
-      index: './src/index.js'
-    },
     resolve: {
       // webpack的resolve配置
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue', '.json'], // 用于配置webpack在尝试过程中用到的后缀列表

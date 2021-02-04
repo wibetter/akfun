@@ -4,7 +4,6 @@ const curWebpackBaseConfPath = getCurWebpackConfig('base');
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
-  // parser: 'vue-eslint-parser', // 指定eslint解析器的，解析器必须符合规则
   // 此项是用来指定javaScript语言类型和风格，sourceType用来指定js导入的方式，默认是script，此处设置为module，指某块导入方式
   parserOptions: {
     parser: 'babel-eslint', // babel-eslint解析器是对babel解析器的包装使其与ESLint解析
@@ -21,15 +20,9 @@ module.exports = {
     commonjs: true,
     node: true
   },
-  // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
-  // 此项是用来配置标准的js风格，就是说写代码的时候要规范的写，如果你使用vs-code我觉得应该可以避免出错
-  extends: [
-    'airbnb-base', // eslint-config-airbnb-base
-    '@vue/typescript' // @vue/eslint-config-typescript: https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin
-  ],
   // 此项是用来提供插件的，插件名称省略了eslint-plugin-，下面这个配置是用来规范html的
   // required to lint *.src files
-  plugins: ['@typescript-eslint', 'prettier', 'html', 'react', 'vue'],
+  plugins: ['@typescript-eslint', 'prettier', 'html', 'react'],
   // check if imports actually resolve
   settings: {
     'import/resolver': {
@@ -38,6 +31,12 @@ module.exports = {
       }
     }
   },
+  // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
+  // 此项是用来配置标准的js风格，就是说写代码的时候要规范的写，如果你使用vs-code我觉得应该可以避免出错
+  extends: [
+    'airbnb-base', // eslint-config-airbnb-base
+    'prettier' // eslint-config-prettier
+  ],
   // 添加自定义ESLint规则
   // "off" or 0 关闭规则
   // "warn" or 1 将规则视为一个警告（不会影响退出码）

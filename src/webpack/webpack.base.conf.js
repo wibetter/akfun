@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const tsImportPluginFactory = require('ts-import-plugin'); // 按需加载lib库组件代码
+// const tsImportPluginFactory = require('ts-import-plugin'); // 按需加载lib库组件代码
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const utils = require('./loaderUtils');
@@ -16,19 +16,17 @@ const babelConfig = require('../config/babel.config'); // Babel的配置文件
 const currentPackageJsonDir = catchCurPackageJson();
 const currentPackageJson = getConfigObj(currentPackageJsonDir);
 
-// 生成构建信息
+// 生成构建头部信息
 const BannerPack = new webpack.BannerPlugin({
   banner: [
     `${currentPackageJson.name} v${currentPackageJson.version}`,
     `author: ${currentPackageJson.author}`,
     `build tool: AKFun`,
     `build time: ${new Date().toString()}`,
-    `build info: https://github.com/wibetter/akfun`
+    `build tool info: https://github.com/wibetter/akfun`
   ].join('\n'),
   entryOnly: true // 只在入口 chunks 文件中添加
 });
-
-console.log('author:' + currentPackageJson.name);
 
 module.exports = () => {
   const webpackConfig = {
@@ -64,30 +62,26 @@ module.exports = () => {
           test: /\.tsx?$/,
           use: [
             {
+              loader: 'babel-loader',
+              options: babelConfig
+            },
+            {
               loader: 'ts-loader',
-              options: {
-                transpileOnly: true,
-                getCustomTransformers: () => ({
-                  before: [tsImportPluginFactory(/** options */)]
-                }),
-                compilerOptions: {
-                  module: 'es2015'
-                }
-              }
+              options: { configFile: path.resolve(__dirname, '../config/tsconfig.json') }
             }
           ],
-          include: [resolve('src'), resolve('test')],
+          include: [resolve('src')],
           exclude: /node_modules/
         },
         {
-          test: /\.(js|jsx|ts|tsx)$/,
+          test: /\.(jsx?)$/,
           use: [
             {
               loader: 'babel-loader',
               options: babelConfig
             }
           ],
-          include: [resolve('src'), resolve('test')],
+          include: [resolve('src')],
           exclude: /node_modules/
         },
         {
@@ -129,7 +123,7 @@ module.exports = () => {
         {
           test: /\.(js|ts|tsx|jsx|vue|css|html)$/,
           loader: 'params-replace-loader',
-          include: [resolve('src'), resolve('test')],
+          include: [resolve('src')],
           exclude: [/node_modules/, resolve('src/mock/data')], // 排除不需要进行校验的文件夹
           options: config.envParams
         }
@@ -144,6 +138,20 @@ module.exports = () => {
 
   // 是否开启ESLint
   if (config.settings.enableESLint) {
+    // ts类型
+    webpackConfig.module.rules.push({
+      test: /\.tsx?$/,
+      loader: 'eslint-loader',
+      enforce: 'pre',
+      include: [resolve('src'), resolve('public')],
+      exclude: /node_modules/,
+      options: {
+        cache: true,
+        fix: config.settings.enableESLintFix || false,
+        formatter: require('eslint-friendly-formatter'),
+        configFile: path.resolve(__dirname, '../config/.eslintrc.ts.js')
+      }
+    });
     // 通用js类型
     webpackConfig.module.rules.push({
       test: /\.jsx?$/,
@@ -170,20 +178,6 @@ module.exports = () => {
         fix: config.settings.enableESLintFix || false,
         formatter: require('eslint-friendly-formatter'),
         configFile: path.resolve(__dirname, '../config/.eslintrc.vue.js')
-      }
-    });
-    // ts类型
-    webpackConfig.module.rules.push({
-      test: /\.tsx?$/,
-      loader: 'eslint-loader',
-      enforce: 'pre',
-      include: [resolve('src'), resolve('public')],
-      exclude: /node_modules/,
-      options: {
-        cache: true,
-        fix: config.settings.enableESLintFix || false,
-        formatter: require('eslint-friendly-formatter'),
-        configFile: path.resolve(__dirname, '../config/.eslintrc.ts.js')
       }
     });
   }

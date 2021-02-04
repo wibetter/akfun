@@ -2,12 +2,12 @@ const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { isArray } = require('../utils/typeof');
 
-module.exports = function (entryConfig, curHtmlTemplate) {
+module.exports = function (entryConfig, curDefaultHtmlTemplate) {
   const webpackProdConfigList = [];
   if (entryConfig) {
     // 遍历入口配置，并生产对应的HtmlWebpackPlugin配置
     Object.keys(entryConfig).forEach((filename) => {
-      let curPageTemplate = curHtmlTemplate;
+      let curPageTemplate = curDefaultHtmlTemplate;
       // 判断是否有对应的页面模板
       let filePath = entryConfig[filename];
       if (isArray(filePath)) {

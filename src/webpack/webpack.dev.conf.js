@@ -47,9 +47,9 @@ module.exports = () => {
     ]
   });
 
-  // 集成dev配置中的构建入口
+  // 集成dev配置中的构建入口（优先级高于config.webpack.entry）
   if (config.dev.entry) {
-    webpackDevConfig.entry = config.dev.entry; // 会覆盖config.webpack.entry的配置
+    webpackDevConfig.entry = config.dev.entry; // 备注：会覆盖config.webpack.entry的配置
   }
 
   // 多页面多模板支持能力
@@ -61,13 +61,12 @@ module.exports = () => {
     JSON.stringify(webpackDevConfig.entry) === '{}' ||
     entryFiles.length === 0
   ) {
-    // 自动从'./src/pages/'中获取入口文件
+    // 如果当前构建入口为空，则自动从'./src/pages/'中获取入口文件
     webpackDevConfig.entry = getJsEntries();
   } else if (webpackDevConfig.entry && entryFiles.length === 1) {
     /**
-     * 备注：开发调试模式中，每个构建入口会自动注入热更新相关的代码
+     * 只有一个构建入口文件，且项目中不存在此文件，则自动从'./src/pages/'中获取构建入口文件
      */
-    // 只有一个构建入口文件，且项目中不存在此文件
     const filename = entryFiles[0];
     let entryFilePath = entryConfig[filename];
     // 当前entryFilePath可能是一个地址字符串，也可能是一个存储多个文件地址的数组
@@ -80,19 +79,13 @@ module.exports = () => {
       const curJsEntries = getJsEntries();
       webpackDevConfig.entry = curJsEntries ? curJsEntries : webpackDevConfig.entry;
     }
-    // 重新获取webpackDevConfig.entry
-    entryConfig = webpackDevConfig.entry || {};
-    const htmlWebpackPluginList = entrys2htmlWebpackPlugin(entryConfig, curHtmlTemplate);
-    htmlWebpackPluginList.forEach((htmlWebpackPlugin) => {
-      webpackDevConfig.plugins.push(htmlWebpackPlugin);
-    });
-  } else {
-    // 使用用户自定义的多入口配置，生产对应的多页面多模板
-    const htmlWebpackPluginList = entrys2htmlWebpackPlugin(entryConfig, curHtmlTemplate);
-    htmlWebpackPluginList.forEach((htmlWebpackPlugin) => {
-      webpackDevConfig.plugins.push(htmlWebpackPlugin);
-    });
   }
+
+  // 使用用户自定义的多入口配置，生产对应的多页面多模板
+  const htmlWebpackPluginList = entrys2htmlWebpackPlugin(webpackDevConfig.entry, curHtmlTemplate);
+  htmlWebpackPluginList.forEach((htmlWebpackPlugin) => {
+    webpackDevConfig.plugins.push(htmlWebpackPlugin);
+  });
 
   // 开启热更新能力
   const devClientPath = path.resolve(__dirname, '../dev-client'); // 从akfun中获取

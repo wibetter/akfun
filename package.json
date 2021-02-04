@@ -1,6 +1,6 @@
 {
   "name": "akfun",
-  "version": "1.5.9",
+  "version": "1.5.10",
   "description": "前端脚手架：支持Vue技术栈和react技术栈",
   "keywords": [
     "前端工程",
@@ -73,6 +73,7 @@
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^3.9.0",
     "@typescript-eslint/parser": "^3.9.0",
+    "eslint-config-prettier": "^7.2.0",
     "@vue/compiler-sfc": "^3.0.0-rc.10",
     "@vue/eslint-config-typescript": "^5.0.2",
     "autoprefixer": "^9.8.0",

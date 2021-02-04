@@ -10,7 +10,8 @@ module.exports = {
         }
       }
     ],
-    ['@babel/preset-react']
+    ['@babel/preset-react'],
+    '@babel/preset-typescript'
   ],
   plugins: [
     ['import', { libraryName: 'antd', style: 'css' }], // babel-plugin-import: antd的按需加载
