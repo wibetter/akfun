@@ -1,6 +1,6 @@
 {
   "name": "akfun",
-  "version": "1.5.10",
+  "version": "1.5.11",
   "description": "前端脚手架：支持Vue技术栈和react技术栈",
   "keywords": [
     "前端工程",
@@ -139,7 +139,7 @@
     "stylelint-config-standard": "^20.0.0",
     "stylelint-webpack-plugin": "^2.0.0",
     "ts-import-plugin": "^1.6.5",
-    "ts-loader": "^8.0.2",
+    "ts-loader": "^8.0.14",
     "typescript": "^3.9.7",
     "url-loader": "^4.1.0",
     "vue-eslint-parser": "^7.1.0",

@@ -66,8 +66,8 @@ module.exports = () => {
               options: babelConfig
             },
             {
-              loader: 'ts-loader',
-              options: { configFile: path.resolve(__dirname, '../config/tsconfig.json') }
+              loader: 'ts-loader'
+              // options: { configFile: path.resolve(__dirname, '../config/tsconfig.json') }
             }
           ],
           include: [resolve('src')],

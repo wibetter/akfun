@@ -2,27 +2,28 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     /* Basic Options */
-    "target": "esnext" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */,
-    "module": "esnext" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */,
+    "target": "esnext",
+    /* 指定编译之后的版本: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
+    "module": "esnext" /* 指定要使用的模板标准: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */,
     // "lib": [],                             /* Specify library files to be included in the compilation. */
-    "allowJs": false /* Allow javascript files to be compiled. */,
-    // "checkJs": true,                       /* Report errors in .js files. */
-    "jsx": "react" /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */,
-    "declaration": false /* Generates corresponding '.d.ts' file. */,
-    // "declarationMap": true,                /* Generates a sourcemap for each corresponding '.d.ts' file. */
-    // "sourceMap": true,                     /* Generates corresponding '.map' file. */
-    // "outFile": "./",                       /* Concatenate and emit output to single file. */
-    "outDir": "dist" /* Redirect output structure to the directory. */,
-    "rootDir": "src" /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */,
-    // "composite": true,                     /* Enable project compilation */
-    // "removeComments": true,                /* Do not emit comments to output. */
-    "noEmit": true /* Do not emit outputs. */,
-    "importHelpers": true /* Import emit helpers from 'tslib'. */,
-    // "downlevelIteration": true,            /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
-    "isolatedModules": true /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */,
+    "allowJs": false /* 指定是否允许编译JS文件，默认false,即不编译JS文件. */,
+    // "checkJs": true,                       /* 指定是否检查和报告JS文件中的错误，默认false */
+    "jsx": "react" /* 指定jsx代码用于的开发环境:'preserve','react-native', or 'react'. */,
+    "declaration": false /* 指定是否在编译的时候生成相的d.ts声明文件 */,
+    // "declarationMap": true,                /* 指定编译时是否生成.map文件 */
+    // "sourceMap": true,                     /* 指定编译时是否生成.map文件 */
+    // "outFile": "./",                       /* 指定输出文件合并为一个文件 */
+    // "outDir": "dist", /* 指定输出文件夹，值为一个文件夹路径字符串，输出的文件都将放置在这个文件夹*/
+    // "rootDir": "src", /* 指定编译文件的根目录，编译器会在根目录查找入口文件 */
+    // "composite": true,                     /* 是否编译构建引用项目 */
+    // "removeComments": true,                /* 指定是否将编译后的文件注释删掉，设为true的话即删除注释，默认为false */
+    "noEmit": true /* 不生成编译文件 */,
+    "importHelpers": true /* 指定是否引入tslib里的复制工具函数，默认为false */,
+    // "downlevelIteration": true,            /* 当target为"ES5"或"ES3"时，为"for-of" "spread"和"destructuring"中的迭代器提供完全支持 */
+    "isolatedModules": true /* 指定是否将每个文件作为单独的模块，默认为true */,
 
     /* Strict Type-Checking Options */
-    "strict": true /* Enable all strict type-checking options. */,
+    "strict": true /* 指定是否启动所有类型检查 */,
     "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
     "strictNullChecks": true /* Enable strict null checks. */,
     // "strictFunctionTypes": true,           /* Enable strict checking of function types. */
@@ -38,14 +39,14 @@
 
     /* Module Resolution Options */
     "moduleResolution": "node" /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */,
-    "baseUrl": "." /* Base directory to resolve non-absolute module names. */,
+    "baseUrl": "./" /* Base directory to resolve non-absolute module names. */,
     // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
     // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
     "typeRoots": [
       "./@types",
       "./node_modules/@types"
-    ] /* List of folders to include type definitions from. */,
-    // "types": [],                           /* Type declaration files to be included in compilation. */
+    ] /* 指定声明文件或文件夹的路径列表，如果指定了此项，则只有在这里列出的声明文件才会被加载 */,
+    // "types": [],                           /* 指定需要包含的模块，只有在这里列出的模块的声明文件才会被加载 */
     "allowSyntheticDefaultImports": true /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */,
     "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
     // "preserveSymlinks": true,              /* Do not resolve the real path of symlinks. */
@@ -62,5 +63,6 @@
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
     "suppressImplicitAnyIndexErrors": true /* Suppress --noImplicitAny errors for indexing objects lacking index signatures. See issue #1232 for more details. */
   },
-  "exclude": ["node_modules"]
+  "include": ["**/*"],
+  "exclude": []
 }
