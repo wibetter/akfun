@@ -27,7 +27,6 @@ const defultAKFunConfig = {
       }
     },
     externals: [], // 从输出的 bundle 中排除依赖
-    template: resolve('src/index.html'), // 默认使用的页面模板
     sassResources: []
   },
   envParams: {

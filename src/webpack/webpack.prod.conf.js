@@ -88,15 +88,6 @@ module.exports = () => {
           safe: true
         }
       }),
-      // copy custom public assets
-      new CopyWebpackPlugin({
-        patterns: [
-          {
-            from: resolve('public'), // 从这里拷贝
-            to: config.build.assetsSubDirectory // 将根目录下的public内的资源复制到指定文件夹
-          }
-        ]
-      }),
       new FriendlyErrorsPlugin(),
       new ProgressBarPlugin()
     ]
@@ -143,6 +134,21 @@ module.exports = () => {
   htmlWebpackPluginList.forEach((htmlWebpackPlugin) => {
     webpackProdConfig.plugins.push(htmlWebpackPlugin);
   });
+
+  // 判断是否有public目录，如果有需要转移到dist目录下
+  if (fs.existsSync(resolve('public'))) {
+    // copy custom public assets
+    webpackProdConfig.plugins.push(
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: resolve('public'), // 从这里拷贝
+            to: config.build.assetsSubDirectory // 将根目录下的public内的资源复制到指定文件夹
+          }
+        ]
+      })
+    );
+  }
 
   // 是否要进行压缩工作
   if (config.build.productionGzip) {

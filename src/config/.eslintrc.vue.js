@@ -29,7 +29,7 @@ module.exports = {
   ],
   // 此项是用来提供插件的，插件名称省略了eslint-plugin-，下面这个配置是用来规范html的
   // required to lint *.src files
-  plugins: ['vue', '@typescript-eslint', 'prettier', 'html'],
+  plugins: ['@typescript-eslint', 'vue', 'prettier', 'html'],
   // check if imports actually resolve
   settings: {
     'import/resolver': {

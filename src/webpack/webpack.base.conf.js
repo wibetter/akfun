@@ -143,7 +143,7 @@ module.exports = () => {
       test: /\.tsx?$/,
       loader: 'eslint-loader',
       enforce: 'pre',
-      include: [resolve('src'), resolve('public')],
+      include: [resolve('src')],
       exclude: /node_modules/,
       options: {
         cache: true,
@@ -157,7 +157,7 @@ module.exports = () => {
       test: /\.jsx?$/,
       loader: 'eslint-loader',
       enforce: 'pre',
-      include: [resolve('src'), resolve('public')],
+      include: [resolve('src')],
       exclude: /node_modules/,
       options: {
         cache: true, // the cache is written to the ./node_modules/.cache/eslint-loader director
@@ -171,7 +171,7 @@ module.exports = () => {
       test: /\.vue$/,
       loader: 'eslint-loader',
       enforce: 'pre',
-      include: [resolve('src'), resolve('public')],
+      include: [resolve('src')],
       exclude: /node_modules/,
       options: {
         cache: true,
