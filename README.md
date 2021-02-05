@@ -1,5 +1,5 @@
 # AKFun 前端脚手架
-> AKFun 是一个基于 Webpack4.0 和 rollup 的前端多场景打包工具，支持多种技术栈：Vue技术栈、React技术栈、React&TS技术栈(开发中)
+> AKFun 是一个基于 Webpack4.0 和 rollup 的前端多场景打包工具，支持多种技术栈：Vue技术栈、React技术栈、React&TS技术栈
 - 技术栈：node/webpack4.0/rollup/express/babel/eslint/stylelint
 
 ## 特性
@@ -144,7 +144,7 @@ $ yarn add akfun --dev 或者 npm i akfun --save-dev
 
 6. **关于多页面**
     1. 当akfun.config.js的entry只有一个入口配置，且对应的构建入口文件不存在时，AKFun会自动从src/pages中获取构建入口（支持多页面多模板）
-    2. 多页面模式下，会自动将src/pages中以.ts、.tsx、.js、.jsx结尾（对应的匹配正则：/\.[tj]sx?$/）的文件作为构建入口文件
+    2. 多页面模式下，会自动将src/pages中以.ts、.tsx、.js、.jsx结尾（对应的匹配正则：/\.[tj]sx?$/）的文件作为构建入口文件，同时将同名的html文件作为当前页面模板
 
 7. **关于多页面多模板**
     1. 只有dev和build的构建过程中才会使用到页面模板，build2lib构建中不会将打包完成的代码输出到页面模板中
