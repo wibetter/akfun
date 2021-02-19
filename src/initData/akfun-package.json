@@ -1,6 +1,6 @@
 {
   "name": "akfun",
-  "version": "1.2.5",
+  "version": "1.2.12",
   "description": "前端脚手架：支持Vue技术站和react技术栈",
   "keywords": ["前端工程", "前端脚手架", "webpack"],
   "author": "ldan@wibetter",
@@ -8,14 +8,14 @@
   "bin": {
     "akfun": "./bin/akfun.js"
   },
-  "main": "build/main.js",
+  "main": "module/main.js",
   "scripts": {
     "akfun": "akfun",
     "lint": "eslint --ext .js,.vue src",
     "lintFix": "eslint --ext .js,.vue src --fix",
     "format": "prettier --write \"src/**/**/*.{js,vue,tsx,ts,scss,json}\""
   },
-  "files": ["bin/*", "build/*", "src/*"],
+  "files": ["bin/*", "module/*", "src/*"],
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",

@@ -81,7 +81,7 @@ module.exports = () => {
     }
   }
 
-  // 使用用户自定义的多入口配置，生产对应的多页面多模板
+  // 使用用户自定义的多入口配置，生产对应的多页面多模板（优先使用用户的自定义页面模板）
   const htmlWebpackPluginList = entrys2htmlWebpackPlugin(webpackDevConfig.entry, curHtmlTemplate);
   htmlWebpackPluginList.forEach((htmlWebpackPlugin) => {
     webpackDevConfig.plugins.push(htmlWebpackPlugin);

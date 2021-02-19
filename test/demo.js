@@ -9,5 +9,5 @@ console.log(resolveToCurrentRoot('./'));*/
 /*const akfunInit = require('../build/akfunInit');
 akfunInit('vue', '');*/
 
-const inspect = require('../build/inspect');
+const inspect = require('../module/inspect');
 inspect('build');

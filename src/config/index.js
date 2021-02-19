@@ -56,13 +56,7 @@ const defultAKFunConfig = {
     assetsPublicPath: '/', // 设置静态资源的引用路径（根域名+路径）
     assetsSubDirectory: '',
     hostname: 'localhost',
-    proxyTable: {
-      '/apiTest': {
-        target: 'http://api-test.com.cn', // 不支持跨域的接口根地址
-        ws: true,
-        changeOrigin: true
-      }
-    },
+    proxyTable: {},
     /** CSS Sourcemaps off by default because relative paths are "buggy"
      * with this option, according to the CSS-Loader README
      * (https://github.com/webpack/css-loader#sourcemaps)

@@ -83,5 +83,8 @@ module.exports = {
     'object-curly-newline': 0, // 该规则在对象文字括号或销毁分配中强制使用一致的换行符
     'operator-linebreak': [0, 'before'], // 换行时运算符在行尾还是行首
     'max-len': ['warn', { code: 150 }]
+  },
+  linterOptions: {
+    exclude: ['node_modules']
   }
 };

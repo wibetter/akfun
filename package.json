@@ -1,6 +1,6 @@
 {
   "name": "akfun",
-  "version": "1.5.11",
+  "version": "1.5.12",
   "description": "前端脚手架：支持Vue技术栈和react技术栈",
   "keywords": [
     "前端工程",
@@ -15,14 +15,14 @@
   "bin": {
     "akfun": "./bin/akfun.js"
   },
-  "main": "build/main.js",
+  "main": "module/main.js",
   "scripts": {
     "akfun": "akfun",
     "format": "prettier --write \"src/**/**/*.{js,vue,tsx,ts,scss,json}\""
   },
   "files": [
     "bin/*",
-    "build/*",
+    "module/*",
     "src/*"
   ],
   "husky": {

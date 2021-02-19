@@ -25,7 +25,7 @@ const bigTip = figlet.textSync('AKFun', {
 });
 
 console.log(chalk.green(bigTip));
-console.log(`当前版本：v${akfunPackage.version}.\n`);
+console.log(chalk.green(`当前版本：v${akfunPackage.version}.\n`));
 
 let argv = yargs
   .command(
