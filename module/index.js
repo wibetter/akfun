@@ -55,6 +55,7 @@ let argv = yargs
         akfunInit(argv.type, argv.dir, argv.name);
       } else {
         const questions = [];
+        // 初始化项目模板时，当用户未设置项目类型type时，以列表形式展示当前可以使用的项目模板
         if (!argv.type) {
           questions.push({
             name : 'type',
@@ -80,6 +81,7 @@ let argv = yargs
             ],
           });
         }
+        // 当用户未设置存放项目的目录地址时，提示用户
         if (!argv.dir) {
           questions.push({
             name : 'dir',
