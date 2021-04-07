@@ -69,6 +69,11 @@ let argv = yargs
                 short : 'react',
               },
               {
+                name : 'react&ts项目',
+                value : 'react&ts',
+                short : 'react&ts',
+              },
+              {
                 name : 'vue项目',
                 value : 'vue',
                 short : 'vue',
