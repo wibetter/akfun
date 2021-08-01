@@ -30,7 +30,15 @@ module.exports = () => {
   }
 
   const webpackProdConfig = merge(baseWebpackConfig, {
-    mode: config.build2lib.NODE_ENV, // production 模式，会启动UglifyJsPlugin服务
+    mode: config.build.NODE_ENV, // production 模式，会启动UglifyJsPlugin服务
+    /*
+     内置变量列表：
+     id: chunk的唯一标识，从0开始；
+     name: chunk的名称；
+     hash: chunk的唯一标识的Hash值；
+     chunkhash: chunk内容的Hash值；
+     其中hash和chunkhash的长度是可以指定的，[hash:8]代表取8位的Hash值，默认是20位。
+     */
     output: {
       path: config.build.assetsRoot, // 输出文件的存放在本地的目录
       publicPath: config.build.assetsPublicPath, // 引用地址：配置发布到线上资源的URL前缀
