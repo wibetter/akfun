@@ -7,7 +7,7 @@ const getConfigObj = require('../utils/getConfigObj');
 /** akfun脚手架赋予当前项目的默认配置
  * 备注：项目根目录的akfun.config.js的配置内容优先级高于defultAKFunConfig
  */
-const defultAKFunConfig = {
+const defaultAKFunConfig = {
   settings: {
     enableESLint: false, // 是否开启ESLint，默认开启ESLint检测代码格式
     enableESLintFix: false, // 是否ESLint自动修正代码格式
@@ -26,6 +26,7 @@ const defultAKFunConfig = {
         $utils: resolve('src/utils')
       }
     },
+    ignoreNodeModules: false, // 打包时是否忽略 node_modules
     externals: [], // 从输出的 bundle 中排除依赖
     sassResources: []
   },
@@ -99,10 +100,10 @@ const defultAKFunConfig = {
 };
 
 // 从项目根目录获取当前项目的配置文件
-const curProjectConfg = getConfigObj(resolve('akfun.config.js'));
+const curProjectConfig = getConfigObj(resolve('akfun.config.js'));
 
-// module.exports = Object.assign(defultAKFunConfig, curProjectConfg);
+// module.exports = Object.assign(defaultAKFunConfig, curProjectConfig);
 
 const overwriteMerge = (destinationArray, sourceArray, options) => sourceArray;
 // 备注：数组类型则直接覆盖
-module.exports = deepMerge(defultAKFunConfig, curProjectConfg, { arrayMerge: overwriteMerge });
+module.exports = deepMerge(defaultAKFunConfig, curProjectConfig, { arrayMerge: overwriteMerge });

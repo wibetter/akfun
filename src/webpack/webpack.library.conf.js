@@ -6,6 +6,7 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 
 const utils = require('./loaderUtils');
 // 引入当前项目配置文件
@@ -33,7 +34,7 @@ module.exports = () => {
       })
     },
     devtool: config.build2lib.productionSourceMap ? '#source-map' : false, // '#source-map': 源码，false：压缩代码
-    externals: config.webpack.externals,
+    externals: config.webpack.ignoreNodeModules ? [nodeExternals()].concat(config.webpack.externals) : config.webpack.externals,
     plugins: [
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(config.build2lib.NODE_ENV)

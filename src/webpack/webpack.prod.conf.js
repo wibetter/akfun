@@ -10,6 +10,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 
 const utils = require('./loaderUtils');
 const { resolve } = require('../utils/pathUtils'); // 统一路径解析
@@ -51,6 +52,7 @@ module.exports = () => {
         environment: 'prod'
       })
     },
+    externals: config.webpack.ignoreNodeModules ? [nodeExternals()].concat(config.webpack.externals) : config.webpack.externals,
     // devtool: '#cheap-module-eval-source-map', // 本地开发环境中的取值
     devtool: config.build.productionSourceMap ? '#source-map' : false, // 线上开发环境中的取值
     optimization: {
