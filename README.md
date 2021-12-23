@@ -1,6 +1,6 @@
 # AKFun 前端脚手架
 > AKFun 是一个基于 Webpack4.0 和 rollup 的前端多场景打包工具，支持多种技术栈：Vue技术栈、React技术栈、React&TS技术栈
-> 核心理念：提供完整&全面的前端工程能力，并尽可能屏蔽掉前端工程相关配置，让开发者更专注业务研发工作。
+- 核心理念：提供完整&全面的前端工程能力，并尽可能屏蔽掉前端工程相关配置，让开发者更专注业务研发工作。
 - 技术栈：node/webpack4.0/rollup/babel/eslint/stylelint
 
 ## 特性
@@ -246,7 +246,7 @@ module.exports = {
 }
 ```
 
-7. 打包忽略node_modules配置项：ignoreNodeModules（默认为false）
+7. 打包忽略node_modules配置项: ignoreNodeModules（默认为false）
 > 打包过程中，忽略node_modules中的依赖文件，不注入到bundle中，减少最后生成代码体积
 ```bash
 module.exports = {
