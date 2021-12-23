@@ -22,8 +22,9 @@ const config = require('../config/index');
 const getBaseWebpackConfig = require('./webpack.base.conf');
 
 module.exports = () => {
+  const curEnvConfig = config.build || {}; // 当前执行环境配置
   // 获取webpack基本配置
-  const baseWebpackConfig = getBaseWebpackConfig();
+  const baseWebpackConfig = getBaseWebpackConfig(curEnvConfig);
   // 获取页面模板地址
   let curHtmlTemplate = path.resolve(__dirname, '../initData/template/index.html');
   if (config.webpack.template) {
@@ -31,7 +32,7 @@ module.exports = () => {
   }
 
   const webpackProdConfig = merge(baseWebpackConfig, {
-    mode: config.build.NODE_ENV, // production 模式，会启动UglifyJsPlugin服务
+    mode: curEnvConfig.NODE_ENV, // production 模式，会启动UglifyJsPlugin服务
     /*
      内置变量列表：
      id: chunk的唯一标识，从0开始；
@@ -41,20 +42,22 @@ module.exports = () => {
      其中hash和chunkhash的长度是可以指定的，[hash:8]代表取8位的Hash值，默认是20位。
      */
     output: {
-      path: config.build.assetsRoot, // 输出文件的存放在本地的目录
-      publicPath: config.build.assetsPublicPath, // 引用地址：配置发布到线上资源的URL前缀
+      path: curEnvConfig.assetsRoot, // 输出文件的存放在本地的目录
+      publicPath: curEnvConfig.assetsPublicPath, // 引用地址：配置发布到线上资源的URL前缀
       filename: utils.assetsPath('scripts/chunk/[name].[contenthash:8].js'),
       chunkFilename: utils.assetsPath('scripts/chunk/[name].[contenthash:8].js')
     },
     module: {
       rules: utils.styleLoaders({
-        sourceMap: config.build.productionSourceMap,
+        sourceMap: curEnvConfig.productionSourceMap,
         environment: 'prod'
       })
     },
-    externals: config.webpack.ignoreNodeModules ? [nodeExternals()].concat(config.webpack.externals) : config.webpack.externals,
+    externals: config.webpack.ignoreNodeModules
+      ? [nodeExternals()].concat(config.webpack.externals)
+      : config.webpack.externals,
     // devtool: '#cheap-module-eval-source-map', // 本地开发环境中的取值
-    devtool: config.build.productionSourceMap ? '#source-map' : false, // 线上开发环境中的取值
+    devtool: curEnvConfig.productionSourceMap ? '#source-map' : false, // 线上开发环境中的取值
     optimization: {
       splitChunks: {
         cacheGroups: {
@@ -77,7 +80,7 @@ module.exports = () => {
     plugins: [
       // http://vuejs.github.io/vue-loader/en/workflow/production.html
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(config.build.NODE_ENV) // vue-router中根据此变量判断执行环境
+        'process.env.NODE_ENV': JSON.stringify(curEnvConfig.NODE_ENV) // vue-router中根据此变量判断执行环境
       }),
       new MiniCssExtractPlugin({
         filename: utils.assetsPath('css/[name].[contenthash:8].css'),
@@ -104,9 +107,9 @@ module.exports = () => {
   });
 
   // 集成build配置中的构建入口
-  if (config.build.entry) {
+  if (curEnvConfig.entry) {
     // 会覆盖config.webpack.entry的配置
-    webpackProdConfig.entry = config.build.entry;
+    webpackProdConfig.entry = curEnvConfig.entry;
   }
 
   // 多页面支持能力
@@ -153,7 +156,7 @@ module.exports = () => {
         patterns: [
           {
             from: resolve('public'), // 从这里拷贝
-            to: config.build.assetsSubDirectory // 将根目录下的public内的资源复制到指定文件夹
+            to: curEnvConfig.assetsSubDirectory // 将根目录下的public内的资源复制到指定文件夹
           }
         ]
       })
@@ -161,10 +164,10 @@ module.exports = () => {
   }
 
   // 是否要进行压缩工作
-  if (config.build.productionGzip) {
+  if (curEnvConfig.productionGzip) {
     webpackProdConfig.plugins.push(
       new CompressionWebpackPlugin({
-        test: new RegExp(`\\.(${config.build.productionGzipExtensions.join('|')})$`),
+        test: new RegExp(`\\.(${curEnvConfig.productionGzipExtensions.join('|')})$`),
         filename: '[path].gz[query]',
         algorithm: 'gzip',
         threshold: 240,
@@ -173,7 +176,7 @@ module.exports = () => {
     );
   }
 
-  if (config.build.bundleAnalyzerReport) {
+  if (curEnvConfig.bundleAnalyzerReport) {
     webpackProdConfig.plugins.push(new BundleAnalyzerPlugin());
   }
 

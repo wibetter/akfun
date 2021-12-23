@@ -13,8 +13,9 @@ const entrys2htmlWebpackPlugin = require('../utils/entrys2htmlWebpackPlugin');
 const { isArray } = require('../utils/typeof');
 
 module.exports = () => {
+  const curEnvConfig = config.dev || {}; // 当前执行环境配置
   // 获取webpack基本配置
-  const baseWebpackConfig = getBaseWebpackConfig();
+  const baseWebpackConfig = getBaseWebpackConfig(curEnvConfig);
 
   // 获取页面模板地址
   let curHtmlTemplate = path.resolve(__dirname, '../initData/template/index.html');
@@ -23,13 +24,13 @@ module.exports = () => {
   }
 
   const webpackDevConfig = merge(baseWebpackConfig, {
-    mode: config.dev.NODE_ENV, // development模式，会启动NamedChunksPlugin、NamedModulesPlugin服务
+    mode: curEnvConfig.NODE_ENV, // development模式，会启动NamedChunksPlugin、NamedModulesPlugin服务
     output: {
-      publicPath: config.dev.assetsPublicPath // 引用地址：配置发布到线上资源的URL前缀
+      publicPath: curEnvConfig.assetsPublicPath // 引用地址：配置发布到线上资源的URL前缀
     },
     module: {
       rules: utils.styleLoaders({
-        sourceMap: config.dev.cssSourceMap,
+        sourceMap: curEnvConfig.cssSourceMap,
         environment: 'dev'
       })
     },
@@ -37,7 +38,7 @@ module.exports = () => {
     devtool: '#source-map', // '#cheap-module-eval-source-map',
     plugins: [
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(config.dev.NODE_ENV) // vue-router中根据此变量判断执行环境
+        'process.env.NODE_ENV': JSON.stringify(curEnvConfig.NODE_ENV) // vue-router中根据此变量判断执行环境
       }),
       // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
       new webpack.HotModuleReplacementPlugin(),
@@ -48,8 +49,8 @@ module.exports = () => {
   });
 
   // 集成dev配置中的构建入口（优先级高于config.webpack.entry）
-  if (config.dev.entry) {
-    webpackDevConfig.entry = config.dev.entry; // 备注：会覆盖config.webpack.entry的配置
+  if (curEnvConfig.entry) {
+    webpackDevConfig.entry = curEnvConfig.entry; // 备注：会覆盖config.webpack.entry的配置
   }
 
   // 多页面多模板支持能力

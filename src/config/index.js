@@ -26,6 +26,7 @@ const defaultAKFunConfig = {
         $utils: resolve('src/utils')
       }
     },
+    createDeclaration: false, // 打包时是否创建ts声明文件
     ignoreNodeModules: false, // 打包时是否忽略 node_modules
     externals: [], // 从输出的 bundle 中排除依赖
     sassResources: []

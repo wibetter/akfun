@@ -28,7 +28,12 @@ const BannerPack = new webpack.BannerPlugin({
   entryOnly: true // 只在入口 chunks 文件中添加
 });
 
-module.exports = () => {
+/**
+ * webpack.base.conf.js
+ * 主要用于设置 rules 和 通用插件
+ */
+module.exports = (option) => {
+  const curEnvConfig = option || {}; // 用于接收当前运行环境配置变量
   const webpackConfig = {
     entry: config.webpack.entry,
     /*
@@ -66,8 +71,14 @@ module.exports = () => {
               options: babelConfig
             },
             {
-              loader: 'ts-loader'
-              // options: { configFile: path.resolve(__dirname, '../config/tsconfig.json') }
+              loader: 'ts-loader',
+              options: {
+                // configFile: path.resolve(__dirname, '../config/tsconfig.json')
+                compilerOptions: {
+                  declaration: config.webpack.createDeclaration || false,
+                  outDir: curEnvConfig.assetsRoot || './dist'
+                }
+              }
             }
           ],
           include: [resolve('src')],
@@ -135,7 +146,6 @@ module.exports = () => {
       new VueLoaderPlugin()
     ]
   };
-
   // 是否开启ESLint
   if (config.settings.enableESLint) {
     // ts类型

@@ -39,7 +39,8 @@ thumbs.db
 .idea
 node_modules/
 jscoverage_lib/
-.svn
+temp/
+package-lock.json
 
 # log files
 npm-debug.log*

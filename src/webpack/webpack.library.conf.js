@@ -14,30 +14,33 @@ const config = require('../config/index');
 const getBaseWebpackConfig = require('./webpack.base.conf');
 
 module.exports = () => {
+  const curEnvConfig = config.build2lib || {}; // 当前执行环境配置
   // 获取webpack基本配置
-  const baseWebpackConfig = getBaseWebpackConfig();
+  const baseWebpackConfig = getBaseWebpackConfig(curEnvConfig);
 
   const webpackLibConfig = merge(baseWebpackConfig, {
-    mode: config.build2lib.NODE_ENV, // production 模式，会启动UglifyJsPlugin服务
+    mode: curEnvConfig.NODE_ENV, // production 模式，会启动UglifyJsPlugin服务
     output: {
-      path: config.build2lib.assetsRoot, // 输出文件的存放在本地的目录
+      path: curEnvConfig.assetsRoot, // 输出文件的存放在本地的目录
       filename: '[name].umd.js',
       publicPath: '',
-      library: config.build2lib.libraryName, // 指定类库名,主要用于直接引用的方式(比如使用script 标签)
+      library: curEnvConfig.libraryName, // 指定类库名,主要用于直接引用的方式(比如使用script 标签)
       globalObject: 'this', // 定义全局变量,兼容node和浏览器运行，避免出现"window is not defined"的情况
       libraryTarget: 'umd' // 定义打包方式Universal Module Definition,同时支持在CommonJS、AMD和全局变量使用
     },
     module: {
       rules: utils.styleLoaders({
-        sourceMap: config.build2lib.productionSourceMap,
+        sourceMap: curEnvConfig.productionSourceMap,
         environment: 'prod'
       })
     },
-    devtool: config.build2lib.productionSourceMap ? '#source-map' : false, // '#source-map': 源码，false：压缩代码
-    externals: config.webpack.ignoreNodeModules ? [nodeExternals()].concat(config.webpack.externals) : config.webpack.externals,
+    devtool: curEnvConfig.productionSourceMap ? '#source-map' : false, // '#source-map': 源码，false：压缩代码
+    externals: config.webpack.ignoreNodeModules
+      ? [nodeExternals()].concat(config.webpack.externals)
+      : config.webpack.externals,
     plugins: [
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(config.build2lib.NODE_ENV)
+        'process.env.NODE_ENV': JSON.stringify(curEnvConfig.NODE_ENV)
       }),
       new MiniCssExtractPlugin({
         filename: utils.assetsPath('index.css'),
@@ -54,10 +57,10 @@ module.exports = () => {
   });
 
   // 是否开启Gzip
-  if (config.build2lib.productionGzip) {
+  if (curEnvConfig.productionGzip) {
     webpackLibConfig.plugins.push(
       new CompressionWebpackPlugin({
-        test: new RegExp(`\\.(${config.build2lib.productionGzipExtensions.join('|')})$`),
+        test: new RegExp(`\\.(${curEnvConfig.productionGzipExtensions.join('|')})$`),
         filename: '[path].gz[query]',
         algorithm: 'gzip',
         threshold: 240,
@@ -66,13 +69,13 @@ module.exports = () => {
     );
   }
 
-  if (config.build2lib.bundleAnalyzerReport) {
+  if (curEnvConfig.bundleAnalyzerReport) {
     webpackLibConfig.plugins.push(new BundleAnalyzerPlugin());
   }
 
   // 集成构建入口相关的配置
-  if (config.build2lib.entry) {
-    webpackLibConfig.entry = config.build2lib.entry; // 会覆盖config.webpack.entry的配置
+  if (curEnvConfig.entry) {
+    webpackLibConfig.entry = curEnvConfig.entry; // 会覆盖config.webpack.entry的配置
   }
 
   return webpackLibConfig;
