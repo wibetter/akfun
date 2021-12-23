@@ -1,13 +1,14 @@
 # AKFun 前端脚手架
 > AKFun 是一个基于 Webpack4.0 和 rollup 的前端多场景打包工具，支持多种技术栈：Vue技术栈、React技术栈、React&TS技术栈
-- 技术栈：node/webpack4.0/rollup/express/babel/eslint/stylelint
+> 核心理念：提供完整&全面的前端工程能力，并尽可能屏蔽掉前端工程相关配置，让开发者更专注业务研发工作。
+- 技术栈：node/webpack4.0/rollup/babel/eslint/stylelint
 
 ## 特性
 - ⚡️ 零配置，开箱即用
 - 👏 支持Vue和React项目的调试和构建
 - 📤 支持单页面和多页面
-- 💪 提供三种构建场景: 本地开发调试模式(包含热更新、接口代理等功能)、构建生产环境代码、library库的构建(支持umd和esm的打包能力)
-- ❤️ 开放配置能力: 可配置构建入口文件、是否开启ESLint代码规范检测、接口代理配置等
+- 💪 提供三种构建场景: 本地开发模式(包含热更新、接口代理等功能)、生产环境代码构建、library库构建(支持umd和esm的打包能力)
+- ❤️ 开放配置能力: 可配置构建入口文件、开启ESLint代码检测、接口代理等
 - 👍 支持 [Autoprefixer](https://github.com/postcss/autoprefixer#readme)、[Sass](https://sass-lang.com/)、[PostCSS](https://postcss.org/)、[ESLint](http://eslint.cn/)、[StyleLint](https://stylelint.io/)
 - ❤️ 支持项目系统参数自动批量替换 [params-replace-loader](https://www.npmjs.com/package/params-replace-loader)
 - 😀 提供完整的Vue和React项目模板
@@ -245,7 +246,31 @@ module.exports = {
 }
 ```
 
-7. 项目源码环境变量批量替换
+7. 打包忽略node_modules配置项：ignoreNodeModules（默认为false）
+> 打包过程中，忽略node_modules中的依赖文件，不注入到bundle中，减少最后生成代码体积
+```bash
+module.exports = {
+  ...
+  webpack: {
+    ignoreNodeModules: true,
+  }
+  ...
+}
+```
+
+8. 是否生成ts声明文件配置项: createDeclaration（默认为false）
+> 构建ts项目中，可以选择是否生成ts声明文件
+```bash
+module.exports = {
+  ...
+  webpack: {
+    createDeclaration: true,
+  }
+  ...
+}
+```
+
+9. 项目源码环境变量批量替换
 > [关于params-replace-loader的使用方法](https://www.npmjs.com/package/params-replace-loader)
 ```bash
 module.exports = {
@@ -264,7 +289,7 @@ module.exports = {
 }
 ```
 
-7. 接口代理配置：目前只有dev本地开发调试模式下会启动
+10. 接口代理配置：目前只有dev本地开发调试模式下会启动
 > [关于proxyTable的配置方法](https://www.webpackjs.com/configuration/dev-server/#devserver-proxy)
 ```bash
 module.exports = {
@@ -277,7 +302,7 @@ module.exports = {
 }
 ```
 
-8、用于开启本地调试模式的相关配置信息
+11. 用于开启本地调试模式的相关配置信息
 ```bash
 module.exports = {
   ...
@@ -301,7 +326,7 @@ module.exports = {
 }
 ```
 
-9、用于构建生产环境代码的相关配置信息
+12. 用于构建生产环境代码的相关配置信息
 ```bash
 module.exports = {
   ...
@@ -319,7 +344,7 @@ module.exports = {
 }
 ```
 
-10、用于构建第三方功能包的配置（以umd格式输出）
+13. 用于构建第三方功能包的配置（以umd格式输出）
 ```bash
 module.exports = {
   ...
@@ -338,7 +363,7 @@ module.exports = {
 }
 ```
 
-11、用于构建esm格式的第三方功能包配置
+14. 用于构建esm格式的第三方功能包配置
 ```bash
 module.exports = {
   ...
