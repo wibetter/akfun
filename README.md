@@ -270,7 +270,19 @@ module.exports = {
 }
 ```
 
-9. 项目源码环境变量批量替换
+9. 配置项目源码目录（工程有效目录范围）: projectDir
+> 构建项目中，设置生效的目录（可同时设置多个目录），用于提高前端工程执行效率。可以不配置，默认为['./src']
+```bash
+module.exports = {
+  ...
+  webpack: {
+    projectDir: ['./src'],
+  }
+  ...
+}
+```
+
+10. 项目源码环境变量批量替换
 > [关于params-replace-loader的使用方法](https://www.npmjs.com/package/params-replace-loader)
 ```bash
 module.exports = {
@@ -289,7 +301,7 @@ module.exports = {
 }
 ```
 
-10. 接口代理配置：目前只有dev本地开发调试模式下会启动
+11. 接口代理配置：目前只有dev本地开发调试模式下会启动
 > [关于proxyTable的配置方法](https://www.webpackjs.com/configuration/dev-server/#devserver-proxy)
 ```bash
 module.exports = {
@@ -302,7 +314,7 @@ module.exports = {
 }
 ```
 
-11. 用于开启本地调试模式的相关配置信息
+12. 用于开启本地调试模式的相关配置信息
 ```bash
 module.exports = {
   ...
@@ -326,7 +338,7 @@ module.exports = {
 }
 ```
 
-12. 用于构建生产环境代码的相关配置信息
+13. 用于构建生产环境代码的相关配置信息
 ```bash
 module.exports = {
   ...
@@ -344,7 +356,7 @@ module.exports = {
 }
 ```
 
-13. 用于构建第三方功能包的配置（以umd格式输出）
+14. 用于构建第三方功能包的配置（以umd格式输出）
 ```bash
 module.exports = {
   ...
@@ -363,7 +375,7 @@ module.exports = {
 }
 ```
 
-14. 用于构建esm格式的第三方功能包配置
+15. 用于构建esm格式的第三方功能包配置
 ```bash
 module.exports = {
   ...

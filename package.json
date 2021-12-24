@@ -1,6 +1,6 @@
 {
   "name": "akfun",
-  "version": "1.5.13",
+  "version": "1.5.16",
   "description": "前端脚手架：支持Vue技术栈和react技术栈",
   "keywords": [
     "前端工程",
@@ -10,7 +10,7 @@
     "vue项目脚手架",
     "lib库构建工具"
   ],
-  "author": "ldan@wibetter",
+  "author": "wibetter",
   "license": "MIT",
   "bin": {
     "akfun": "./bin/akfun.js"

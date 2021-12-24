@@ -7,6 +7,7 @@ const utils = require('./loaderUtils');
 const vueLoaderConfig = require('./vue-loader.conf');
 const { resolve, resolveToCurrentRoot, catchCurPackageJson } = require('../utils/pathUtils');
 const getConfigObj = require('../utils/getConfigObj');
+const getProjectDir = require('../utils/getProjectDir');
 const catchVuePages = require('../utils/catchVuePages'); // 用于获取当前项目中的vue单文件
 // 引入当前项目配置文件
 const config = require('../config/index');
@@ -34,6 +35,8 @@ const BannerPack = new webpack.BannerPlugin({
  */
 module.exports = (option) => {
   const curEnvConfig = option || {}; // 用于接收当前运行环境配置变量
+  // 获取当前项目目录
+  const curProjectDir = getProjectDir(config.webpack.projectDir);
   const webpackConfig = {
     entry: config.webpack.entry,
     /*
@@ -81,7 +84,7 @@ module.exports = (option) => {
               }
             }
           ],
-          include: [resolve('src')],
+          include: curProjectDir, // [resolve('src')],
           exclude: /node_modules/
         },
         {
@@ -92,7 +95,7 @@ module.exports = (option) => {
               options: babelConfig
             }
           ],
-          include: [resolve('src')],
+          include: curProjectDir, // [resolve('src')],
           exclude: /node_modules/
         },
         {
@@ -134,7 +137,7 @@ module.exports = (option) => {
         {
           test: /\.(js|ts|tsx|jsx|vue|css|html)$/,
           loader: 'params-replace-loader',
-          include: [resolve('src')],
+          include: curProjectDir, // [resolve('src')],
           exclude: [/node_modules/, resolve('src/mock/data')], // 排除不需要进行校验的文件夹
           options: config.envParams
         }
@@ -153,7 +156,7 @@ module.exports = (option) => {
       test: /\.tsx?$/,
       loader: 'eslint-loader',
       enforce: 'pre',
-      include: [resolve('src')],
+      include: curProjectDir, // [resolve('src')],
       exclude: /node_modules/,
       options: {
         cache: true,
@@ -167,7 +170,7 @@ module.exports = (option) => {
       test: /\.jsx?$/,
       loader: 'eslint-loader',
       enforce: 'pre',
-      include: [resolve('src')],
+      include: curProjectDir, // [resolve('src')],
       exclude: /node_modules/,
       options: {
         cache: true, // the cache is written to the ./node_modules/.cache/eslint-loader director
@@ -181,7 +184,7 @@ module.exports = (option) => {
       test: /\.vue$/,
       loader: 'eslint-loader',
       enforce: 'pre',
-      include: [resolve('src')],
+      include: curProjectDir, // [resolve('src')],
       exclude: /node_modules/,
       options: {
         cache: true,
