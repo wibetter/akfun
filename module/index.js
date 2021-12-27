@@ -137,7 +137,7 @@ let argv = yargs
         .alias('h', 'help');
     },
     (argv) => {
-      mainAction.build();
+      mainAction.build('prod');
     },
   )
   .command(

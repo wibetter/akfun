@@ -4,10 +4,15 @@ const path = require('path');
 const chalk = require('chalk');
 const webpack = require('webpack');
 const checkVersion = require('./check-versions');
-const config = require('./config/index'); // 引入当前项目配置文件
+const projectConfig = require('./config/index'); // 引入当前项目配置文件
+const deepMergeConfig = require('./utils/deepMergeConfig');
 
 // 构建脚本：一般用于构建生产环境的代码
-module.exports = function (BuildType) {
+module.exports = function (BuildType, akfunConfig) {
+  let config = projectConfig; // 默认使用执行命令目录下的配置数据
+  if (akfunConfig) {
+    config = deepMergeConfig(defaultConfig, akfunConfig);
+  }
   // 检查当前npm版本号是否匹配
   checkVersion();
   const spinner = ora('[akfun]开启AKFun构建能力...').start();
@@ -16,10 +21,10 @@ module.exports = function (BuildType) {
   // 根据BuildType判断是否引用专用于第三方功能包的webpack配置
   if (BuildType && BuildType === 'lib') {
     spinner.start('[akfun]开始构建第三方功能包...');
-    webpackConfig = require('./webpack/webpack.library.conf')();
+    webpackConfig = require('./webpack/webpack.library.conf')(config);
   } else {
     spinner.start('[akfun]开始构建生产环境的代码...');
-    webpackConfig = require('./webpack/webpack.prod.conf')();
+    webpackConfig = require('./webpack/webpack.prod.conf')(config);
   }
 
   /**

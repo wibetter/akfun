@@ -7,11 +7,17 @@ const checkVersion = require('./check-versions');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const { resolve } = require('./utils/pathUtils');
 // 引入当前项目配置文件
-const config = require('./config/index');
+const projectConfig = require('./config/index');
+const defaultConfig = require('./config/default.config');
 const getDevWebpackConfig = require('./webpack/webpack.dev.conf');
+const deepMergeConfig = require('./utils/deepMergeConfig');
 
 // 构建脚本：一般用于构建开发环境的代码（包含热更新、接口代理等功能）
-module.exports = function () {
+module.exports = function (akfunConfig) {
+  let config = projectConfig; // 默认使用执行命令目录下的配置数据
+  if (akfunConfig) {
+    config = deepMergeConfig(defaultConfig, akfunConfig);
+  }
   // 检查当前npm版本号是否匹配
   checkVersion();
   const spinner = ora('[akfun]开启调试模式...').start();
@@ -35,7 +41,7 @@ module.exports = function () {
   // 使用 express 启动一个服务
   const app = express();
   // 获取开发环境的webpack基本配置
-  const webpackConfig = getDevWebpackConfig();
+  const webpackConfig = getDevWebpackConfig(config);
   const compiler = webpack(webpackConfig); // 启动 webpack 进行编译
 
   // 启动 webpack-dev-middleware，将编译后的文件暂存到内存中

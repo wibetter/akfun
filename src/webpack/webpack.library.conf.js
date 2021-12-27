@@ -10,10 +10,11 @@ const nodeExternals = require('webpack-node-externals');
 
 const utils = require('./loaderUtils');
 // 引入当前项目配置文件
-const config = require('../config/index');
+const projectConfig = require('../config/index');
 const getBaseWebpackConfig = require('./webpack.base.conf');
 
-module.exports = () => {
+module.exports = (akfunConfig) => {
+  let config = akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据
   const curEnvConfig = config.build2lib || {}; // 当前执行环境配置
   // 获取webpack基本配置
   const baseWebpackConfig = getBaseWebpackConfig(curEnvConfig);
