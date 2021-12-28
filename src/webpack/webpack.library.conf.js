@@ -44,7 +44,9 @@ module.exports = (akfunConfig) => {
         'process.env.NODE_ENV': JSON.stringify(curEnvConfig.NODE_ENV)
       }),
       new MiniCssExtractPlugin({
-        filename: utils.assetsPath('index.css'),
+        // filename: utils.assetsPath('index.css'),
+        filename: "[name].css",
+        chunkFilename: "[id].css",
         ignoreOrder: false
       }),
       new OptimizeCSSPlugin({
