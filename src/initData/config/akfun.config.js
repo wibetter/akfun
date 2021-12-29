@@ -22,7 +22,7 @@ module.exports = {
     },
     resolve: {
       // webpack的resolve配置
-      extensions: ['.js', '.jsx', '.vue', 'json'], // 用于配置webpack在尝试过程中用到的后缀列表
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue', 'json'], // 用于配置webpack在尝试过程中用到的后缀列表
       alias: {
         '@': resolve('src'),
         $components: resolve('src/components'),
@@ -31,6 +31,8 @@ module.exports = {
         $utils: resolve('src/utils')
       }
     },
+    createDeclaration: false, // 打包时是否创建ts声明文件
+    ignoreNodeModules: false, // 打包时是否忽略 node_modules
     externals: [], // 从输出的 bundle 中排除依赖
     template: resolve('src/index.html'), // 默认使用的页面模板
     sassResources: []

@@ -11,6 +11,7 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 const utils = require('./loaderUtils');
 const { resolve } = require('../utils/pathUtils'); // 统一路径解析
@@ -175,6 +176,11 @@ module.exports = (akfunConfig) => {
         minRatio: 0.8
       })
     );
+  }
+  
+  // 是否开启
+  if (curEnvConfig.openMonacoWebpackPlugin) {
+    webpackProdConfig.plugins.push(new MonacoWebpackPlugin());
   }
 
   if (curEnvConfig.bundleAnalyzerReport) {

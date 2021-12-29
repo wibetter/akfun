@@ -1,4 +1,3 @@
-'use strict';
 // 统一路径解析：
 const { resolve } = require('../utils/pathUtils');
 const defaultAKFunConfig = require('./default.config');

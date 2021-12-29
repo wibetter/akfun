@@ -129,7 +129,7 @@ let argv = yargs
   )
   .command(
     'build',
-    '构建生产环境的代码',
+    '构建生产环境代码',
     (yargs) => {
       yargs
         .reset()
@@ -142,7 +142,7 @@ let argv = yargs
   )
   .command(
     'build2lib',
-    '构建第三方功能包',
+    '构建lib库',
     (yargs) => {
       yargs
         .reset()
@@ -155,7 +155,7 @@ let argv = yargs
   )
   .command(
     'build2esm',
-    '构建esm功能包',
+    '构建esm模块',
     (yargs) => {
       yargs
         .reset()
