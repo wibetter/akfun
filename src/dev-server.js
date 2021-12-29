@@ -11,16 +11,19 @@ const projectConfig = require('./config/index');
 const defaultConfig = require('./config/default.config');
 const getDevWebpackConfig = require('./webpack/webpack.dev.conf');
 const deepMergeConfig = require('./utils/deepMergeConfig');
+const {curConsoleTag } = require("./utils/akfunParams");
 
 // 构建脚本：一般用于构建开发环境的代码（包含热更新、接口代理等功能）
-module.exports = function (akfunConfig) {
+module.exports = function (akfunConfig, _consoleTag) {
+  const consoleTag = _consoleTag || curConsoleTag;
   let config = projectConfig; // 默认使用执行命令目录下的配置数据
   if (akfunConfig) {
+    // 参数中的config配置优先级最高
     config = deepMergeConfig(defaultConfig, akfunConfig);
   }
   // 检查当前npm版本号是否匹配
   checkVersion();
-  const spinner = ora('[akfun]开启调试模式...').start();
+  const spinner = ora(`${consoleTag}开启调试模式...`).start();
   /**
    * 如果 Node 的环境无法判断当前是 dev / product 环境
    * 使用 config.dev.NODE_ENV 作为当前的环境
@@ -112,7 +115,7 @@ module.exports = function (akfunConfig) {
       console.log(`> Listening at ${uri}\n`);
       // 如果是开发环境，自动打开浏览器并跳到项目首页
       if (autoOpenBrowser && process.NODE_ENV === 'development') {
-        spinner.succeed('[akfun]调试模式已开启！');
+        spinner.succeed(`${consoleTag}调试模式已开启！`);
         opn(uri);
       }
       server = app.listen(port);

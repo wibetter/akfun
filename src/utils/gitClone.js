@@ -3,9 +3,11 @@ const ora = require('ora');
 const gitclone = require('git-clone');
 const rm = require('rimraf').sync;
 const { resolveToCurrentRoot } = require('../utils/pathUtils');
+const {curConsoleTag} = require("./akfunParams");
 
-function gitClone(gitUrl, dir, callback) {
-  const spinner = ora('[akfun]正在加载项目模板...').start();
+function _gitClone(gitUrl, dir, callback, _consoleTag) {
+  const consoleTag = _consoleTag || curConsoleTag;
+  const spinner = ora(`${consoleTag}正在加载项目模板...`).start();
   gitclone(
     gitUrl,
     resolveToCurrentRoot(dir),
@@ -15,7 +17,7 @@ function gitClone(gitUrl, dir, callback) {
     (err) => {
       if (err === undefined) {
         rm(resolveToCurrentRoot(path.resolve(dir, '.git')));
-        spinner.succeed('[akfun]项目模板加载完成！');
+        spinner.succeed(`${consoleTag}项目模板加载完成！`);
         callback();
       } else {
         console.log(err);
@@ -24,4 +26,4 @@ function gitClone(gitUrl, dir, callback) {
     }
   );
 }
-module.exports = gitClone;
+module.exports = _gitClone;
