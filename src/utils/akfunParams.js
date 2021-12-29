@@ -1,4 +1,4 @@
-var consoleTag = '[akfun]'; // 输出标记
+let consoleTag = '[akfun]'; // 输出标记
 
 function setConsoleTag(newText) {
   consoleTag = newText;

@@ -163,7 +163,7 @@ let argv = yargs
         .option('fileName', {
           alias: 'n',
           describe: '输出的文件名',
-          default: 'lib',
+          default: '',
         })
         .alias('h', 'help');
     },

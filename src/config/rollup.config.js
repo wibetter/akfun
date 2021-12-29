@@ -22,7 +22,7 @@ const { resolveToCurrentRoot, resolveToCurrentDist } = require('../utils/pathUti
 const babelConfig = require('./babel.config'); // Babel的配置文件
 const config = require('./index'); // 引入当前项目配置文件
 
-module.exports = function (fileName) {
+module.exports = function(fileName) {
   // 获取用户配置的构建入口文件
   let rollupInput = resolveToCurrentRoot('src/main.js');
   if (config.build2esm && config.build2esm.input) {
