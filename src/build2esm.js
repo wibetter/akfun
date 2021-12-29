@@ -1,5 +1,6 @@
 const ora = require('ora');
 const rollup = require('rollup');
+const nodeExternals = require('webpack-node-externals');
 const projectConfig = require('./config/index'); // 引入当前项目配置文件
 const defaultConfig = require('./config/default.config');
 const rollupConfig = require('./config/rollup.config'); // rollup的配置文件
@@ -12,7 +13,9 @@ async function build2esmFunc(options, curConfig) {
   const bundle = await rollup.rollup({
     input: options.input,
     /** 直接使用webpack中的externals配置（避免再新增一个rollup对应的配置，增加用户的配置复杂度） */
-    external: curConfig.webpack.externals,
+    external: curConfig.webpack.ignoreNodeModules
+      ? [nodeExternals()].concat(curConfig.webpack.externals)
+      : curConfig.webpack.externals,
     plugins: options.plugins
   });
 
