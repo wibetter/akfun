@@ -7,12 +7,12 @@ const { isArray, isObject } = require('./utils/typeof');
 const {curConsoleTag } = require("./utils/akfunParams");
 const deepMergeConfig = require('./utils/deepMergeConfig');
 
-async function build2esmFunc(options) {
+async function build2esmFunc(options, curConfig) {
   // create a bundle
   const bundle = await rollup.rollup({
     input: options.input,
     /** 直接使用webpack中的externals配置（避免再新增一个rollup对应的配置，增加用户的配置复杂度） */
-    external: config.webpack.externals,
+    external: curConfig.webpack.externals,
     plugins: options.plugins
   });
 
@@ -43,7 +43,7 @@ module.exports = function (fileName, akfunConfig, _consoleTag) {
   if (build2esm && build2esm.output) {
     curRollupConfig.output = build2esm.output;
   }
-  build2esmFunc(curRollupConfig).then(() => {
+  build2esmFunc(curRollupConfig, config).then(() => {
     spinner.succeed(`${consoleTag}esm lib库构建完成`);
   });
 };
