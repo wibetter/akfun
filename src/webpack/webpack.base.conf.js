@@ -5,27 +5,18 @@ const StyleLintPlugin = require('stylelint-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const utils = require('./loaderUtils');
 const vueLoaderConfig = require('./vue-loader.conf');
-const { resolve, resolveToCurrentRoot, catchCurPackageJson } = require('../utils/pathUtils');
-const getConfigObj = require('../utils/getConfigObj');
+const { resolve, resolveToCurrentRoot } = require('../utils/pathUtils');
 const getProjectDir = require('../utils/getProjectDir');
 const catchVuePages = require('../utils/catchVuePages'); // 用于获取当前项目中的vue单文件
 // 引入当前项目配置文件
 const config = require('../config/index');
 const babelConfig = require('../config/babel.config'); // Babel的配置文件
+const {buildBanner} = require("../utils/akfunParams");
 
-// 获取当前项目的package文件
-const currentPackageJsonDir = catchCurPackageJson();
-const currentPackageJson = getConfigObj(currentPackageJsonDir);
 
 // 生成构建头部信息
 const BannerPack = new webpack.BannerPlugin({
-  banner: [
-    `${currentPackageJson.name} v${currentPackageJson.version}`,
-    `author: ${currentPackageJson.author}`,
-    `build tool: AKFun`,
-    `build time: ${new Date().toString()}`,
-    `build tool info: https://github.com/wibetter/akfun`
-  ].join('\n'),
+  banner: buildBanner,
   entryOnly: true // 只在入口 chunks 文件中添加
 });
 
@@ -33,12 +24,13 @@ const BannerPack = new webpack.BannerPlugin({
  * webpack.base.conf.js
  * 主要用于设置 rules 和 通用插件
  */
-module.exports = (option) => {
-  const curEnvConfig = option || {}; // 用于接收当前运行环境配置变量
+module.exports = (_curEnvConfig, _curWebpackConfig) => {
+  const curEnvConfig = _curEnvConfig || {}; // 用于接收当前运行环境配置变量
+  const curWebpackConfig = _curWebpackConfig || config.webpack;
   // 获取当前项目目录
-  const curProjectDir = getProjectDir(config.webpack.projectDir);
+  const curProjectDir = getProjectDir(curWebpackConfig.projectDir);
   const webpackConfig = {
-    entry: config.webpack.entry,
+    entry: curWebpackConfig.entry,
     /*
      内置变量列表：
      id: chunk的唯一标识，从0开始；
@@ -53,7 +45,7 @@ module.exports = (option) => {
     /**
      * 当webpack试图去加载模块的时候，它默认是查找以 .js 结尾的文件的
      */
-    resolve: config.webpack.resolve,
+    resolve: curWebpackConfig.resolve,
     module: {
       rules: [
         {
@@ -78,7 +70,7 @@ module.exports = (option) => {
               options: {
                 // configFile: path.resolve(__dirname, '../config/tsconfig.json')
                 compilerOptions: {
-                  declaration: config.webpack.createDeclaration || false,
+                  declaration: curWebpackConfig.createDeclaration || false,
                   outDir: curEnvConfig.assetsRoot || './dist'
                 }
               }

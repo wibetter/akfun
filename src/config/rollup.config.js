@@ -17,36 +17,38 @@ const nested = require('postcss-nested');
 const postcssPresetEnv = require('postcss-preset-env');
 // css代码压缩
 const cssnano = require('cssnano');
-
 const { resolveToCurrentRoot, resolveToCurrentDist } = require('../utils/pathUtils'); // 统一路径解析
 const babelConfig = require('./babel.config'); // Babel的配置文件
-const config = require('./index'); // 引入当前项目配置文件
+const curProjectConfig = require('./index'); // 引入当前项目配置文件
+const {buildBanner} = require("../utils/akfunParams");
 
-module.exports = function(fileName) {
+module.exports = function(fileName, akfunConfig) {
+  const curConfig = akfunConfig || curProjectConfig;
   // 获取用户配置的构建入口文件
   let rollupInput = resolveToCurrentRoot('src/main.js');
-  if (config.build2esm && config.build2esm.input) {
-    rollupInput = config.build2esm.input;
+  if (curConfig.build2esm && curConfig.build2esm.input) {
+    rollupInput = curConfig.build2esm.input;
   }
   let curFileName = fileName || 'index'; // 默认以"index.esm.js"输出
   // 获取用户配置的构建输出文件名
-  if (config.build2esm && config.build2esm.fileName) {
-    curFileName = config.build2esm.fileName;
+  if (curConfig.build2esm && curConfig.build2esm.fileName) {
+    curFileName = curConfig.build2esm.fileName;
   }
   // 增加babel配置
   babelConfig.babelHelpers = 'runtime';
 
   return {
+    banner: buildBanner,
     input: rollupInput,
     // external：将模块视为外部模块，不会打包在库中（在akfun.config.js中配置）
     plugins: [
       alias({
-        resolve: config.webpack.resolve.extensions,
-        extensions: config.webpack.resolve.extensions,
-        entries: config.webpack.resolve.alias
+        resolve: curConfig.webpack.resolve.extensions,
+        extensions: curConfig.webpack.resolve.extensions,
+        entries: curConfig.webpack.resolve.alias
       }),
       nodeResolve({
-        extensions: config.webpack.resolve.extensions
+        extensions: curConfig.webpack.resolve.extensions
       }),
       babel(babelConfig), // 备注，需要先babel()再commjs()
       vue(),
