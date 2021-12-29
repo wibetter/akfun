@@ -35,7 +35,7 @@ module.exports = function (fileName, akfunConfig, _consoleTag) {
     config = deepMergeConfig(defaultConfig, akfunConfig);
   }
   const spinner = ora(`${consoleTag}开启esm lib库的构建能力...`).start();
-  const curRollupConfig = rollupConfig(fileName); // 默认配置
+  const curRollupConfig = rollupConfig(fileName, config); // 默认配置
   const build2esm = config.build2esm; // 用户的项目配置
   if (build2esm && build2esm.input) {
     curRollupConfig.input = build2esm.input;
