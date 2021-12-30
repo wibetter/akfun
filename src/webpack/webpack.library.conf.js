@@ -38,7 +38,7 @@ module.exports = (akfunConfig) => {
     devtool: curEnvConfig.productionSourceMap ? '#source-map' : false, // '#source-map': 源码，false：压缩代码
     externals: config.webpack.ignoreNodeModules
       ? [nodeExternals({
-        allowList: config.webpack.allowList ? config.webpack.allowList : []
+        allowlist: config.webpack.allowList ? config.webpack.allowList : []
       })].concat(config.webpack.externals)
       : config.webpack.externals,
     plugins: [

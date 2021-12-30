@@ -57,7 +57,7 @@ module.exports = (akfunConfig) => {
     },
     externals: config.webpack.ignoreNodeModules
       ? [nodeExternals({
-        allowList: config.webpack.allowList ? config.webpack.allowList : []
+        allowlist: config.webpack.allowList ? config.webpack.allowList : []
       })].concat(config.webpack.externals)
       : config.webpack.externals,
     // devtool: '#cheap-module-eval-source-map', // 本地开发环境中的取值
