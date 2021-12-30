@@ -253,6 +253,7 @@ module.exports = {
   ...
   webpack: {
     ignoreNodeModules: true,
+    allowList: [], // 用于配置会注入bundle中的依赖包（ignoreNodeModules为true时生效）
   }
   ...
 }
