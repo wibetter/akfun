@@ -34,7 +34,7 @@ module.exports = function (fileName, akfunConfig, _consoleTag) {
     // 参数中的config配置优先级最高
     config = deepMergeConfig(defaultConfig, akfunConfig);
   }
-  const spinner = ora(`${consoleTag}开启esm lib库的构建能力...`).start();
+  const spinner = ora(`${consoleTag}开启esm模块构建能力...`).start();
   const curRollupConfig = rollupConfig(fileName, config); // 默认配置
   const build2esm = config.build2esm; // 用户的项目配置
   if (build2esm && build2esm.input) {

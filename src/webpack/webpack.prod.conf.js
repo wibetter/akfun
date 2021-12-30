@@ -56,7 +56,9 @@ module.exports = (akfunConfig) => {
       })
     },
     externals: config.webpack.ignoreNodeModules
-      ? [nodeExternals()].concat(config.webpack.externals)
+      ? [nodeExternals({
+        allowList: config.webpack.allowList ? config.webpack.allowList : []
+      })].concat(config.webpack.externals)
       : config.webpack.externals,
     // devtool: '#cheap-module-eval-source-map', // 本地开发环境中的取值
     devtool: curEnvConfig.productionSourceMap ? '#source-map' : false, // 线上开发环境中的取值
