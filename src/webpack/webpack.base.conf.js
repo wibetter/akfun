@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 // const tsImportPluginFactory = require('ts-import-plugin'); // 按需加载lib库组件代码
 const StyleLintPlugin = require('stylelint-webpack-plugin');
@@ -10,13 +11,11 @@ const { resolve, resolveToCurrentRoot } = require('../utils/pathUtils');
 const getProjectDir = require('../utils/getProjectDir');
 const catchVuePages = require('../utils/catchVuePages'); // 用于获取当前项目中的vue单文件
 // 引入当前项目配置文件
-const config = require('../config/index');
+const projectConfig = require('../config/index');
 const babelConfig = require('../config/babel.config'); // Babel的配置文件
 const {buildBanner} = require("../utils/akfunParams");
 const getJsEntries = require('../utils/jsEntries');
 const { isArray } = require('../utils/typeof');
-const fs = require('fs');
-
 
 // 生成构建头部信息
 const BannerPack = new webpack.BannerPlugin({
@@ -27,10 +26,13 @@ const BannerPack = new webpack.BannerPlugin({
 /**
  * webpack.base.conf.js
  * 主要用于设置 rules 和 通用插件
+ * _curEnvConfig: 执行环境中的配置，比如：dev、build、build2lib等；
+ * _akfunConfig：完整的配置对象
  */
-module.exports = (_curEnvConfig, _curWebpackConfig) => {
+module.exports = (_curEnvConfig, _akfunConfig) => {
   const curEnvConfig = _curEnvConfig || {}; // 用于接收当前运行环境配置变量
-  const curWebpackConfig = _curWebpackConfig || config.webpack;
+  let config = _akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据
+  const curWebpackConfig = config.webpack;
   // 获取当前项目目录
   const curProjectDir = getProjectDir(curWebpackConfig.projectDir);
   const webpackConfig = {
@@ -50,11 +52,11 @@ module.exports = (_curEnvConfig, _curWebpackConfig) => {
      * 当webpack试图去加载模块的时候，它默认是查找以 .js 结尾的文件的
      */
     resolve: curWebpackConfig.resolve,
-    externals: config.webpack.ignoreNodeModules
+    externals: curWebpackConfig.ignoreNodeModules
       ? [nodeExternals({
-        allowlist: config.webpack.allowList ? config.webpack.allowList : []
-      })].concat(config.webpack.externals)
-      : config.webpack.externals,
+        allowlist: curWebpackConfig.allowList ? curWebpackConfig.allowList : []
+      })].concat(curWebpackConfig.externals)
+      : curWebpackConfig.externals,
     module: {
       rules: [
         {
@@ -152,7 +154,7 @@ module.exports = (_curEnvConfig, _curWebpackConfig) => {
   };
   // 优先使用执行环境中的配置
   if (curEnvConfig.ignoreNodeModules) {
-    const allowList = curEnvConfig.allowList || config.webpack.allowList;
+    const allowList = curEnvConfig.allowList || curWebpackConfig.allowList;
     webpackConfig.externals = [nodeExternals({
       allowlist: allowList || [],
     })].concat(curEnvConfig.externals || config.webpack.externals);

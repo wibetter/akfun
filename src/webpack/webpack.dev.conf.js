@@ -13,7 +13,7 @@ module.exports = (akfunConfig) => {
   let config = akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据
   const curEnvConfig = config.dev || {}; // 当前执行环境配置
   // 获取webpack基本配置
-  const baseWebpackConfig = getBaseWebpackConfig(curEnvConfig, config.webpack);
+  const baseWebpackConfig = getBaseWebpackConfig(curEnvConfig, config);
 
   // 获取页面模板地址
   let curHtmlTemplate = path.resolve(__dirname, '../initData/template/index.html');
