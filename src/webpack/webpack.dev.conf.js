@@ -1,4 +1,3 @@
-const fs = require('fs');
 const webpack = require('webpack');
 const path = require('path');
 const merge = require('webpack-merge');
@@ -8,10 +7,7 @@ const utils = require('./loaderUtils');
 // 引入当前项目配置文件
 const projectConfig = require('../config/index');
 const getBaseWebpackConfig = require('./webpack.base.conf');
-const getJsEntries = require('../utils/jsEntries');
 const entrys2htmlWebpackPlugin = require('../utils/entrys2htmlWebpackPlugin');
-const { isArray } = require('../utils/typeof');
-const nodeExternals = require('webpack-node-externals');
 
 module.exports = (akfunConfig) => {
   let config = akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据

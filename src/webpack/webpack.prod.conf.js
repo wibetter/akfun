@@ -10,14 +10,11 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
-const nodeExternals = require('webpack-node-externals');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 const utils = require('./loaderUtils');
 const { resolve } = require('../utils/pathUtils'); // 统一路径解析
-const getJsEntries = require('../utils/jsEntries');
 const entrys2htmlWebpackPlugin = require('../utils/entrys2htmlWebpackPlugin');
-const { isArray } = require('../utils/typeof');
 // 引入当前项目配置文件
 const projectConfig = require('../config/index');
 const getBaseWebpackConfig = require('./webpack.base.conf');

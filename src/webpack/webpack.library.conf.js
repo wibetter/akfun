@@ -6,7 +6,6 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
-const nodeExternals = require('webpack-node-externals');
 
 const utils = require('./loaderUtils');
 // 引入当前项目配置文件
