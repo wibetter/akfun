@@ -153,11 +153,12 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
     ]
   };
   // 优先使用执行环境中的配置
-  if (curEnvConfig.ignoreNodeModules) {
+  if (curEnvConfig.ignoreNodeModules !== undefined) {
     const allowList = curEnvConfig.allowList || curWebpackConfig.allowList;
-    webpackConfig.externals = [nodeExternals({
+    const externals = curEnvConfig.externals || config.webpack.external || [];
+    webpackConfig.externals = curEnvConfig.ignoreNodeModules ? [nodeExternals({
       allowlist: allowList || [],
-    })].concat(curEnvConfig.externals || config.webpack.externals);
+    })].concat(externals) : externals;
   }
   // 集成构建入口相关的配置（优先级更高）
   if (curEnvConfig.entry) {
