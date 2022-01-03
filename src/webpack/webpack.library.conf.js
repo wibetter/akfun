@@ -36,11 +36,6 @@ module.exports = (akfunConfig) => {
       })
     },
     devtool: curEnvConfig.productionSourceMap ? '#source-map' : false, // '#source-map': 源码，false：压缩代码
-    externals: config.webpack.ignoreNodeModules
-      ? [nodeExternals({
-        allowlist: config.webpack.allowList ? config.webpack.allowList : []
-      })].concat(config.webpack.externals)
-      : config.webpack.externals,
     plugins: [
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(curEnvConfig.NODE_ENV)
@@ -48,7 +43,7 @@ module.exports = (akfunConfig) => {
       new MiniCssExtractPlugin({
         // filename: utils.assetsPath('index.css'),
         filename: "[name].css",
-        chunkFilename: "[id].css",
+        chunkFilename: "[name].css",
         ignoreOrder: false
       }),
       new OptimizeCSSPlugin({
@@ -76,11 +71,6 @@ module.exports = (akfunConfig) => {
 
   if (curEnvConfig.bundleAnalyzerReport) {
     webpackLibConfig.plugins.push(new BundleAnalyzerPlugin());
-  }
-
-  // 集成构建入口相关的配置
-  if (curEnvConfig.entry) {
-    webpackLibConfig.entry = curEnvConfig.entry; // 会覆盖config.webpack.entry的配置
   }
 
   return webpackLibConfig;

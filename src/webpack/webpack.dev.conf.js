@@ -11,6 +11,7 @@ const getBaseWebpackConfig = require('./webpack.base.conf');
 const getJsEntries = require('../utils/jsEntries');
 const entrys2htmlWebpackPlugin = require('../utils/entrys2htmlWebpackPlugin');
 const { isArray } = require('../utils/typeof');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = (akfunConfig) => {
   let config = akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据
@@ -48,40 +49,6 @@ module.exports = (akfunConfig) => {
       new ProgressBarPlugin()
     ]
   });
-
-  // 集成dev配置中的构建入口（优先级高于config.webpack.entry）
-  if (curEnvConfig.entry) {
-    webpackDevConfig.entry = curEnvConfig.entry; // 备注：会覆盖config.webpack.entry的配置
-  }
-
-  // 多页面多模板支持能力
-  let entryConfig = webpackDevConfig.entry || {}; // 获取构建入口配置
-  const entryFiles = (entryConfig && Object.keys(entryConfig)) || [];
-
-  if (
-    !webpackDevConfig.entry ||
-    JSON.stringify(webpackDevConfig.entry) === '{}' ||
-    entryFiles.length === 0
-  ) {
-    // 如果当前构建入口为空，则自动从'./src/pages/'中获取入口文件
-    webpackDevConfig.entry = getJsEntries();
-  } else if (webpackDevConfig.entry && entryFiles.length === 1) {
-    /**
-     * 只有一个构建入口文件，且项目中不存在此文件，则自动从'./src/pages/'中获取构建入口文件
-     */
-    const filename = entryFiles[0];
-    let entryFilePath = entryConfig[filename];
-    // 当前entryFilePath可能是一个地址字符串，也可能是一个存储多个文件地址的数组
-    if (isArray(entryFilePath)) {
-      // 如果是数组则自动获取最后一个文件地址
-      entryFilePath = entryFilePath[entryFilePath.length - 1];
-    }
-    if (!fs.existsSync(entryFilePath)) {
-      // 如果仅有的构建入口文件不存在，则自动从'./src/pages/'中获取入口文件
-      const curJsEntries = getJsEntries();
-      webpackDevConfig.entry = curJsEntries ? curJsEntries : webpackDevConfig.entry;
-    }
-  }
 
   // 使用用户自定义的多入口配置，生产对应的多页面多模板（优先使用用户的自定义页面模板）
   const htmlWebpackPluginList = entrys2htmlWebpackPlugin(webpackDevConfig.entry, curHtmlTemplate);

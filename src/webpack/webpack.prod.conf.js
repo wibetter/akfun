@@ -55,11 +55,6 @@ module.exports = (akfunConfig) => {
         environment: 'prod'
       })
     },
-    externals: config.webpack.ignoreNodeModules
-      ? [nodeExternals({
-        allowlist: config.webpack.allowList ? config.webpack.allowList : []
-      })].concat(config.webpack.externals)
-      : config.webpack.externals,
     // devtool: '#cheap-module-eval-source-map', // 本地开发环境中的取值
     devtool: curEnvConfig.productionSourceMap ? '#source-map' : false, // 线上开发环境中的取值
     optimization: {
@@ -109,41 +104,6 @@ module.exports = (akfunConfig) => {
       new ProgressBarPlugin()
     ]
   });
-
-  // 集成build配置中的构建入口
-  if (curEnvConfig.entry) {
-    // 会覆盖config.webpack.entry的配置
-    webpackProdConfig.entry = curEnvConfig.entry;
-  }
-
-  // 多页面支持能力
-  let entryConfig = webpackProdConfig.entry || {}; // 获取构建入口配置
-  const entryFiles = (entryConfig && Object.keys(entryConfig)) || [];
-
-  if (
-    !webpackProdConfig.entry ||
-    JSON.stringify(webpackProdConfig.entry) === '{}' ||
-    entryFiles.length === 0
-  ) {
-    // 自动从'./src/pages/'中获取入口文件
-    webpackProdConfig.entry = getJsEntries();
-  } else if (webpackProdConfig.entry && entryFiles.length === 1) {
-    /**
-     * 只有一个构建入口文件，且项目中不存在此文件，则自动从'./src/pages/'中获取构建入口文件
-     */
-    const filename = entryFiles[0];
-    let entryFilePath = entryConfig[filename];
-    // 当前entryFilePath可能是一个地址字符串，也可能是一个存储多个文件地址的数组
-    if (isArray(entryFilePath)) {
-      // 如果是数组则自动获取最后一个文件地址
-      entryFilePath = entryFilePath[entryFilePath.length - 1];
-    }
-    if (!fs.existsSync(entryFilePath)) {
-      // 如果仅有的构建入口文件不存在，则自动从'./src/pages/'中获取入口文件
-      const curJsEntries = getJsEntries();
-      webpackProdConfig.entry = curJsEntries ? curJsEntries : webpackProdConfig.entry;
-    }
-  }
 
   // 使用用户自定义的多入口配置，生产对应的多页面多模板
   const htmlWebpackPluginList = entrys2htmlWebpackPlugin(webpackProdConfig.entry, curHtmlTemplate);

@@ -3,6 +3,7 @@ const webpack = require('webpack');
 // const tsImportPluginFactory = require('ts-import-plugin'); // 按需加载lib库组件代码
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const nodeExternals = require('webpack-node-externals');
 const utils = require('./loaderUtils');
 const vueLoaderConfig = require('./vue-loader.conf');
 const { resolve, resolveToCurrentRoot } = require('../utils/pathUtils');
@@ -12,6 +13,9 @@ const catchVuePages = require('../utils/catchVuePages'); // 用于获取当前�
 const config = require('../config/index');
 const babelConfig = require('../config/babel.config'); // Babel的配置文件
 const {buildBanner} = require("../utils/akfunParams");
+const getJsEntries = require('../utils/jsEntries');
+const { isArray } = require('../utils/typeof');
+const fs = require('fs');
 
 
 // 生成构建头部信息
@@ -46,6 +50,11 @@ module.exports = (_curEnvConfig, _curWebpackConfig) => {
      * 当webpack试图去加载模块的时候，它默认是查找以 .js 结尾的文件的
      */
     resolve: curWebpackConfig.resolve,
+    externals: config.webpack.ignoreNodeModules
+      ? [nodeExternals({
+        allowlist: config.webpack.allowList ? config.webpack.allowList : []
+      })].concat(config.webpack.externals)
+      : config.webpack.externals,
     module: {
       rules: [
         {
@@ -141,6 +150,45 @@ module.exports = (_curEnvConfig, _curWebpackConfig) => {
       new VueLoaderPlugin()
     ]
   };
+  // 优先使用执行环境中的配置
+  if (curEnvConfig.ignoreNodeModules) {
+    const allowList = curEnvConfig.allowList || config.webpack.allowList;
+    webpackConfig.externals = [nodeExternals({
+      allowlist: allowList || [],
+    })].concat(curEnvConfig.externals || config.webpack.externals);
+  }
+  // 集成构建入口相关的配置（优先级更高）
+  if (curEnvConfig.entry) {
+    webpackConfig.entry = curEnvConfig.entry; // 会覆盖config.webpack.entry的配置
+  }
+  // 多页面多模板支持能力
+  let entryConfig = webpackConfig.entry || {}; // 获取构建入口配置
+  const entryFiles = (entryConfig && Object.keys(entryConfig)) || [];
+
+  if (
+    !webpackConfig.entry ||
+    JSON.stringify(webpackConfig.entry) === '{}' ||
+    entryFiles.length === 0
+  ) {
+    // 如果当前构建入口为空，则自动从'./src/pages/'中获取入口文件
+    webpackConfig.entry = getJsEntries();
+  } else if (webpackConfig.entry && entryFiles.length === 1) {
+    /**
+     * 只有一个构建入口文件，且项目中不存在此文件，则自动从'./src/pages/'中获取构建入口文件
+     */
+    const filename = entryFiles[0];
+    let entryFilePath = entryConfig[filename];
+    // 当前entryFilePath可能是一个地址字符串，也可能是一个存储多个文件地址的数组
+    if (isArray(entryFilePath)) {
+      // 如果是数组则自动获取最后一个文件地址
+      entryFilePath = entryFilePath[entryFilePath.length - 1];
+    }
+    if (!fs.existsSync(entryFilePath)) {
+      // 如果仅有的构建入口文件不存在，则自动从'./src/pages/'中获取入口文件
+      const curJsEntries = getJsEntries();
+      webpackConfig.entry = curJsEntries ? curJsEntries : webpackConfig.entry;
+    }
+  }
   // 是否开启ESLint
   if (config.settings.enableESLint) {
     // ts类型
