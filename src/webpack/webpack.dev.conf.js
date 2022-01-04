@@ -1,8 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
 const merge = require('webpack-merge');
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
-const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const utils = require('./loaderUtils');
 // 引入当前项目配置文件
 const projectConfig = require('../config/index');
@@ -32,17 +30,33 @@ module.exports = (akfunConfig) => {
         environment: 'dev'
       })
     },
-    // cheap-module-eval-source-map is faster for development
-    devtool: '#source-map', // '#cheap-module-eval-source-map',
+    // devtool: '#cheap-module-eval-source-map', // 本地开发环境中的取值
+    devtool: curEnvConfig.productionSourceMap ? curEnvConfig.devtool || 'eval-source-map' : 'eval', // 开发环境
+    optimization: {
+      chunkIds: 'named', // named 对调试更友好的可读的 id。
+      emitOnErrors: true,
+      splitChunks: {
+        cacheGroups: {
+          defaultVendors: {
+            // 4.0: vendors
+            test: /node_modules\/(.*)/,
+            name: 'vendor',
+            chunks: 'initial',
+            reuseExistingChunk: true
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            priority: -20,
+            chunks: 'initial',
+            reuseExistingChunk: true
+          }
+        }
+      }
+    },
     plugins: [
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(curEnvConfig.NODE_ENV) // vue-router中根据此变量判断执行环境
-      }),
       // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
-      new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoEmitOnErrorsPlugin(),
-      new FriendlyErrorsPlugin(),
-      new ProgressBarPlugin()
+      new webpack.HotModuleReplacementPlugin()
     ]
   });
 

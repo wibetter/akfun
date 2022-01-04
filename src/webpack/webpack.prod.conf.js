@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const webpack = require('webpack');
 const merge = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 // const ExtractTextPlugin = require('extract-text-webpack-plugin'); // 不支持webpack4.0
@@ -8,8 +7,6 @@ const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 替换extract-text-webpack-plugin
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
-const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 const utils = require('./loaderUtils');
@@ -52,12 +49,14 @@ module.exports = (akfunConfig) => {
         environment: 'prod'
       })
     },
-    // devtool: '#cheap-module-eval-source-map', // 本地开发环境中的取值
-    devtool: curEnvConfig.productionSourceMap ? '#source-map' : false, // 线上开发环境中的取值
+    devtool: curEnvConfig.productionSourceMap ? curEnvConfig.devtool || 'source-map' : false, // 线上生成环境
     optimization: {
+      chunkIds: 'deterministic', // 在不同的编译中不变的短数字 id。有益于长期缓存。在生产模式中会默认开启。
+      emitOnErrors: true,
       splitChunks: {
         cacheGroups: {
-          vendors: {
+          defaultVendors: {
+            // 4.0: vendors
             test: /node_modules\/(.*)/,
             name: 'vendor',
             chunks: 'initial',
@@ -74,10 +73,6 @@ module.exports = (akfunConfig) => {
       }
     },
     plugins: [
-      // http://vuejs.github.io/vue-loader/en/workflow/production.html
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(curEnvConfig.NODE_ENV) // vue-router中根据此变量判断执行环境
-      }),
       new MiniCssExtractPlugin({
         filename: utils.assetsPath('css/[name].[contenthash:8].css'),
         ignoreOrder: false // Enable to remove warnings about conflicting order
@@ -96,9 +91,7 @@ module.exports = (akfunConfig) => {
         cssProcessorOptions: {
           safe: true
         }
-      }),
-      new FriendlyErrorsPlugin(),
-      new ProgressBarPlugin()
+      })
     ]
   });
 
@@ -136,7 +129,7 @@ module.exports = (akfunConfig) => {
       })
     );
   }
-  
+
   // 是否开启
   if (curEnvConfig.openMonacoWebpackPlugin) {
     webpackProdConfig.plugins.push(new MonacoWebpackPlugin());

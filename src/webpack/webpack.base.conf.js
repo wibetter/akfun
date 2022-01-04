@@ -5,6 +5,8 @@ const webpack = require('webpack');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const nodeExternals = require('webpack-node-externals');
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const utils = require('./loaderUtils');
 const vueLoaderConfig = require('./vue-loader.conf');
 const { resolve, resolveToCurrentRoot } = require('../utils/pathUtils');
@@ -13,7 +15,7 @@ const catchVuePages = require('../utils/catchVuePages'); // 用于获取当前�
 // 引入当前项目配置文件
 const projectConfig = require('../config/index');
 const babelConfig = require('../config/babel.config'); // Babel的配置文件
-const {buildBanner} = require("../utils/akfunParams");
+const { buildBanner } = require('../utils/akfunParams');
 const getJsEntries = require('../utils/jsEntries');
 const { isArray } = require('../utils/typeof');
 
@@ -37,6 +39,9 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
   const curProjectDir = getProjectDir(curWebpackConfig.projectDir);
   const webpackConfig = {
     entry: curWebpackConfig.entry,
+    // target: 'web', // <=== 默认为 'web'，可省略
+    target: ['web', 'es5'], // 使用共同的特性子集
+    // target: false, // 不使用任何插件
     /*
      内置变量列表：
      id: chunk的唯一标识，从0开始；
@@ -53,9 +58,11 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
      */
     resolve: curWebpackConfig.resolve,
     externals: curWebpackConfig.ignoreNodeModules
-      ? [nodeExternals({
-        allowlist: curWebpackConfig.allowList ? curWebpackConfig.allowList : []
-      })].concat(curWebpackConfig.externals)
+      ? [
+          nodeExternals({
+            allowlist: curWebpackConfig.allowList ? curWebpackConfig.allowList : []
+          })
+        ].concat(curWebpackConfig.externals)
       : curWebpackConfig.externals,
     module: {
       rules: [
@@ -148,17 +155,26 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
     },
     plugins: [
       BannerPack,
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(curEnvConfig.NODE_ENV)
+      }),
       // 请确保引入这个插件来施展魔法
-      new VueLoaderPlugin()
+      new VueLoaderPlugin(),
+      new FriendlyErrorsPlugin(),
+      new ProgressBarPlugin()
     ]
   };
   // 优先使用执行环境中的配置
   if (curEnvConfig.ignoreNodeModules !== undefined) {
     const allowList = curEnvConfig.allowList || curWebpackConfig.allowList;
     const externals = curEnvConfig.externals || config.webpack.external || [];
-    webpackConfig.externals = curEnvConfig.ignoreNodeModules ? [nodeExternals({
-      allowlist: allowList || [],
-    })].concat(externals) : externals;
+    webpackConfig.externals = curEnvConfig.ignoreNodeModules
+      ? [
+          nodeExternals({
+            allowlist: allowList || []
+          })
+        ].concat(externals)
+      : externals;
   }
   // 集成构建入口相关的配置（优先级更高）
   if (curEnvConfig.entry) {
