@@ -11,7 +11,7 @@ const projectConfig = require('./config/index');
 const defaultConfig = require('./config/default.config');
 const getDevWebpackConfig = require('./webpack/webpack.dev.conf');
 const deepMergeConfig = require('./utils/deepMergeConfig');
-const {curConsoleTag } = require("./utils/akfunParams");
+const { curConsoleTag } = require('./utils/akfunParams');
 
 // 构建脚本：一般用于构建开发环境的代码（包含热更新、接口代理等功能）
 module.exports = function (akfunConfig, _consoleTag) {
@@ -114,7 +114,7 @@ module.exports = function (akfunConfig, _consoleTag) {
       const uri = `http://${config.dev.hostname}:${port}`;
       console.log(`> Listening at ${uri}\n`);
       // 如果是开发环境，自动打开浏览器并跳到项目首页
-      if (autoOpenBrowser && process.NODE_ENV === 'development') {
+      if (autoOpenBrowser) {
         spinner.succeed(`${consoleTag}调试模式已开启！`);
         opn(uri);
       }
