@@ -60,6 +60,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
     externals: curWebpackConfig.ignoreNodeModules
       ? [
           nodeExternals({
+            importType: 'commonjs',
             allowlist: curWebpackConfig.allowList ? curWebpackConfig.allowList : []
           })
         ].concat(curWebpackConfig.externals)
@@ -171,6 +172,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
     webpackConfig.externals = curEnvConfig.ignoreNodeModules
       ? [
           nodeExternals({
+            importType: 'commonjs',
             allowlist: allowList || []
           })
         ].concat(externals)
