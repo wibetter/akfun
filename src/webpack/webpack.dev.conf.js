@@ -6,6 +6,8 @@ const utils = require('./loaderUtils');
 const projectConfig = require('../config/index');
 const getBaseWebpackConfig = require('./webpack.base.conf');
 const entrys2htmlWebpackPlugin = require('../utils/entrys2htmlWebpackPlugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = (akfunConfig) => {
   let config = akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据
@@ -27,7 +29,7 @@ module.exports = (akfunConfig) => {
     module: {
       rules: utils.styleLoaders({
         sourceMap: curEnvConfig.cssSourceMap,
-        environment: 'dev'
+        environment: 'prod' // 'dev': 不会将css单独提取出来
       })
     },
     // devtool: '#cheap-module-eval-source-map', // 本地开发环境中的取值
@@ -38,7 +40,18 @@ module.exports = (akfunConfig) => {
     },
     plugins: [
       // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
-      new webpack.HotModuleReplacementPlugin()
+      new webpack.HotModuleReplacementPlugin(),
+      new MiniCssExtractPlugin({
+        // filename: utils.assetsPath('index.css'),
+        filename: '[name].css',
+        chunkFilename: '[name].css',
+        ignoreOrder: false
+      }),
+      new OptimizeCSSPlugin({
+        cssProcessorOptions: {
+          safe: true
+        }
+      })
     ]
   });
 

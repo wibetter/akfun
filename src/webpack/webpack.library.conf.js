@@ -19,7 +19,7 @@ module.exports = (akfunConfig) => {
     mode: curEnvConfig.NODE_ENV, // production 模式，会启动UglifyJsPlugin服务
     output: {
       path: curEnvConfig.assetsRoot, // 输出文件的存放在本地的目录
-      filename: 'index.umd.js',
+      filename: '[name].umd.js',
       publicPath: '',
       library: {
         type: 'umd', // 定义打包方式Universal Module Definition,同时支持在CommonJS、AMD和全局变量使用

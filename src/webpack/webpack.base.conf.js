@@ -38,6 +38,11 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
   // 获取当前项目目录
   const curProjectDir = getProjectDir(curWebpackConfig.projectDir);
   const webpackConfig = {
+    stats: {
+      // cachedModules: false,
+      // providedExports: true,
+      // warnings: false
+    },
     entry: curWebpackConfig.entry,
     // target: 'web', // <=== 默认为 'web'，可省略
     target: ['web', 'es5'], // 使用共同的特性子集
