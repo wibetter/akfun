@@ -125,7 +125,7 @@ module.exports = function (akfunConfig, _consoleTag) {
           // 获取第一个入口文件
           const filename = entryFiles[0];
           console.info(
-            `当前运行脚本:\n ${projPath}${filename}.html\n当前运行样式[可能不存在]:\n${projPath}${filename}.css`
+            `当前运行脚本:\n ${projPath}${filename}.js\n当前运行样式[可能不存在]:\n${projPath}${filename}.css`
           );
           opn(`${projPath}${filename}.html`);
         }
