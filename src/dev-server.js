@@ -1,4 +1,4 @@
-const opn = require('opn');
+const open = require('open');
 const ora = require('ora');
 const path = require('path');
 const express = require('express');
@@ -127,7 +127,7 @@ module.exports = function (akfunConfig, _consoleTag) {
           console.info(
             `当前运行脚本:\n ${projPath}${filename}.js\n当前运行样式[可能不存在]:\n${projPath}${filename}.css`
           );
-          opn(`${projPath}${filename}.html`);
+          open(`${projPath}${filename}.html`, {wait: true});
         }
       }
       server = app.listen(port);
