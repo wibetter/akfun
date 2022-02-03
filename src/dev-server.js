@@ -43,15 +43,25 @@ module.exports = function (akfunConfig, _consoleTag) {
 
   // 使用 express 启动一个服务
   const app = express();
+
   // 获取开发环境的webpack基本配置
   const webpackConfig = getDevWebpackConfig(config);
+
+  // serve pure public assets
+  // 拼接 public 文件夹的静态资源路径
+  const staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory);
+  app.use(staticPath, express.static(resolve('public')));
+
   const compiler = webpack(webpackConfig); // 启动 webpack 进行编译
 
   // 启动 webpack-dev-middleware，将编译后的文件暂存到内存中
   const devMiddleware = require('webpack-dev-middleware')(compiler, {
-    publicPath: webpackConfig.output.publicPath,
-    quiet: true
+    publicPath: webpackConfig.output.publicPath
+    // stats: true
   });
+
+  // serve webpack bundle output
+  app.use(devMiddleware);
 
   // 启动 webpack-hot-middleware，也就是我们常说的 Hot-reload
   const hotMiddleware = require('webpack-hot-middleware')(compiler, {
@@ -82,15 +92,6 @@ module.exports = function (akfunConfig, _consoleTag) {
   // 使用 connect-history-api-fallback 匹配资源，如果不匹配就可以重定向到指定地址
   // handle fallback for HTML5 history API
   app.use(require('connect-history-api-fallback')());
-
-  // serve webpack bundle output
-  app.use(devMiddleware);
-
-  // serve pure public assets
-  // 拼接 public 文件夹的静态资源路径
-  const staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory);
-
-  app.use(staticPath, express.static(resolve('public')));
 
   let _resolve;
   let _reject;
@@ -127,7 +128,7 @@ module.exports = function (akfunConfig, _consoleTag) {
           console.info(
             `当前运行脚本:\n ${projPath}${filename}.js\n当前运行样式[可能不存在]:\n${projPath}${filename}.css`
           );
-          open(`${projPath}${filename}.html`, {wait: true});
+          open(`${projPath}${filename}.html`, { wait: true });
         }
       }
       server = app.listen(port);

@@ -36,6 +36,7 @@ exports.cssLoaders = function (options) {
   const cssLoader = {
     loader: 'css-loader',
     options: {
+      url: false, // enables/disables url()/image-set() functions handling
       sourceMap: options.sourceMap
     }
   };
@@ -56,7 +57,7 @@ exports.cssLoaders = function (options) {
         {
           loader: MiniCssExtractPlugin.loader,
           options: {
-            esModule: true
+            esModule: false // enable a CommonJS syntax using
           }
         },
         cssLoader,

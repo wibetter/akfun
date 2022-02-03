@@ -1,5 +1,5 @@
-const merge = require('webpack-merge');
-const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+const { merge } = require('webpack-merge');
+// const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 替换extract-text-webpack-plugin
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -41,7 +41,8 @@ module.exports = (akfunConfig) => {
        *  deterministic 在不同的编译中不变的短数字 id。有益于长期缓存。在生产模式中会默认开启。
        */
       chunkIds: 'named',
-      emitOnErrors: true
+      emitOnErrors: true,
+      minimize: true
     },
     plugins: [
       new MiniCssExtractPlugin({
@@ -49,11 +50,6 @@ module.exports = (akfunConfig) => {
         filename: '[name].css',
         chunkFilename: '[name].css',
         ignoreOrder: false
-      }),
-      new OptimizeCSSPlugin({
-        cssProcessorOptions: {
-          safe: true
-        }
       })
     ]
   });

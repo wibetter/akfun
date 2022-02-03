@@ -5,8 +5,9 @@ const webpack = require('webpack');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const nodeExternals = require('webpack-node-externals');
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+// const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const utils = require('./loaderUtils');
 const vueLoaderConfig = require('./vue-loader.conf');
 const { resolve, resolveToCurrentRoot } = require('../utils/pathUtils');
@@ -147,7 +148,10 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
         {
           test: /\.(html)$/,
           use: {
-            loader: 'html-loader'
+            loader: 'html-loader',
+            options: {
+              sources: false // Enables/Disables sources handling
+            }
           }
         },
         {
@@ -166,7 +170,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
       }),
       // 请确保引入这个插件来施展魔法
       new VueLoaderPlugin(),
-      new FriendlyErrorsPlugin(),
+      // new FriendlyErrorsPlugin(),
       new ProgressBarPlugin()
     ]
   };
@@ -218,47 +222,47 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
   // 是否开启ESLint
   if (config.settings.enableESLint) {
     // ts类型
-    webpackConfig.module.rules.push({
-      test: /\.tsx?$/,
-      loader: 'eslint-loader',
-      enforce: 'pre',
-      include: curProjectDir, // [resolve('src')],
-      exclude: /node_modules/,
-      options: {
-        cache: true,
-        fix: config.settings.enableESLintFix || false,
-        formatter: require('eslint-friendly-formatter'),
-        configFile: path.resolve(__dirname, '../config/.eslintrc.ts.js')
-      }
-    });
+    webpackConfig.plugins.push(
+      new ESLintPlugin({
+        extensions: ['ts', 'tsx'],
+        include: curProjectDir, // [resolve('src')],
+        exclude: /node_modules/,
+        options: {
+          cache: true,
+          fix: config.settings.enableESLintFix || false,
+          formatter: require('eslint-friendly-formatter'),
+          configFile: path.resolve(__dirname, '../config/.eslintrc.ts.js')
+        }
+      })
+    );
     // 通用js类型
-    webpackConfig.module.rules.push({
-      test: /\.jsx?$/,
-      loader: 'eslint-loader',
-      enforce: 'pre',
-      include: curProjectDir, // [resolve('src')],
-      exclude: /node_modules/,
-      options: {
-        cache: true, // the cache is written to the ./node_modules/.cache/eslint-loader director
-        fix: config.settings.enableESLintFix || false,
-        formatter: require('eslint-friendly-formatter'),
-        configFile: path.resolve(__dirname, '../config/.eslintrc.js')
-      }
-    });
+    webpackConfig.plugins.push(
+      new ESLintPlugin({
+        extensions: ['js', 'jsx'],
+        include: curProjectDir, // [resolve('src')],
+        exclude: /node_modules/,
+        options: {
+          cache: true, // the cache is written to the ./node_modules/.cache/eslint-loader director
+          fix: config.settings.enableESLintFix || false,
+          formatter: require('eslint-friendly-formatter'),
+          configFile: path.resolve(__dirname, '../config/.eslintrc.js')
+        }
+      })
+    );
     // vue单文件类型
-    webpackConfig.module.rules.push({
-      test: /\.vue$/,
-      loader: 'eslint-loader',
-      enforce: 'pre',
-      include: curProjectDir, // [resolve('src')],
-      exclude: /node_modules/,
-      options: {
-        cache: true,
-        fix: config.settings.enableESLintFix || false,
-        formatter: require('eslint-friendly-formatter'),
-        configFile: path.resolve(__dirname, '../config/.eslintrc.vue.js')
-      }
-    });
+    webpackConfig.plugins.push(
+      new ESLintPlugin({
+        extensions: ['vue'],
+        include: curProjectDir, // [resolve('src')],
+        exclude: /node_modules/,
+        options: {
+          cache: true,
+          fix: config.settings.enableESLintFix || false,
+          formatter: require('eslint-friendly-formatter'),
+          configFile: path.resolve(__dirname, '../config/.eslintrc.vue.js')
+        }
+      })
+    );
   }
   // 是否开启StyleLint: 用于验证scss文件里面的style规范
   if (config.settings.enableStyleLint) {

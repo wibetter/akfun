@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 // const ExtractTextPlugin = require('extract-text-webpack-plugin'); // 不支持webpack4.0
-const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+// const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 替换extract-text-webpack-plugin
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
@@ -70,13 +70,14 @@ module.exports = (akfunConfig) => {
             reuseExistingChunk: true
           }
         }
-      }
+      },
+      minimize: true
     },
     plugins: [
       new MiniCssExtractPlugin({
         filename: utils.assetsPath('css/[name].[contenthash:8].css'),
         ignoreOrder: false // Enable to remove warnings about conflicting order
-      }),
+      })
       // Compress extracted CSS. We are using this plugin so that possible
       // duplicated CSS from different components can be deduped.
       /**
@@ -87,11 +88,6 @@ module.exports = (akfunConfig) => {
        * cssProcessorOptions：传递给cssProcessor的选项，默认为 {}
        * canPrint：一个布尔值，指示插件是否可以将消息打印到控制台，默认为 true
        */
-      new OptimizeCSSPlugin({
-        cssProcessorOptions: {
-          safe: true
-        }
-      })
     ]
   });
 
