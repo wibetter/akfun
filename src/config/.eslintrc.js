@@ -1,12 +1,13 @@
-const getCurWebpackConfig = require('../utils/getCurWebpackConfig.js'); // 用于获取当前webpack配置的方法
+const getCurWebpackConfig = require('../utils/getCurWebpackConfig'); // 用于获取当前webpack配置的方法
 const curWebpackBaseConfPath = getCurWebpackConfig('base');
 
 module.exports = {
   root: true,
-  parser: 'babel-eslint', // 指定eslint解析器的，解析器必须符合规则
+  parser: '@babel/eslint-parser', // 指定eslint解析器的，解析器必须符合规则
   // 此项是用来指定javaScript语言类型和风格，sourceType用来指定js导入的方式，默认是script，此处设置为module，指某块导入方式
   parserOptions: {
-    ecmaVersion: 6,
+    ecmaVersion: 8,
+    requireConfigFile: false,
     sourceType: 'module', // 支持的ES语法版本，默认为5。注意只是语法，不包括ES的全局变量
     ecmaFeatures: {
       // Features是特征的意思，这里用于指定要使用其他那些语言对象

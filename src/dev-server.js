@@ -56,8 +56,8 @@ module.exports = function (akfunConfig, _consoleTag) {
 
   // 启动 webpack-dev-middleware，将编译后的文件暂存到内存中
   const devMiddleware = require('webpack-dev-middleware')(compiler, {
-    publicPath: webpackConfig.output.publicPath
-    // stats: true
+    publicPath: webpackConfig.output.publicPath,
+    stats: true
   });
 
   // serve webpack bundle output

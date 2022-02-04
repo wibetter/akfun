@@ -146,20 +146,21 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
           }
         },
         {
-          test: /\.(html)$/,
-          use: {
-            loader: 'html-loader',
-            options: {
-              sources: false // Enables/Disables sources handling
-            }
-          }
-        },
-        {
           test: /\.(js|ts|tsx|jsx|vue|css|html)$/,
           loader: 'params-replace-loader',
           include: curProjectDir, // [resolve('src')],
           exclude: [/node_modules/, resolve('src/mock/data')], // 排除不需要进行校验的文件夹
           options: config.envParams
+        },
+        {
+          test: /\.(html)$/,
+          use: {
+            loader: 'html-loader',
+            options: {
+              minimize: true,
+              sources: false // Enables/Disables sources handling
+            }
+          }
         }
       ]
     },
@@ -224,43 +225,38 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
     // ts类型
     webpackConfig.plugins.push(
       new ESLintPlugin({
+        // context: resolve('src'),
         extensions: ['ts', 'tsx'],
-        include: curProjectDir, // [resolve('src')],
-        exclude: /node_modules/,
-        options: {
-          cache: true,
-          fix: config.settings.enableESLintFix || false,
-          formatter: require('eslint-friendly-formatter'),
-          configFile: path.resolve(__dirname, '../config/.eslintrc.ts.js')
-        }
+        // include: curProjectDir, // [resolve('src')],
+        exclude: 'node_modules',
+        cache: true,
+        fix: config.settings.enableESLintFix || false,
+        formatter: require('eslint-friendly-formatter'),
+        overrideConfigFile: path.resolve(__dirname, '../config/.eslintrc.ts.js')
       })
     );
     // 通用js类型
     webpackConfig.plugins.push(
       new ESLintPlugin({
         extensions: ['js', 'jsx'],
-        include: curProjectDir, // [resolve('src')],
-        exclude: /node_modules/,
-        options: {
-          cache: true, // the cache is written to the ./node_modules/.cache/eslint-loader director
-          fix: config.settings.enableESLintFix || false,
-          formatter: require('eslint-friendly-formatter'),
-          configFile: path.resolve(__dirname, '../config/.eslintrc.js')
-        }
+        // include: curProjectDir, // [resolve('src')],
+        exclude: 'node_modules',
+        cache: true,
+        fix: config.settings.enableESLintFix || false,
+        formatter: require('eslint-friendly-formatter'),
+        overrideConfigFile: path.resolve(__dirname, '../config/.eslintrc.js')
       })
     );
     // vue单文件类型
     webpackConfig.plugins.push(
       new ESLintPlugin({
         extensions: ['vue'],
-        include: curProjectDir, // [resolve('src')],
-        exclude: /node_modules/,
-        options: {
-          cache: true,
-          fix: config.settings.enableESLintFix || false,
-          formatter: require('eslint-friendly-formatter'),
-          configFile: path.resolve(__dirname, '../config/.eslintrc.vue.js')
-        }
+        // include: curProjectDir, // [resolve('src')],
+        exclude: 'node_modules',
+        cache: true,
+        fix: config.settings.enableESLintFix || false,
+        formatter: require('eslint-friendly-formatter'),
+        overrideConfigFile: path.resolve(__dirname, '../config/.eslintrc.vue.js')
       })
     );
   }
