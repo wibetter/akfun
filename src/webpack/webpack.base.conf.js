@@ -269,7 +269,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
       webpackConfig.plugins.push(
         new StyleLintPlugin({
           files: ['src/**/*.vue'],
-          quiet: true,
+          // quiet: true,
           cache: true,
           cacheLocation: resolveToCurrentRoot('./node_modules/stylelint/.vue-cache'),
           fix: config.settings.enableStyleLintFix,
@@ -281,7 +281,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
     webpackConfig.plugins.push(
       new StyleLintPlugin({
         files: 'src/**/*.s?(a|c)ss',
-        quiet: true,
+        // quiet: true,
         cache: true,
         cacheLocation: resolveToCurrentRoot('./node_modules/stylelint/.cache'),
         fix: config.settings.enableStyleLintFix,

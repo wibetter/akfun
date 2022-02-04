@@ -3,10 +3,11 @@ const { curWebpackBaseConfPath } = require('akfun');
 
 module.exports = {
   root: true,
-  parser: 'babel-eslint', // 指定eslint解析器的，解析器必须符合规则
+  parser: '@babel/eslint-parser', // 指定eslint解析器的，解析器必须符合规则
   // 此项是用来指定javaScript语言类型和风格，sourceType用来指定js导入的方式，默认是script，此处设置为module，指某块导入方式
   parserOptions: {
-    ecmaVersion: 6,
+    ecmaVersion: 8,
+    requireConfigFile: false,
     sourceType: 'module', // 支持的ES语法版本，默认为5。注意只是语法，不包括ES的全局变量
     ecmaFeatures: {
       // Features是特征的意思，这里用于指定要使用其他那些语言对象
@@ -23,11 +24,11 @@ module.exports = {
   // 此项是用来配置标准的js风格，就是说写代码的时候要规范的写，如果你使用vs-code我觉得应该可以避免出错
   extends: [
     'airbnb-base', // eslint-config-airbnb-base
-    '@vue/typescript' // @vue/eslint-config-typescript: https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin
+    'prettier' // eslint-config-prettier
   ],
   // 此项是用来提供插件的，插件名称省略了eslint-plugin-，下面这个配置是用来规范html的
   // required to lint *.src files
-  plugins: ['@typescript-eslint', 'prettier', 'html', 'react', 'vue'],
+  plugins: ['prettier', 'html', 'react'],
   // check if imports actually resolve
   settings: {
     'import/resolver': {
@@ -52,8 +53,8 @@ module.exports = {
         vue: 'never'
       }
     ],
-    'react/jsx-uses-react': 'error',
-    'react/jsx-uses-vars': 'error',
+    'react/jsx-uses-react': 'error', // 防止在JSX中使用的变量被错误地标记为未使用
+    'react/jsx-uses-vars': 'error', // 防止在JSX中使用的变量被错误地标记为未使用
     'import/first': 0,
     'arrow-parens': 0,
     'no-underscore-dangle': 'off',
@@ -80,6 +81,7 @@ module.exports = {
     'no-lonely-if': 0, // 禁止else语句内只有if语句
     'no-eval': 1, // JavaScript的eval()功能具有潜在的危险，并且经常被滥用
     'object-curly-newline': 0, // 该规则在对象文字括号或销毁分配中强制使用一致的换行符
-    'operator-linebreak': [0, 'before'] // 换行时运算符在行尾还是行首
+    'operator-linebreak': [0, 'before'], // 换行时运算符在行尾还是行首
+    'max-len': ['warn', { code: 150 }]
   }
 };

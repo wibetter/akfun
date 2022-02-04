@@ -35,7 +35,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "akfun": "^1.0.1",
+    "akfun": "^3.0.1",
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^9.1.1",
     "husky": "^4.2.5",
