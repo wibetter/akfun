@@ -7,7 +7,7 @@ const projectConfig = require('../config/index');
 const getBaseWebpackConfig = require('./webpack.base.conf');
 const entrys2htmlWebpackPlugin = require('../utils/entrys2htmlWebpackPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+// const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = (akfunConfig) => {
   let config = akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据

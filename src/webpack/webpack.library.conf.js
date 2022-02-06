@@ -1,6 +1,6 @@
 const { merge } = require('webpack-merge');
-// const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 替换extract-text-webpack-plugin
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -42,7 +42,12 @@ module.exports = (akfunConfig) => {
        */
       chunkIds: 'named',
       emitOnErrors: true,
-      minimize: true
+      minimize: true,
+      minimizer: [
+        // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
+        `...`,
+        new CssMinimizerPlugin()
+      ]
     },
     plugins: [
       new MiniCssExtractPlugin({

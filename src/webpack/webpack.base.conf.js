@@ -158,7 +158,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
             loader: 'html-loader',
             options: {
               minimize: true,
-              sources: false // Enables/Disables sources handling
+              sources: true // Enables/Disables sources handling
             }
           }
         }
