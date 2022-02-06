@@ -36,7 +36,7 @@ exports.cssLoaders = function (options) {
   const cssLoader = {
     loader: 'css-loader',
     options: {
-      url: false, // enables/disables url()/image-set() functions handling
+      url: true, // enables/disables url()/image-set() functions handling
       sourceMap: options.sourceMap
     }
   };

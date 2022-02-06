@@ -121,28 +121,43 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
             url-loader 功能类似于 file-loader，在文件大小（单位 byte）低于指定的限制时，可以返回一个 DataURL。
            */
           test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            name: utils.assetsPath('img/[name].[hash:7].[ext]')
+          type: 'asset',
+          parser: {
+            dataUrlCondition: {
+              maxSize: 2 * 1024 //data转成url的条件，也就是转成bas64的条件,maxSize相当于limit
+            }
+          },
+          generator: {
+            // filename，和output中设置assetModuleFilename一样，将资源打包至img文件夹
+            filename: utils.assetsPath('img/[name].[hash:7][ext]') //[name]指原来的名字，[hash:6]取哈希的前六位，[ext]指原来的扩展名
           }
         },
         {
           // 视频音频资源
           test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            name: utils.assetsPath('media/[name].[hash:7].[ext]')
+          type: 'asset',
+          parser: {
+            dataUrlCondition: {
+              maxSize: 2 * 1024 //data转成url的条件，也就是转成bas64的条件,maxSize相当于limit
+            }
+          },
+          generator: {
+            // filename，和output中设置assetModuleFilename一样，将资源打包至imgs文件夹
+            filename: utils.assetsPath('media/[name].[hash:7][ext]') //[name]指原来的名字，[hash:6]取哈希的前六位，[ext]指原来的扩展名
           }
         },
         {
           // 字体资源
           test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+          type: 'asset',
+          parser: {
+            dataUrlCondition: {
+              maxSize: 2 * 1024 //data转成url的条件，也就是转成bas64的条件,maxSize相当于limit
+            }
+          },
+          generator: {
+            // filename，和output中设置assetModuleFilename一样，将资源打包至fonts目录中
+            filename: utils.assetsPath('fonts/[name].[hash:7][ext]') //[name]指原来的名字，[hash:6]取哈希的前六位，[ext]指原来的扩展名
           }
         },
         {
