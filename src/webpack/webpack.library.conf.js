@@ -31,7 +31,8 @@ module.exports = (akfunConfig) => {
     module: {
       rules: utils.styleLoaders({
         sourceMap: curEnvConfig.productionSourceMap,
-        environment: 'prod'
+        environment: 'prod',
+        cssLoaderUrl: config.webpack.cssLoaderUrl
       })
     },
     devtool: curEnvConfig.productionSourceMap ? curEnvConfig.devtool || 'source-map' : false, // 线上生成环境

@@ -39,10 +39,10 @@ exports.cssLoaders = function (options) {
       // url: false, // enables/disables url()/image-set() functions handling
       url: {
         filter: (url, resourcePath) => {
-          /*// 自定义配置优先
+          // 自定义配置优先
           if (options.cssLoaderUrl !== undefined) {
             return options.cssLoaderUrl;
-          }*/
+          }
           // Don't handle `node_modules` urls
           if (resourcePath.includes('node_modules')) {
             return true;

@@ -29,7 +29,8 @@ module.exports = (akfunConfig) => {
     module: {
       rules: utils.styleLoaders({
         sourceMap: curEnvConfig.cssSourceMap,
-        environment: 'prod' // 'dev': 不会将css单独提取出来
+        environment: 'prod', // 'dev': 不会将css单独提取出来
+        cssLoaderUrl: config.webpack.cssLoaderUrl
       })
     },
     // devtool: '#cheap-module-eval-source-map', // 本地开发环境中的取值

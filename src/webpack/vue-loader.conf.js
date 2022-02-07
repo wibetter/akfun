@@ -5,6 +5,7 @@ const isProduction = process.NODE_ENV === 'production';
 
 module.exports = {
   loaders: utils.cssLoaders({
+    cssLoaderUrl: config.webpack.cssLoaderUrl, // 用于自定义css-loader配置项[url]
     sourceMap: isProduction // 生产环境sourceMap是true
       ? config.build.productionSourceMap
       : config.dev.cssSourceMap,
