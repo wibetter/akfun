@@ -6,9 +6,9 @@ const resolveToCurrentRoot = (filePath) => path.resolve(currentRoot(), filePath)
 
 console.log(resolveToCurrentRoot('./'));*/
 
-/*const akfunInit = require('../build/akfunInit');
-akfunInit('vue', '');*/
+const akfunInit = require('../module/akfunInit');
+akfunInit('vue', '');
 
-const AKFun = require('../module/main');
-AKFun.build('lib');
-// createDeclaration: true
+/*const AKFun = require('../module/main');
+AKFun.build('lib');*/
+// createDeclaration: truec
