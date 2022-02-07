@@ -36,7 +36,20 @@ exports.cssLoaders = function (options) {
   const cssLoader = {
     loader: 'css-loader',
     options: {
-      url: true, // enables/disables url()/image-set() functions handling
+      // url: false, // enables/disables url()/image-set() functions handling
+      url: {
+        filter: (url, resourcePath) => {
+          /*// 自定义配置优先
+          if (options.cssLoaderUrl !== undefined) {
+            return options.cssLoaderUrl;
+          }*/
+          // Don't handle `node_modules` urls
+          if (resourcePath.includes('node_modules')) {
+            return true;
+          }
+          return false;
+        }
+      },
       sourceMap: options.sourceMap
     }
   };
