@@ -193,7 +193,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
   // 优先使用执行环境中的配置
   if (curEnvConfig.ignoreNodeModules !== undefined) {
     const allowList = curEnvConfig.allowList || curWebpackConfig.allowList;
-    const externals = curEnvConfig.externals || config.webpack.external || [];
+    const externals = curEnvConfig.externals || curWebpackConfig.external || [];
     webpackConfig.externals = curEnvConfig.ignoreNodeModules
       ? [
           nodeExternals({
@@ -303,6 +303,12 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
         configFile: path.resolve(__dirname, '../config/.stylelintrc')
       })
     );
+  }
+
+  // 判断是否有自定义plugins
+  if (curWebpackConfig.plugins && Array.isArray(curWebpackConfig.plugins)) {
+    // 添加自定义webpack插件
+    webpackConfig.plugins.concat(curWebpackConfig.plugins);
   }
 
   return webpackConfig;
