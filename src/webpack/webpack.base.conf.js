@@ -308,7 +308,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
   // 判断是否有自定义plugins
   if (curWebpackConfig.plugins && Array.isArray(curWebpackConfig.plugins)) {
     // 添加自定义webpack插件
-    webpackConfig.plugins.concat(curWebpackConfig.plugins);
+    webpackConfig.plugins.push(...curWebpackConfig.plugins);
   }
 
   return webpackConfig;
