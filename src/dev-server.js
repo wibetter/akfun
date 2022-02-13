@@ -127,10 +127,10 @@ module.exports = function (akfunConfig, _consoleTag) {
         console.info(
           `当前运行脚本:\n ${projPath}${filename}.js\n当前运行样式[可能不存在]:\n${projPath}${filename}.css`
         );
-      }
-      // 是否自动打开浏览器并跳到项目首页
-      if (!config.dev.closeHtmlWebpackPlugin && autoOpenBrowser) {
-        open(`${projPath}${filename}.html`, { wait: true });
+        // 是否自动打开浏览器并跳转到第一个入口页面
+        if (!config.dev.closeHtmlWebpackPlugin && autoOpenBrowser) {
+          open(`${projPath}${filename}.html`, { wait: true });
+        }
       }
       server = app.listen(port);
       _resolve();

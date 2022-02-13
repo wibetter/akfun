@@ -7,6 +7,7 @@ const projectConfig = require('../config/index');
 const getBaseWebpackConfig = require('./webpack.base.conf');
 const entrys2htmlWebpackPlugin = require('../utils/entrys2htmlWebpackPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const config = require('../config');
 // const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = (akfunConfig) => {
@@ -30,7 +31,8 @@ module.exports = (akfunConfig) => {
       rules: utils.styleLoaders({
         sourceMap: curEnvConfig.cssSourceMap,
         environment: 'prod', // 'dev': 不会将css单独提取出来
-        cssLoaderUrl: config.webpack.cssLoaderUrl
+        cssLoaderUrl: config.webpack.cssLoaderUrl,
+        cssLoaderUrlDir: config.webpack.cssLoaderUrlDir
       })
     },
     // devtool: '#cheap-module-eval-source-map', // 本地开发环境中的取值

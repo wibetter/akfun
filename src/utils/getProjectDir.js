@@ -7,10 +7,20 @@ module.exports = (_projectDir) => {
     curProjectDir.push(resolveToCurrentRoot('./src'));
   } else if (isArray(_projectDir)) {
     _projectDir.forEach((dir) => {
-      curProjectDir.push(resolveToCurrentRoot(dir));
+      if (dir.indexOf('/') === 0) {
+        // 判断是否是绝对路径
+        curProjectDir.push(dir);
+      } else {
+        curProjectDir.push(resolveToCurrentRoot(dir));
+      }
     });
   } else if (isString(_projectDir)) {
-    curProjectDir.push(resolveToCurrentRoot(_projectDir));
+    if (_projectDir.indexOf('/') === 0) {
+      // 判断是否是绝对路径
+      curProjectDir.push(_projectDir);
+    } else {
+      curProjectDir.push(resolveToCurrentRoot(_projectDir));
+    }
   }
   return curProjectDir;
 };
