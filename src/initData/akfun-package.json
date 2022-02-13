@@ -105,7 +105,6 @@
     "http-proxy-middleware": "^2.0.2",
     "inquirer": "^8.2.0",
     "mini-css-extract-plugin": "^2.5.3",
-    "monaco-editor-webpack-plugin": "6.0.0",
     "sass": "^1.49.7",
     "open": "^8.4.0",
     "ora": "^4.0.4",

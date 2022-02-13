@@ -7,7 +7,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 替换extrac
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 const utils = require('./loaderUtils');
 const { resolve } = require('../utils/pathUtils'); // 统一路径解析
@@ -131,11 +130,6 @@ module.exports = (akfunConfig) => {
         minRatio: 0.8
       })
     );
-  }
-
-  // 是否开启
-  if (curEnvConfig.openMonacoWebpackPlugin) {
-    webpackProdConfig.plugins.push(new MonacoWebpackPlugin());
   }
 
   if (curEnvConfig.bundleAnalyzerReport) {
