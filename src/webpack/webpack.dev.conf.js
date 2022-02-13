@@ -52,11 +52,13 @@ module.exports = (akfunConfig) => {
     ]
   });
 
-  // 使用用户自定义的多入口配置，生产对应的多页面多模板（优先使用用户的自定义页面模板）
-  const htmlWebpackPluginList = entrys2htmlWebpackPlugin(webpackDevConfig.entry, curHtmlTemplate);
-  htmlWebpackPluginList.forEach((htmlWebpackPlugin) => {
-    webpackDevConfig.plugins.push(htmlWebpackPlugin);
-  });
+  if (!webpackDevConfig.closeHtmlWebpackPlugin) {
+    // 使用用户自定义的多入口配置，生产对应的多页面多模板（优先使用用户的自定义页面模板）
+    const htmlWebpackPluginList = entrys2htmlWebpackPlugin(webpackDevConfig.entry, curHtmlTemplate);
+    htmlWebpackPluginList.forEach((htmlWebpackPlugin) => {
+      webpackDevConfig.plugins.push(htmlWebpackPlugin);
+    });
+  }
 
   // 开启热更新能力
   const devClientPath = path.resolve(__dirname, '../dev-client'); // 从akfun中获取

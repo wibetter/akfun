@@ -115,21 +115,21 @@ module.exports = function (akfunConfig, _consoleTag) {
       const uri = `http://${config.dev.hostname}:${port}`;
 
       console.log(`> Listening at ${uri}\n`);
-      // 如果是开发环境，自动打开浏览器并跳到项目首页
+      spinner.succeed(`${consoleTag}调试模式已开启！`);
+      // 打印当前环境中的首个html和css地址
+      const projPath = `${uri}${webpackConfig.output.publicPath}`;
+      let entryConfig = webpackConfig.entry || {}; // 获取构建入口配置
+      const entryFiles = (entryConfig && Object.keys(entryConfig)) || [];
+      if (entryFiles.length > 0) {
+        // 获取第一个入口文件
+        const filename = entryFiles[0];
+        console.info(
+          `当前运行脚本:\n ${projPath}${filename}.js\n当前运行样式[可能不存在]:\n${projPath}${filename}.css`
+        );
+      }
+      // 是否自动打开浏览器并跳到项目首页
       if (autoOpenBrowser) {
-        spinner.succeed(`${consoleTag}调试模式已开启！`);
-        // 打印当前环境中的首个html和css地址
-        const projPath = `${uri}${webpackConfig.output.publicPath}`;
-        let entryConfig = webpackConfig.entry || {}; // 获取构建入口配置
-        const entryFiles = (entryConfig && Object.keys(entryConfig)) || [];
-        if (entryFiles.length > 0) {
-          // 获取第一个入口文件
-          const filename = entryFiles[0];
-          console.info(
-            `当前运行脚本:\n ${projPath}${filename}.js\n当前运行样式[可能不存在]:\n${projPath}${filename}.css`
-          );
-          open(`${projPath}${filename}.html`, { wait: true });
-        }
+        open(`${projPath}${filename}.html`, { wait: true });
       }
       server = app.listen(port);
       _resolve();
