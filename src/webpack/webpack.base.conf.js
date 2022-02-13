@@ -101,8 +101,8 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
               }
             }
           ],
-          include: curProjectDir, // [resolve('src')],
-          exclude: /node_modules/
+          // exclude: /node_modules/,
+          include: curProjectDir // [resolve('src')],
         },
         {
           test: /\.(jsx?)$/,
@@ -112,8 +112,8 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
               options: babelConfig
             }
           ],
-          include: curProjectDir, // [resolve('src')],
-          exclude: /node_modules/
+          // exclude: /node_modules/,
+          include: curProjectDir // [resolve('src')],
         },
         {
           // 图片资源
@@ -163,8 +163,8 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
         {
           test: /\.(js|ts|tsx|jsx|vue|css|html)$/,
           loader: 'params-replace-loader',
+          // exclude: [/node_modules/, resolve('src/mock/data')], // 排除不需要进行校验的文件夹
           include: curProjectDir, // [resolve('src')],
-          exclude: [/node_modules/, resolve('src/mock/data')], // 排除不需要进行校验的文件夹
           options: config.envParams
         },
         {
@@ -243,7 +243,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
         // context: resolve('src'),
         extensions: ['ts', 'tsx'],
         // include: curProjectDir, // [resolve('src')],
-        exclude: 'node_modules',
+        // exclude: 'node_modules',
         cache: true,
         fix: config.settings.enableESLintFix || false,
         formatter: require('eslint-friendly-formatter'),
@@ -255,7 +255,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
       new ESLintPlugin({
         extensions: ['js', 'jsx'],
         // include: curProjectDir, // [resolve('src')],
-        exclude: 'node_modules',
+        // exclude: 'node_modules',
         cache: true,
         fix: config.settings.enableESLintFix || false,
         formatter: require('eslint-friendly-formatter'),
@@ -267,7 +267,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
       new ESLintPlugin({
         extensions: ['vue'],
         // include: curProjectDir, // [resolve('src')],
-        exclude: 'node_modules',
+        // exclude: 'node_modules',
         cache: true,
         fix: config.settings.enableESLintFix || false,
         formatter: require('eslint-friendly-formatter'),
