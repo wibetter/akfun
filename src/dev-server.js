@@ -111,11 +111,12 @@ module.exports = function (akfunConfig, _consoleTag) {
       if (err) {
         _reject(err);
       }
+      spinner.succeed(`${consoleTag}调试模式已开启！`);
+
       process.env.PORT = port;
       const uri = `http://${config.dev.hostname}:${port}`;
-
       console.log(`> Listening at ${uri}\n`);
-      spinner.succeed(`${consoleTag}调试模式已开启！`);
+
       // 打印当前环境中的首个html和css地址
       const projPath = `${uri}${webpackConfig.output.publicPath}`;
       let entryConfig = webpackConfig.entry || {}; // 获取构建入口配置
@@ -128,7 +129,7 @@ module.exports = function (akfunConfig, _consoleTag) {
         );
       }
       // 是否自动打开浏览器并跳到项目首页
-      if (autoOpenBrowser) {
+      if (!config.dev.closeHtmlWebpackPlugin && autoOpenBrowser) {
         open(`${projPath}${filename}.html`, { wait: true });
       }
       server = app.listen(port);
