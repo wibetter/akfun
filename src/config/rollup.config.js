@@ -1,6 +1,8 @@
 // rollup.config.js
 const { babel } = require('@rollup/plugin-babel');
 const { nodeResolve } = require('@rollup/plugin-node-resolve'); // 支持node中的文件导入
+// const jsx = require('rollup-plugin-jsx'); // 用于处理jsx
+const typescript = require('@rollup/plugin-typescript'); // 支持ts
 const commonjs = require('@rollup/plugin-commonjs'); // 识别cmd模块
 const vue = require('rollup-plugin-vue');
 const json = require('@rollup/plugin-json'); // 识别json类型文件
@@ -20,9 +22,9 @@ const cssnano = require('cssnano');
 const { resolveToCurrentRoot, resolveToCurrentDist } = require('../utils/pathUtils'); // 统一路径解析
 const babelConfig = require('./babel.config'); // Babel的配置文件
 const curProjectConfig = require('./index'); // 引入当前项目配置文件
-const {buildBanner} = require("../utils/akfunParams");
+const { buildBanner } = require('../utils/akfunParams');
 
-module.exports = function(fileName, akfunConfig) {
+module.exports = function (fileName, akfunConfig) {
   const curConfig = akfunConfig || curProjectConfig;
   // 获取用户配置的构建入口文件
   let rollupInput = resolveToCurrentRoot('src/main.js');
@@ -50,7 +52,9 @@ module.exports = function(fileName, akfunConfig) {
       nodeResolve({
         extensions: curConfig.webpack.resolve.extensions
       }),
+      typescript(),
       babel(babelConfig), // 备注，需要先babel()再commjs()
+      // jsx( {factory: 'React.createElement'} ),
       vue(),
       commonjs(),
       postcss({
