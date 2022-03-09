@@ -19,7 +19,7 @@ const nested = require('postcss-nested');
 const postcssPresetEnv = require('postcss-preset-env');
 // css代码压缩
 const cssnano = require('cssnano');
-// const { externals } = require('rollup-plugin-node-externals');
+const { externals } = require('rollup-plugin-node-externals');
 const { resolveToCurrentRoot, resolveToCurrentDist } = require('../utils/pathUtils'); // 统一路径解析
 const babelConfig = require('./babel.config'); // Babel的配置文件
 const projectConfig = require('./index'); // 引入当前项目配置文件
@@ -45,16 +45,18 @@ module.exports = function (fileName, akfunConfig) {
     banner: buildBanner,
     // format: build2esm.format || 'esm', // 生成包的格式
     input: rollupInput,
-    /**
-     * external：（在akfun.config.js中配置）
-     * 需要一个 id 并返回 true（外部引用）或 false（不是外部的引用）， 或者 Array 应该保留在bundle的外部引用的模块ID。
-     */
-    external: build2esm.external || [],
     plugins: [
       alias({
         resolve: curConfig.webpack.resolve.extensions,
         extensions: curConfig.webpack.resolve.extensions,
         entries: curConfig.webpack.resolve.alias
+      }),
+      /**
+       * excludeList（在akfun.config.js中配置）
+       * 设置打包中应该排除的依赖
+       */
+      externals({
+        include: build2esm.excludeList || []
       }),
       nodeResolve({
         extensions: curConfig.webpack.resolve.extensions
