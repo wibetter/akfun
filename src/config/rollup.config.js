@@ -19,30 +19,37 @@ const nested = require('postcss-nested');
 const postcssPresetEnv = require('postcss-preset-env');
 // css代码压缩
 const cssnano = require('cssnano');
+// const { externals } = require('rollup-plugin-node-externals');
 const { resolveToCurrentRoot, resolveToCurrentDist } = require('../utils/pathUtils'); // 统一路径解析
 const babelConfig = require('./babel.config'); // Babel的配置文件
-const curProjectConfig = require('./index'); // 引入当前项目配置文件
+const projectConfig = require('./index'); // 引入当前项目配置文件
 const { buildBanner } = require('../utils/akfunParams');
 
 module.exports = function (fileName, akfunConfig) {
   const curConfig = akfunConfig || curProjectConfig;
+  const build2esm = curConfig.build2esm || {};
   // 获取用户配置的构建入口文件
   let rollupInput = resolveToCurrentRoot('src/main.js');
-  if (curConfig.build2esm && curConfig.build2esm.input) {
-    rollupInput = curConfig.build2esm.input;
+  if (build2esm.input) {
+    rollupInput = build2esm.input;
   }
   let curFileName = fileName || 'index'; // 默认以"index.esm.js"输出
   // 获取用户配置的构建输出文件名
-  if (curConfig.build2esm && curConfig.build2esm.fileName) {
-    curFileName = curConfig.build2esm.fileName;
+  if (build2esm.fileName) {
+    curFileName = build2esm.fileName;
   }
   // 增加babel配置
   babelConfig.babelHelpers = 'runtime';
 
   return {
     banner: buildBanner,
+    // format: build2esm.format || 'esm', // 生成包的格式
     input: rollupInput,
-    // external：将模块视为外部模块，不会打包在库中（在akfun.config.js中配置）
+    /**
+     * external：（在akfun.config.js中配置）
+     * 需要一个 id 并返回 true（外部引用）或 false（不是外部的引用）， 或者 Array 应该保留在bundle的外部引用的模块ID。
+     */
+    external: build2esm.external || [],
     plugins: [
       alias({
         resolve: curConfig.webpack.resolve.extensions,
