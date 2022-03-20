@@ -74,6 +74,12 @@ module.exports = (akfunConfig) => {
     );
   }
 
+  // 判断当前环境是否有自定义plugins
+  if (curEnvConfig.plugins && Array.isArray(curEnvConfig.plugins)) {
+    // 添加自定义webpack插件
+    webpackLibConfig.plugins.push(...curEnvConfig.plugins);
+  }
+
   if (curEnvConfig.bundleAnalyzerReport) {
     webpackLibConfig.plugins.push(new BundleAnalyzerPlugin());
   }
