@@ -3,7 +3,7 @@ const rm = require('rimraf');
 const path = require('path');
 const chalk = require('chalk');
 const webpack = require('webpack');
-const {curConsoleTag} = require("./utils/akfunParams");
+const { curConsoleTag } = require('./utils/akfunParams');
 const checkVersion = require('./check-versions');
 const projectConfig = require('./config/index'); // 引入当前项目配置文件
 const defaultConfig = require('./config/default.config');
@@ -17,6 +17,7 @@ module.exports = function (BuildType, akfunConfig, _consoleTag) {
     // 参数中的config配置优先级最高
     config = deepMergeConfig(defaultConfig, akfunConfig);
   }
+  let curEnvConfig = config.build;
   // 检查当前npm版本号是否匹配
   checkVersion();
   const spinner = ora(`${consoleTag}开始构建...`).start();
@@ -26,6 +27,7 @@ module.exports = function (BuildType, akfunConfig, _consoleTag) {
   if (BuildType && BuildType === 'lib') {
     spinner.start(`${consoleTag}开始构建lib库...`);
     webpackConfig = require('./webpack/webpack.library.conf')(config);
+    curEnvConfig = config.build2lib;
   } else {
     spinner.start(`${consoleTag}开始构建生产环境的代码...`);
     webpackConfig = require('./webpack/webpack.prod.conf')(config);
@@ -36,10 +38,10 @@ module.exports = function (BuildType, akfunConfig, _consoleTag) {
    * 使用 config.dev.NODE_ENV 作为当前的环境
    */
   if (!process.NODE_ENV) {
-    process.NODE_ENV = config.build.NODE_ENV; // 将运行环境设置为生产环境
+    process.NODE_ENV = curEnvConfig.NODE_ENV; // 将运行环境设置为生产环境
   }
 
-  rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), (err) => {
+  rm(path.join(curEnvConfig.assetsRoot, curEnvConfig.assetsSubDirectory), (err) => {
     if (err) throw err;
     webpack(webpackConfig, (err, stats) => {
       spinner.stop();
