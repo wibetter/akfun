@@ -1,6 +1,6 @@
 {
   "name": "akfun",
-  "version": "3.2.6",
+  "version": "3.2.7",
   "description": "前端脚手架：支持Vue技术栈和react技术栈",
   "keywords": [
     "前端工程",
@@ -155,6 +155,7 @@
     "webpack-hot-middleware": "^2.25.1",
     "webpack-merge": "^5.8.0",
     "webpack-node-externals": "^3.0.0",
+    "@svgr/webpack": "^6.2.1",
     "yargs": "^12.0.5"
   },
   "devDependencies": {

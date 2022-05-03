@@ -122,6 +122,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
            */
           test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
           type: 'asset',
+          issuer: /\.s?css$/,
           parser: {
             dataUrlCondition: {
               maxSize: 2 * 1024 //data转成url的条件，也就是转成bas64的条件,maxSize相当于limit
@@ -131,6 +132,11 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
             // filename，和output中设置assetModuleFilename一样，将资源打包至img文件夹
             filename: utils.assetsPath('img/[name].[hash:7][ext]') //[name]指原来的名字，[hash:6]取哈希的前六位，[ext]指原来的扩展名
           }
+        },
+        {
+          test: /\.svg$/,
+          issuer: /\.[jt]sx?$/,
+          use: ['@svgr/webpack']
         },
         {
           // 视频音频资源
