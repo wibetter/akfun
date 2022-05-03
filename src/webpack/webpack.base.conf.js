@@ -311,5 +311,11 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
     webpackConfig.plugins.push(...curWebpackConfig.plugins);
   }
 
+  // 判断是否有自定义loader
+  if (curWebpackConfig.moduleRules && Array.isArray(curWebpackConfig.moduleRules)) {
+    // 添加自定义自定义loader
+    webpackConfig.module.rules.push(...curWebpackConfig.moduleRules);
+  }
+
   return webpackConfig;
 };
