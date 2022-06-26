@@ -107,11 +107,13 @@ exports.cssLoaders = function (options) {
     return loaders;
   }
 
+  const sassOptions = options.sassOptions || {};
+
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {
     css: generateLoaders(),
-    sass: generateLoaders('sass', { indentedSyntax: true }),
-    scss: generateLoaders('sass'),
+    sass: generateLoaders('sass', { indentedSyntax: true, sassOptions }),
+    scss: generateLoaders('sass', { sassOptions }),
     less: generateLoaders('less'),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
