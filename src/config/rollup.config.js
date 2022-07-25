@@ -83,11 +83,11 @@ module.exports = function (fileName, akfunConfig) {
     ],
     output: [
       {
-        file: resolveToCurrentDist(`${curFileName}.esm.js`),
+        file: resolveToCurrentDist(`${curFileName}.esm.js`, build2esm.outDir),
         format: 'esm'
       },
       {
-        file: resolveToCurrentDist(`${curFileName}.esm.min.js`),
+        file: resolveToCurrentDist(`${curFileName}.esm.min.js`, build2esm.outDir),
         format: 'esm',
         plugins: [terser()]
       }
