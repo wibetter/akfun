@@ -69,7 +69,7 @@ module.exports = function (fileName, akfunConfig) {
       postcss({
         extensions: ['.css', '.scss', '.sass', '.styl', '.stylus', '.less'],
         // Or with custom file name, it will generate file relative to bundle.js in v3
-        extract: resolveToCurrentDist(`${curFileName}.css`),
+        extract: resolveToCurrentDist(`${curFileName}.css`, build2esm.outDir),
         plugins: [
           simplevars(),
           nested(),
