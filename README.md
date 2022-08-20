@@ -6,12 +6,12 @@
 ## 特性
 - ⚡️ 零配置，开箱即用
 - 👏 支持Vue和React项目的调试和构建
-- 📤 支持单页面和多页面
-- 💪 提供三种构建场景: 本地开发模式(包含热更新、接口代理等功能)、生产环境代码构建、library库构建(支持umd和esm的打包能力)
-- ❤️ 开放配置能力: 可配置构建入口文件、开启ESLint代码检测、接口代理等
-- 👍 支持 [Autoprefixer](https://github.com/postcss/autoprefixer#readme)、[Sass](https://sass-lang.com/)、[PostCSS](https://postcss.org/)、[ESLint](http://eslint.cn/)、[StyleLint](https://stylelint.io/)
-- ❤️ 支持项目系统参数自动批量替换 [params-replace-loader](https://www.npmjs.com/package/params-replace-loader)
-- 😀 提供完整的Vue和React项目模板
+- 支持单页面和多页面
+- 提供三种构建场景: 本地开发模式(包含热更新、接口代理等功能)、生产环境代码构建、library库构建(支持umd和esm的打包能力)
+- 开放配置能力: 可配置构建入口文件、开启ESLint代码检测、接口代理等
+- 支持 [Autoprefixer](https://github.com/postcss/autoprefixer#readme)、[Sass](https://sass-lang.com/)、[PostCSS](https://postcss.org/)、[ESLint](http://eslint.cn/)、[StyleLint](https://stylelint.io/)
+- 支持项目系统参数自动批量替换 [params-replace-loader](https://www.npmjs.com/package/params-replace-loader)
+- 提供完整的Vue和React项目模板
 
 ## 快速开始 / 使用方法一
 > 全局安装AKFun，用于同时管理多个前端项目代码（可使用AKFun创建一个新项目）
