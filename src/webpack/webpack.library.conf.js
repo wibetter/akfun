@@ -15,7 +15,13 @@ module.exports = (akfunConfig) => {
   // 获取webpack基本配置
   const baseWebpackConfig = getBaseWebpackConfig(curEnvConfig, config);
 
+  let curTarget = ['web', 'es5'];
+  if (config.webpack.target) {
+    curTarget = config.webpack.target; // akfun.config.js中的webpack配置
+  }
+
   const webpackLibConfig = merge(baseWebpackConfig, {
+    target: curTarget,
     mode: curEnvConfig.NODE_ENV, // production 模式，会启动UglifyJsPlugin服务
     output: {
       path: curEnvConfig.assetsRoot, // 输出文件的存放在本地的目录
