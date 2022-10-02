@@ -1,6 +1,8 @@
 const open = require('open');
 const ora = require('ora');
 const path = require('path');
+const https = require('https');
+const fs = require('fs');
 const express = require('express');
 const webpack = require('webpack');
 const checkVersion = require('./check-versions');
@@ -106,7 +108,9 @@ module.exports = function (akfunConfig, _consoleTag) {
 
   console.log('\n> Starting dev server...');
 
-  devMiddleware.waitUntilValid(() => {
+  let isHttps = false; // 是否开启https服务
+
+  const devMiddlewareWaitUntilValid = () => {
     portfinder.getPort((err, port) => {
       if (err) {
         _reject(err);
@@ -114,7 +118,9 @@ module.exports = function (akfunConfig, _consoleTag) {
       spinner.succeed(`${consoleTag}调试模式已开启！`);
 
       process.env.PORT = port;
-      const uri = `http://${config.dev.hostname}:${port}`;
+      const uri = isHttps
+        ? `https://${config.dev.hostname}`
+        : `http://${config.dev.hostname}:${port}`;
       console.log(`> Listening at ${uri}\n`);
 
       // 打印当前环境中的首个html和css地址
@@ -135,5 +141,23 @@ module.exports = function (akfunConfig, _consoleTag) {
       server = app.listen(port);
       _resolve();
     });
-  });
+  };
+
+  if (config.dev.https) {
+    const sslOptions = {
+      key: fs.readFileSync(path.resolve(__dirname, './ssl/localhost.key')),
+      cert: fs.readFileSync(path.resolve(__dirname, './ssl/localhost.cert')),
+      requestCert: false,
+      rejectUnauthorized: false
+    };
+
+    var httpsServer = https.createServer(sslOptions, app);
+
+    httpsServer.listen(443, () => {
+      isHttps = true;
+      devMiddleware.waitUntilValid(devMiddlewareWaitUntilValid);
+    });
+  } else {
+    devMiddleware.waitUntilValid(devMiddlewareWaitUntilValid);
+  }
 };
