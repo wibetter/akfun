@@ -5,6 +5,7 @@ const https = require('https');
 const fs = require('fs');
 const express = require('express');
 const webpack = require('webpack');
+const portfinder = require('portfinder');
 const checkVersion = require('./check-versions');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const { resolve } = require('./utils/pathUtils');
@@ -95,52 +96,33 @@ module.exports = function (akfunConfig, _consoleTag) {
   // handle fallback for HTML5 history API
   app.use(require('connect-history-api-fallback')());
 
-  let _resolve;
-  let _reject;
-  const readyPromise = new Promise((resolve, reject) => {
-    _resolve = resolve;
-    _reject = reject;
-  });
+  const afterCreateServerAction = (isHttps, port) => {
+    spinner.succeed(`${consoleTag}调试模式已开启！`);
 
-  let server;
-  const portfinder = require('portfinder');
-  portfinder.basePort = port;
+    process.env.PORT = port;
 
-  console.log('\n> Starting dev server...');
+    const uri = isHttps
+      ? `https://${config.dev.hostname}`
+      : `http://${config.dev.hostname}:${port}`;
 
-  let isHttps = false; // 是否开启https服务
+    console.log(`> Listening at ${uri}\n`);
 
-  const devMiddlewareWaitUntilValid = () => {
-    portfinder.getPort((err, port) => {
-      if (err) {
-        _reject(err);
+    // 打印当前环境中的首个html和css地址
+    const projPath = `${uri}${webpackConfig.output.publicPath}`;
+
+    let entryConfig = webpackConfig.entry || {}; // 获取构建入口配置
+    const entryFiles = (entryConfig && Object.keys(entryConfig)) || [];
+    if (entryFiles.length > 0) {
+      // 获取第一个入口文件
+      const filename = entryFiles[0];
+      console.info(
+        `当前运行脚本:\n ${projPath}${filename}.js\n当前运行样式[可能不存在]:\n${projPath}${filename}.css`
+      );
+      // 是否自动打开浏览器并跳转到第一个入口页面
+      if (!config.dev.closeHtmlWebpackPlugin && autoOpenBrowser) {
+        open(`${projPath}${filename}.html`, { wait: true });
       }
-      spinner.succeed(`${consoleTag}调试模式已开启！`);
-
-      process.env.PORT = port;
-      const uri = isHttps
-        ? `https://${config.dev.hostname}`
-        : `http://${config.dev.hostname}:${port}`;
-      console.log(`> Listening at ${uri}\n`);
-
-      // 打印当前环境中的首个html和css地址
-      const projPath = `${uri}${webpackConfig.output.publicPath}`;
-      let entryConfig = webpackConfig.entry || {}; // 获取构建入口配置
-      const entryFiles = (entryConfig && Object.keys(entryConfig)) || [];
-      if (entryFiles.length > 0) {
-        // 获取第一个入口文件
-        const filename = entryFiles[0];
-        console.info(
-          `当前运行脚本:\n ${projPath}${filename}.js\n当前运行样式[可能不存在]:\n${projPath}${filename}.css`
-        );
-        // 是否自动打开浏览器并跳转到第一个入口页面
-        if (!config.dev.closeHtmlWebpackPlugin && autoOpenBrowser) {
-          open(`${projPath}${filename}.html`, { wait: true });
-        }
-      }
-      server = app.listen(port);
-      _resolve();
-    });
+    }
   };
 
   if (config.dev.https) {
@@ -153,11 +135,23 @@ module.exports = function (akfunConfig, _consoleTag) {
 
     var httpsServer = https.createServer(sslOptions, app);
 
-    httpsServer.listen(443, () => {
-      isHttps = true;
-      devMiddleware.waitUntilValid(devMiddlewareWaitUntilValid);
+    devMiddleware.waitUntilValid(() => {
+      httpsServer.listen(443, () => {
+        afterCreateServerAction(true, port);
+      });
     });
   } else {
-    devMiddleware.waitUntilValid(devMiddlewareWaitUntilValid);
+    portfinder.basePort = port;
+    devMiddleware.waitUntilValid(() => {
+      portfinder.getPort((err, port) => {
+        if (err) {
+          _reject(err);
+        }
+
+        app.listen(port, () => {
+          afterCreateServerAction(false, port);
+        });
+      });
+    });
   }
 };
