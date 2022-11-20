@@ -28,6 +28,7 @@ const { buildBanner } = require('../utils/akfunParams');
 module.exports = function (fileName, akfunConfig) {
   const curConfig = akfunConfig || curProjectConfig;
   const build2esm = curConfig.build2esm || {};
+  const curWebpackConfig = curConfig.webpack || {};
   // 获取用户配置的构建入口文件
   let rollupInput = resolveToCurrentRoot('src/main.js');
   if (build2esm.input) {
@@ -40,6 +41,12 @@ module.exports = function (fileName, akfunConfig) {
   }
   // 增加babel配置
   babelConfig.babelHelpers = 'runtime';
+
+  // 判断是否有自定义 Babel plugins
+  if (curWebpackConfig.babelPlugins && Array.isArray(curWebpackConfig.babelPlugins)) {
+    // 添加自定义webpack插件
+    babelConfig.plugins.push(...curWebpackConfig.babelPlugins);
+  }
 
   return {
     banner: buildBanner,
