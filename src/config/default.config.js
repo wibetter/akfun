@@ -12,6 +12,7 @@ const defaultAKFunConfig = {
     enableStyleLintFix: false // 是否需要StyleLint自动修正代码格式
   },
   webpack: {
+    target: ['web', 'es5'],
     resolve: {
       // webpack的resolve配置
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue', '.json'], // 用于配置webpack在尝试过程中用到的后缀列表

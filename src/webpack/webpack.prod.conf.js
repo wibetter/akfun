@@ -26,7 +26,13 @@ module.exports = (akfunConfig) => {
     curHtmlTemplate = config.webpack.template; // akfun.config.js中的webpack配置
   }
 
+  let curTarget = ['web', 'es5'];
+  if (config.webpack.target) {
+    curTarget = config.webpack.target; // akfun.config.js中的webpack配置
+  }
+
   const webpackProdConfig = merge(baseWebpackConfig, {
+    target: curTarget,
     mode: curEnvConfig.NODE_ENV, // production 模式，会启动UglifyJsPlugin服务
     /*
      内置变量列表：

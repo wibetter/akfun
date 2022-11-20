@@ -22,7 +22,13 @@ module.exports = (akfunConfig) => {
     curHtmlTemplate = config.webpack.template; // akfun.config.js中的webpack配置
   }
 
+  let curTarget = ['web', 'es5'];
+  if (config.webpack.target) {
+    curTarget = config.webpack.target; // akfun.config.js中的webpack配置
+  }
+
   const webpackDevConfig = merge(baseWebpackConfig, {
+    target: curTarget,
     mode: curEnvConfig.NODE_ENV, // development模式，会启动NamedChunksPlugin、NamedModulesPlugin服务
     output: {
       publicPath: curEnvConfig.assetsPublicPath // 引用地址：配置发布到线上资源的URL前缀

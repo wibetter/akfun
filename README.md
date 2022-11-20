@@ -1,17 +1,17 @@
 # AKFun 前端脚手架
-> AKFun 是一个基于 Webpack4.0 和 rollup 的前端多场景打包工具，支持多种技术栈：Vue技术栈、React技术栈、React&TS技术栈
+> AKFun 是一个基于 Webpack 和 rollup 的前端多场景打包工具，支持多种技术栈：Vue技术栈、React技术栈、React&TS技术栈
 - 核心理念：提供完整&全面的前端工程能力，并尽可能屏蔽掉前端工程相关配置，让开发者更专注业务研发工作。
-- 技术栈：node/webpack4.0/rollup/babel/eslint/stylelint
+- 技术栈：node/webpack/rollup/babel/eslint/stylelint
 
 ## 特性
 - ⚡️ 零配置，开箱即用
 - 👏 支持Vue和React项目的调试和构建
-- 📤 支持单页面和多页面
-- 💪 提供三种构建场景: 本地开发模式(包含热更新、接口代理等功能)、生产环境代码构建、library库构建(支持umd和esm的打包能力)
-- ❤️ 开放配置能力: 可配置构建入口文件、开启ESLint代码检测、接口代理等
-- 👍 支持 [Autoprefixer](https://github.com/postcss/autoprefixer#readme)、[Sass](https://sass-lang.com/)、[PostCSS](https://postcss.org/)、[ESLint](http://eslint.cn/)、[StyleLint](https://stylelint.io/)
-- ❤️ 支持项目系统参数自动批量替换 [params-replace-loader](https://www.npmjs.com/package/params-replace-loader)
-- 😀 提供完整的Vue和React项目模板
+- 支持单页面和多页面
+- 提供三种构建场景: 本地开发模式(包含热更新、接口代理等功能)、生产环境代码构建、library库构建(支持umd和esm的打包能力)
+- 开放配置能力: 可配置构建入口文件、开启ESLint代码检测、接口代理等
+- 支持 [Autoprefixer](https://github.com/postcss/autoprefixer#readme)、[Sass](https://sass-lang.com/)、[PostCSS](https://postcss.org/)、[ESLint](http://eslint.cn/)、[StyleLint](https://stylelint.io/)
+- 支持项目系统参数自动批量替换 [params-replace-loader](https://www.npmjs.com/package/params-replace-loader)
+- 提供完整的Vue和React项目模板
 
 ## 快速开始 / 使用方法一
 > 全局安装AKFun，用于同时管理多个前端项目代码（可使用AKFun创建一个新项目）
@@ -387,3 +387,17 @@ module.exports = {
   ...
 }
 ```
+
+16. 本地开启https服务
+> 使用 https://localhost/index.html 访问当前项目。
+```bash
+module.exports = {
+  ...
+  dev: {
+    ...
+    https: true, // 默认不开启
+  }
+  ...
+}
+```
+备注：akfun使用自签名证书开启https服务，浏览器会提示安全性问题不能正常访问，需要进行如下设置，以 Chrome设置 为例：浏览器打开 Chrome://flags/#allow-insecure-localhost 后将其设置为Enabled。
