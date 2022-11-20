@@ -39,6 +39,13 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
   const curWebpackConfig = config.webpack;
   // 获取当前项目目录
   const curProjectDir = getProjectDir(curWebpackConfig.projectDir);
+
+  // 判断是否有自定义 Babel plugins
+  if (curWebpackConfig.babelPlugins && Array.isArray(curWebpackConfig.babelPlugins)) {
+    // 添加自定义webpack插件
+    babelConfig.plugins.push(...curWebpackConfig.babelPlugins);
+  }
+
   const webpackConfig = {
     stats: {
       // cachedModules: false,
