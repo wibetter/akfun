@@ -43,14 +43,7 @@ exports.cssLoaders = function (options) {
           if (options.cssLoaderUrl !== undefined) {
             return options.cssLoaderUrl;
           }
-          // Don't handle `node_modules` urls
-          if (
-            resourcePath.includes('node_modules') ||
-            (options.cssLoaderUrlDir && resourcePath.includes(options.cssLoaderUrlDir))
-          ) {
-            return true;
-          }
-          return false;
+          return true;
         }
       },
       sourceMap: options.sourceMap
