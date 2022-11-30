@@ -39,9 +39,18 @@ exports.cssLoaders = function (options) {
       // url: false, // enables/disables url()/image-set() functions handling
       url: {
         filter: (url, resourcePath) => {
-          // 自定义配置优先
-          if (options.cssLoaderUrl !== undefined) {
+          if (url.startsWith('data:')) {
+            // 不处理 css 中的 bas64 url
+            return false;
+          } else if (options.cssLoaderUrlDir && resourcePath.includes(options.cssLoaderUrlDir)) {
+            // 指定处理某类路径下的中相关 css 文件中的 url
+            return true;
+          } else if (options.cssLoaderUrl !== undefined) {
+            // cssLoaderUrl 为true 则不处理 css 中的 url
             return options.cssLoaderUrl;
+          } else if (resourcePath.includes('node_modules')) {
+            // 默认不处理 node_modules 中相关 css 文件中的 url
+            return false;
           }
           return true;
         }
