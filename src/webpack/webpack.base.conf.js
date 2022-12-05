@@ -19,7 +19,7 @@ const projectConfig = require('../config/index');
 const babelConfig = require('../config/babel.config'); // Babel的配置文件
 const { buildBanner } = require('../utils/akfunParams');
 const getJsEntries = require('../utils/jsEntries');
-const { isArray } = require('../utils/typeof');
+const { isArray, isFunction } = require('../utils/typeof');
 
 // 生成构建头部信息
 const BannerPack = new webpack.BannerPlugin({
@@ -41,9 +41,12 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
   const curProjectDir = getProjectDir(curWebpackConfig.projectDir);
 
   // 判断是否有自定义 Babel plugins
-  if (curWebpackConfig.babelPlugins && Array.isArray(curWebpackConfig.babelPlugins)) {
-    // 添加自定义webpack插件
+  if (isArray(curWebpackConfig.babelPlugins)) {
+    // 添加自定义babel插件
     babelConfig.plugins.push(...curWebpackConfig.babelPlugins);
+  } else if (isFunction(curWebpackConfig.babelPlugins)) {
+    // 处理自定义babel插件
+    curWebpackConfig.babelPlugins(babelConfig.plugins);
   }
 
   const webpackConfig = {
@@ -73,11 +76,11 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
     resolve: curWebpackConfig.resolve,
     externals: curWebpackConfig.ignoreNodeModules
       ? [
-          nodeExternals({
-            importType: 'commonjs',
-            allowlist: curWebpackConfig.allowList ? curWebpackConfig.allowList : []
-          })
-        ].concat(curWebpackConfig.externals)
+        nodeExternals({
+          importType: 'commonjs',
+          allowlist: curWebpackConfig.allowList ? curWebpackConfig.allowList : []
+        })
+      ].concat(curWebpackConfig.externals)
       : curWebpackConfig.externals,
     module: {
       rules: [
@@ -210,11 +213,11 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
     const externals = curEnvConfig.externals || curWebpackConfig.external || [];
     webpackConfig.externals = curEnvConfig.ignoreNodeModules
       ? [
-          nodeExternals({
-            importType: 'commonjs',
-            allowlist: allowList || []
-          })
-        ].concat(externals)
+        nodeExternals({
+          importType: 'commonjs',
+          allowlist: allowList || []
+        })
+      ].concat(externals)
       : externals;
   }
   // 集成构建入口相关的配置（优先级更高）
@@ -320,13 +323,13 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
   }
 
   // 判断是否有自定义plugins
-  if (curWebpackConfig.plugins && Array.isArray(curWebpackConfig.plugins)) {
+  if (curWebpackConfig.plugins && isArray(curWebpackConfig.plugins)) {
     // 添加自定义webpack插件
     webpackConfig.plugins.push(...curWebpackConfig.plugins);
   }
 
   // 判断是否有自定义loader
-  if (curWebpackConfig.moduleRules && Array.isArray(curWebpackConfig.moduleRules)) {
+  if (curWebpackConfig.moduleRules && isArray(curWebpackConfig.moduleRules)) {
     // 添加自定义自定义loader
     webpackConfig.module.rules.push(...curWebpackConfig.moduleRules);
   }
