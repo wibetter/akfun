@@ -33,12 +33,18 @@ module.exports = (akfunConfig) => {
     output: {
       publicPath: curEnvConfig.assetsPublicPath // 引用地址：配置发布到线上资源的URL前缀
     },
+    resolve: {
+      // dev环境默认使用 require
+      conditionNames: ['require'],
+      ...baseWebpackConfig.resolve,
+    },
     module: {
       rules: utils.styleLoaders({
         sourceMap: curEnvConfig.cssSourceMap,
         environment: 'prod', // 'dev': 不会将css单独提取出来
         cssLoaderUrl: config.webpack.cssLoaderUrl,
-        cssLoaderUrlDir: config.webpack.cssLoaderUrlDir
+        cssLoaderUrlDir: config.webpack.cssLoaderUrlDir,
+        cssLoaderOption: config.webpack.cssLoaderOption, // 用于自定义css-loader配置项（优先级最高）
       })
     },
     // devtool: '#cheap-module-eval-source-map', // 本地开发环境中的取值

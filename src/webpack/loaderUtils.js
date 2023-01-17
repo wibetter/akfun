@@ -52,7 +52,8 @@ exports.cssLoaders = function (options) {
           return true;
         }
       },
-      sourceMap: options.sourceMap
+      sourceMap: options.sourceMap,
+      ...(options.cssLoaderOption || {})
     }
   };
 
