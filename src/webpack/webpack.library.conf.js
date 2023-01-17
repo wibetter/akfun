@@ -39,7 +39,8 @@ module.exports = (akfunConfig) => {
         sourceMap: curEnvConfig.productionSourceMap,
         environment: 'prod',
         cssLoaderUrl: config.webpack.cssLoaderUrl,
-        cssLoaderUrlDir: config.webpack.cssLoaderUrlDir
+        cssLoaderUrlDir: config.webpack.cssLoaderUrlDir,
+        cssLoaderOption: config.webpack.cssLoaderOption, // 用于自定义css-loader配置项（优先级最高）
       })
     },
     devtool: curEnvConfig.productionSourceMap ? curEnvConfig.devtool || 'source-map' : false, // 线上生成环境
