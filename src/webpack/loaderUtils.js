@@ -39,14 +39,15 @@ exports.cssLoaders = function (options) {
       // url: false, // enables/disables url()/image-set() functions handling
       url: {
         filter: (url, resourcePath) => {
+          if (options.cssLoaderUrlDir && resourcePath.includes(options.cssLoaderUrlDir)) {
+            // 指定处理某类路径下的中相关 css 文件中的 url
+            return true;
+          } 
           if (url.startsWith('data:')) {
             // 不处理 css 中的 bas64 url
             return false;
-          } else if (options.cssLoaderUrlDir && resourcePath.includes(options.cssLoaderUrlDir)) {
-            // 指定处理某类路径下的中相关 css 文件中的 url
-            return true;
           } else if (options.cssLoaderUrl !== undefined) {
-            // cssLoaderUrl 为true 则不处理 css 中的 url
+            // cssLoaderUrl 为false 则不处理 css 中的 url
             return options.cssLoaderUrl;
           }
           return true;
