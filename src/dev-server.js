@@ -50,6 +50,11 @@ module.exports = function (akfunConfig, _consoleTag) {
   // 获取开发环境的webpack基本配置
   const webpackConfig = getDevWebpackConfig(config);
 
+  // 使用 connect-history-api-fallback 匹配资源，如果不匹配就可以重定向到指定地址
+  // handle fallback for HTML5 history API
+  // 备注：需放express.static前面，避免失效
+  app.use(require('connect-history-api-fallback')());
+
   // serve pure public assets
   // 拼接 public 文件夹的静态资源路径
   const staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory);
@@ -91,10 +96,6 @@ module.exports = function (akfunConfig, _consoleTag) {
       app.use(context, createProxyMiddleware(options));
     });
   }
-
-  // 使用 connect-history-api-fallback 匹配资源，如果不匹配就可以重定向到指定地址
-  // handle fallback for HTML5 history API
-  app.use(require('connect-history-api-fallback')());
 
   const afterCreateServerAction = (isHttps, port) => {
     spinner.succeed(`${consoleTag}调试模式已开启！`);
