@@ -388,7 +388,44 @@ module.exports = {
 }
 ```
 
-16. 本地开启https服务
+16. 自定义css-loader的配置
+> 比如用于启用/禁用 @import 解析。
+```bash
+module.exports = {
+  ...
+  webpack: {
+    ...
+    cssLoaderOption: {
+      import: false, // 启用/禁用 @import 解析
+    }
+  }
+  ...
+}
+```
+
+17. 自定义postcss-loader的配置
+> 比如用于添加 PostCSS 选项与插件。
+```bash
+module.exports = {
+  ...
+  webpack: {
+    ...
+    postCssLoaderOption: {
+      postcssOptions: {
+        plugins: [
+          require('postcss-pxtorem')({ // 用于将px自动转化为rem
+            rootValue: 16, // 1rem 等于 16px
+            propList: ['*'], // 所有属性都转换
+          }),
+        ],
+      }
+    }
+  }
+  ...
+}
+```
+
+18. 本地开启https服务
 > 使用 https://localhost/index.html 访问当前项目。
 ```bash
 module.exports = {

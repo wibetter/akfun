@@ -42,7 +42,7 @@ exports.cssLoaders = function (options) {
           if (options.cssLoaderUrlDir && resourcePath.includes(options.cssLoaderUrlDir)) {
             // 指定处理某类路径下的中相关 css 文件中的 url
             return true;
-          } 
+          }
           if (url.startsWith('data:')) {
             // 不处理 css 中的 bas64 url
             return false;
@@ -60,7 +60,10 @@ exports.cssLoaders = function (options) {
 
   const postCssLoader = {
     loader: 'postcss-loader',
-    options: postCssConfig // 同babel-loader的option
+    options: {
+      ...postCssConfig,
+      ...(options.postCssLoaderOption || {})
+    }
   };
 
   // generate loader string to be used with extract text plugin

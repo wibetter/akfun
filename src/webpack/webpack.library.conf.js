@@ -41,6 +41,7 @@ module.exports = (akfunConfig) => {
         cssLoaderUrl: config.webpack.cssLoaderUrl,
         cssLoaderUrlDir: config.webpack.cssLoaderUrlDir,
         cssLoaderOption: config.webpack.cssLoaderOption, // 用于自定义css-loader配置项（优先级最高）
+        postCssLoaderOption: config.webpack.postCssLoaderOption // 用于自定义postcss-loader配置项（优先级最高）
       })
     },
     devtool: curEnvConfig.productionSourceMap ? curEnvConfig.devtool || 'source-map' : false, // 线上生成环境

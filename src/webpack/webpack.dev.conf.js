@@ -7,7 +7,6 @@ const projectConfig = require('../config/index');
 const getBaseWebpackConfig = require('./webpack.base.conf');
 const entrys2htmlWebpackPlugin = require('../utils/entrys2htmlWebpackPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const config = require('../config');
 // const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = (akfunConfig) => {
@@ -36,7 +35,7 @@ module.exports = (akfunConfig) => {
     resolve: {
       // dev环境默认使用 require
       conditionNames: ['require'],
-      ...baseWebpackConfig.resolve,
+      ...baseWebpackConfig.resolve
     },
     module: {
       rules: utils.styleLoaders({
@@ -45,6 +44,7 @@ module.exports = (akfunConfig) => {
         cssLoaderUrl: config.webpack.cssLoaderUrl,
         cssLoaderUrlDir: config.webpack.cssLoaderUrlDir,
         cssLoaderOption: config.webpack.cssLoaderOption, // 用于自定义css-loader配置项（优先级最高）
+        postCssLoaderOption: config.webpack.postCssLoaderOption // 用于自定义postcss-loader配置项（优先级最高）
       })
     },
     // devtool: '#cheap-module-eval-source-map', // 本地开发环境中的取值
