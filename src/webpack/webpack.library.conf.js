@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 替换extrac
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const deepMergeConfig = require('../utils/deepMergeConfig');
 
 const utils = require('./loaderUtils');
 // 引入当前项目配置文件
@@ -68,6 +69,11 @@ module.exports = (akfunConfig) => {
       })
     ]
   });
+
+  // 优先使用当前环境配置中的output
+  if (curEnvConfig.output) {
+    webpackLibConfig.output = deepMergeConfig(webpackLibConfig.output, curEnvConfig.output);
+  }
 
   // 是否开启Gzip
   if (curEnvConfig.productionGzip) {
