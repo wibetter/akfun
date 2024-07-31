@@ -28,7 +28,7 @@ const projectConfig = require('./index'); // 引入当前项目配置文件
 const { buildBanner } = require('../utils/akfunParams');
 
 module.exports = function (fileName, akfunConfig) {
-  const curConfig = akfunConfig || curProjectConfig;
+  const curConfig = akfunConfig || projectConfig;
   const build2esm = curConfig.build2esm || {};
   const curWebpackConfig = curConfig.webpack || {};
   // 获取用户配置的构建入口文件
