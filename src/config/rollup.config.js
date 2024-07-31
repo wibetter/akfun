@@ -19,6 +19,8 @@ const nested = require('postcss-nested');
 const postcssPresetEnv = require('postcss-preset-env');
 // css代码压缩
 const cssnano = require('cssnano');
+// 处理svg文件
+const svgr = require('@svgr/rollup');
 const { externals } = require('rollup-plugin-node-externals');
 const { resolveToCurrentRoot, resolveToCurrentDist } = require('../utils/pathUtils'); // 统一路径解析
 const babelConfig = require('./babel.config'); // Babel的配置文件
@@ -84,6 +86,14 @@ module.exports = function (fileName, akfunConfig) {
           postcssPresetEnv(),
           cssnano()
         ]
+      }),
+      // https://react-svgr.com/docs/options/
+      svgr({
+        svgProps: {
+          className: 'icon'
+        },
+        prettier: false,
+        dimensions: false
       }),
       image(),
       json()
