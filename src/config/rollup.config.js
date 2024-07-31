@@ -95,7 +95,9 @@ module.exports = function (fileName, akfunConfig) {
         prettier: false,
         dimensions: false
       }),
-      image(),
+      image({
+        exclude: [build2esm.svgDir || 'src/icons/**']
+      }),
       json()
     ],
     output: [

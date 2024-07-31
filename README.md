@@ -383,6 +383,7 @@ module.exports = {
     build2esm: {
       input: resolve('src/main.js'), // 入口文件
       fileName: 'index', // 输出的文件名称
+      svgDir: 'src/icons/**', // 用于设置当前项目的icon所在目录，避免被 @rollup/plugin-image 编译成base64格式
     },
   ...
 }
