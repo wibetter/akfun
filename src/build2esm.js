@@ -1,10 +1,11 @@
 const ora = require('ora');
 const rollup = require('rollup');
+const { terser } = require('rollup-plugin-terser'); // 压缩
 const projectConfig = require('./config/index'); // 引入当前项目配置文件
 const defaultConfig = require('./config/default.config');
 const rollupConfig = require('./config/rollup.config'); // rollup的配置文件
 const { isArray, isObject } = require('./utils/typeof');
-const {curConsoleTag } = require("./utils/akfunParams");
+const { curConsoleTag } = require('./utils/akfunParams');
 const deepMergeConfig = require('./utils/deepMergeConfig');
 
 async function build2esmFunc(options, curConfig) {
@@ -37,11 +38,22 @@ module.exports = function (fileName, akfunConfig, _consoleTag) {
   const spinner = ora(`${consoleTag}开启esm模块构建能力...`).start();
   const curRollupConfig = rollupConfig(fileName, config); // 默认配置
   const build2esm = config.build2esm; // 用户的项目配置
+  const compress = build2esm.compress ?? true; // 是否压缩代码
   if (build2esm && build2esm.input) {
     curRollupConfig.input = build2esm.input;
   }
   if (build2esm && build2esm.output) {
     curRollupConfig.output = build2esm.output;
+
+    if (isArray(build2esm.output)) {
+      build2esm.output.map((outputItem) => {
+        if (!outputItem.plugins && compress) {
+          outputItem.plugins = [terser()];
+        }
+      });
+    } else if (isObject(build2esm.output) && !build2esm.output.plugins && compress) {
+      build2esm.output.plugins = [terser()];
+    }
   }
   build2esmFunc(curRollupConfig, config).then(() => {
     spinner.succeed(`${consoleTag}esm模块构建完成。`);
