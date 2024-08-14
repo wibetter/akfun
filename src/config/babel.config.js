@@ -14,7 +14,7 @@ module.exports = {
     '@babel/preset-typescript'
   ],
   plugins: [
-    ['import', { libraryName: 'antd', style: 'css' }], // babel-plugin-import: antd的按需加载
+    // ['import', { libraryName: 'antd', style: 'css' }], // babel-plugin-import: antd的按需加载
     ['@babel/plugin-transform-runtime'],
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     '@babel/plugin-proposal-function-sent',
