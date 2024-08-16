@@ -16,7 +16,7 @@ module.exports = {
   plugins: [
     // ['import', { libraryName: 'antd', style: 'css' }], // babel-plugin-import: antd的按需加载
     ['@babel/plugin-transform-runtime'],
-    ['@babel/plugin-proposal-decorators', { legacy: true }],
+    ['@babel/plugin-proposal-decorators', { legacy: true }], // 启用装饰器语法支持
     '@babel/plugin-proposal-function-sent',
     '@babel/plugin-proposal-export-namespace-from',
     '@babel/plugin-proposal-numeric-separator',
