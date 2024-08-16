@@ -51,8 +51,8 @@ module.exports = (akfunConfig) => {
     devtool: curEnvConfig.productionSourceMap ? curEnvConfig.devtool || 'eval-source-map' : 'eval', // 开发环境
     optimization: {
       chunkIds: 'named', // named 对调试更友好的可读的 id。
-      emitOnErrors: true,
-      minimize: false
+      emitOnErrors: true
+      // minimize: false
     },
     plugins: [
       // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
