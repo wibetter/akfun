@@ -31,6 +31,7 @@ module.exports = function (fileName, akfunConfig) {
   const curConfig = akfunConfig || projectConfig;
   const build2esm = curConfig.build2esm || {};
   const curWebpackConfig = curConfig.webpack || {};
+  const buildType = build2esm.type || 'ts';
   // 获取用户配置的构建入口文件
   let rollupInput = resolveToCurrentRoot('src/main.js');
   if (build2esm.input) {
@@ -70,9 +71,10 @@ module.exports = function (fileName, akfunConfig) {
       nodeResolve({
         extensions: curConfig.webpack.resolve.extensions
       }),
-      typescript(),
+      buildType === 'ts' ? typescript() : undefined,
       babel(babelConfig), // 备注，需要先babel()再commjs()
       // jsx( {factory: 'React.createElement'} ),
+      buildType === 'ts' ? jsx( {factory: 'React.createElement'} ) : undefined,
       vue(),
       commonjs(),
       postcss({
