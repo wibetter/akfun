@@ -50,7 +50,7 @@ module.exports = function (akfunConfig, _consoleTag) {
   // 获取开发环境的webpack基本配置
   const webpackConfig = getDevWebpackConfig(config);
 
-    // Define HTTP proxies to your custom API backend
+  // Define HTTP proxies to your custom API backend
   // https://github.com/chimurai/http-proxy-middleware
   // 使用 config.dev.proxyTable 的配置作为 proxyTable 的代理配置
   // 备注：需放connect-history-api-fallback前面，避免get请求的代理失效
