@@ -50,6 +50,23 @@ module.exports = function (akfunConfig, _consoleTag) {
   // 获取开发环境的webpack基本配置
   const webpackConfig = getDevWebpackConfig(config);
 
+    // Define HTTP proxies to your custom API backend
+  // https://github.com/chimurai/http-proxy-middleware
+  // 使用 config.dev.proxyTable 的配置作为 proxyTable 的代理配置
+  // 备注：需放connect-history-api-fallback前面，避免get请求的代理失效
+  const proxyTable = config.dev.proxyTable;
+  if (proxyTable && JSON.stringify(proxyTable) !== '{}') {
+    // 将 proxyTable 中的请求配置挂在到启动的 express 服务上
+    // proxy api requests
+    Object.keys(proxyTable).forEach((context) => {
+      let options = proxyTable[context];
+      if (typeof options === 'string') {
+        options = { target: options };
+      }
+      app.use(context, createProxyMiddleware(options));
+    });
+  }
+
   // 使用 connect-history-api-fallback 匹配资源，如果不匹配就可以重定向到指定地址
   // handle fallback for HTML5 history API
   // 备注：需放express.static前面，避免失效
@@ -80,22 +97,6 @@ module.exports = function (akfunConfig, _consoleTag) {
   // enable hot-reload and state-preserving
   // compilation error display
   app.use(hotMiddleware);
-
-  // Define HTTP proxies to your custom API backend
-  // https://github.com/chimurai/http-proxy-middleware
-  // 使用 config.dev.proxyTable 的配置作为 proxyTable 的代理配置
-  const proxyTable = config.dev.proxyTable;
-  if (proxyTable && JSON.stringify(proxyTable) !== '{}') {
-    // 将 proxyTable 中的请求配置挂在到启动的 express 服务上
-    // proxy api requests
-    Object.keys(proxyTable).forEach((context) => {
-      let options = proxyTable[context];
-      if (typeof options === 'string') {
-        options = { target: options };
-      }
-      app.use(context, createProxyMiddleware(options));
-    });
-  }
 
   const afterCreateServerAction = (isHttps, port) => {
     spinner.succeed(`${consoleTag}调试模式已开启！`);
