@@ -1,7 +1,6 @@
 /*
   获取执行命令中的指定参数值
 */
-
 function catchProcessParam(paramKey) {
   const argv = process.argv;
   let paramVal = '';

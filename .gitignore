@@ -41,6 +41,7 @@ node_modules/
 jscoverage_lib/
 temp/
 test/
+dist/
 package-lock.json
 
 # log files

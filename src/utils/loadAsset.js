@@ -1,3 +1,6 @@
+// 空函数
+export function noop() {}
+
 /**
  * 加载远程 JS脚本
  * @param JsSrc: js脚本地址

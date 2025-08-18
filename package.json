@@ -162,7 +162,9 @@
     "webpack-hot-middleware": "^2.25.1",
     "webpack-merge": "^5.8.0",
     "webpack-node-externals": "^3.0.0",
-    "yargs": "^12.0.5"
+    "yargs": "^12.0.5",
+    "@baiducloud/sdk": "^1.0.7",
+    "ali-oss": "^6.17.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",

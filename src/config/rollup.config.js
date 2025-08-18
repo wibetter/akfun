@@ -74,7 +74,7 @@ module.exports = function (fileName, akfunConfig) {
       buildType === 'ts' ? typescript() : undefined,
       babel(babelConfig), // 备注，需要先babel()再commjs()
       // jsx( {factory: 'React.createElement'} ),
-      buildType === 'ts' ? jsx( {factory: 'React.createElement'} ) : undefined,
+      buildType === 'ts' ? jsx({ factory: 'React.createElement' }) : undefined,
       vue(),
       commonjs(),
       postcss({
