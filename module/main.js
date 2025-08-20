@@ -9,6 +9,8 @@ const {resolve} = require('../src/utils/pathUtils');
 const getConfigObj = require('../src/utils/getConfigObj');
 const deepMergeConfig = require('../src/utils/deepMergeConfig');
 const getCurWebpackConfig = require('../src/utils/getCurWebpackConfig.js'); // 用于获取当前webpack配置的方法
+const aliBOS = require('../src/oss/aliBos.js');
+const baiduBOS = require('../src/oss/baiduBos.js');
 
 module.exports = {
   dev: devAction,
@@ -22,4 +24,6 @@ module.exports = {
   deepMergeConfig,
   getCurWebpackConfig,
   curWebpackBaseConfPath: getCurWebpackConfig('base'),
+  aliBOS,
+  baiduBOS
 };

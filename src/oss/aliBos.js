@@ -3,7 +3,7 @@
  */
 const BosClient = require('ali-oss');
 
-class BOSFileStorage {
+class aliBOS {
   constructor(endpoint, region, bucket, accessKeyId, accessKeySecret) {
     this.endpoint = endpoint;
     this.region = region;
@@ -75,4 +75,4 @@ class BOSFileStorage {
   }
 }
 
-module.exports = BOSFileStorage;
+module.exports = aliBOS;

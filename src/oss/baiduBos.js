@@ -3,7 +3,7 @@
  */
 const { BosClient } = require('@baiducloud/sdk');
 
-class BOSFileStorage {
+class baiduBOS {
   constructor(endpoint, bucket, ak, sk) {
     this.endpoint = endpoint;
     this.bucket = bucket;
@@ -84,4 +84,4 @@ class BOSFileStorage {
   }
 }
 
-module.exports = BOSFileStorage;
+module.exports = baiduBOS;
