@@ -1,6 +1,6 @@
 {
   "name": "akfun",
-  "version": "5.1.2",
+  "version": "5.1.3",
   "description": "前端脚手架：支持Vue技术栈和react技术栈",
   "keywords": [
     "前端工程",
@@ -116,6 +116,7 @@
     "html-webpack-plugin": "^5.5.0",
     "http-proxy-middleware": "^2.0.2",
     "inquirer": "^8.2.0",
+    "rollup-plugin-jsx": "^1.0.3",
     "mini-css-extract-plugin": "^2.5.3",
     "open": "^8.4.0",
     "ora": "^4.0.4",

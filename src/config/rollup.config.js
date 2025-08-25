@@ -1,7 +1,7 @@
 // rollup.config.js
 const { babel } = require('@rollup/plugin-babel');
 const { nodeResolve } = require('@rollup/plugin-node-resolve'); // 支持node中的文件导入
-// const jsx = require('rollup-plugin-jsx'); // 用于处理jsx
+const jsx = require('rollup-plugin-jsx'); // 用于处理jsx
 const typescript = require('@rollup/plugin-typescript'); // 支持ts
 const commonjs = require('@rollup/plugin-commonjs'); // 识别cmd模块
 const vue = require('rollup-plugin-vue');
@@ -74,7 +74,7 @@ module.exports = function (fileName, akfunConfig) {
       buildType === 'ts' ? typescript() : undefined,
       babel(babelConfig), // 备注，需要先babel()再commjs()
       // jsx( {factory: 'React.createElement'} ),
-      buildType === 'ts' ? jsx({ factory: 'React.createElement' }) : undefined,
+      buildType === 'ts' ? undefined : jsx({ factory: 'React.createElement' }),
       vue(),
       commonjs(),
       postcss({
