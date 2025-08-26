@@ -2,9 +2,9 @@ const webpack = require('webpack');
 const path = require('path');
 const { merge } = require('webpack-merge');
 const utils = require('./loaderUtils');
+const getBaseWebpackConfig = require('./webpack.base.conf'); // 获取webpack基本配置
 // 引入当前项目配置文件
 const projectConfig = require('../config/index');
-const getBaseWebpackConfig = require('./webpack.base.conf');
 const entrys2htmlWebpackPlugin = require('../utils/entrys2htmlWebpackPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
@@ -39,6 +39,7 @@ module.exports = (akfunConfig) => {
     },
     module: {
       rules: utils.styleLoaders({
+        envConfig: curEnvConfig, // 当前环境变量
         sourceMap: curEnvConfig.cssSourceMap,
         environment: 'prod', // 'dev': 不会将css单独提取出来
         cssLoaderUrl: config.webpack.cssLoaderUrl,
@@ -56,15 +57,21 @@ module.exports = (akfunConfig) => {
     },
     plugins: [
       // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
-      new webpack.HotModuleReplacementPlugin(),
+      new webpack.HotModuleReplacementPlugin()
+    ]
+  });
+
+  // 支持 cssExtract 配置
+  if (curEnvConfig.cssExtract || curEnvConfig.cssExtract === undefined) {
+    webpackDevConfig.plugins.push(
       new MiniCssExtractPlugin({
         // filename: utils.assetsPath('index.css'),
         filename: '[name].css',
         chunkFilename: '[name].css',
         ignoreOrder: false
       })
-    ]
-  });
+    );
+  }
 
   if (!webpackDevConfig.closeHtmlWebpackPlugin) {
     // 使用用户自定义的多入口配置，生产对应的多页面多模板（优先使用用户的自定义页面模板）

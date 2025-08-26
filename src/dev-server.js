@@ -21,28 +21,29 @@ module.exports = function (akfunConfig, _consoleTag) {
   const consoleTag = _consoleTag || curConsoleTag;
   let config = projectConfig; // 默认使用执行命令目录下的配置数据
   if (akfunConfig) {
-    // 参数中的config配置优先级最高
+    // 优先使用参数中的config配置
     config = deepMergeConfig(defaultConfig, akfunConfig);
   }
+  const curEnvConfig = config.dev;
   // 检查当前npm版本号是否匹配
   checkVersion();
   const spinner = ora(`${consoleTag}开启调试模式...`).start();
   /**
    * 如果 Node 的环境无法判断当前是 dev / product 环境
-   * 使用 config.dev.NODE_ENV 作为当前的环境
+   * 使用 curEnvConfig.NODE_ENV 作为当前的环境
    */
   if (!process.NODE_ENV) {
-    process.NODE_ENV = config.dev.NODE_ENV;
+    process.NODE_ENV = curEnvConfig.NODE_ENV;
     // 此时process.NODE_ENV = ‘development’;
   }
 
   // default port where dev server listens for incoming traffic
-  // 如果没有指定运行端口，使用 config.dev.port 作为运行端口
-  const port = process.env.PORT || config.dev.port;
+  // 如果没有指定运行端口，使用 curEnvConfig.port 作为运行端口
+  const port = process.env.PORT || curEnvConfig.port;
 
   // automatically open browser, if not set will be false
   // 是否自动打开浏览器
-  const autoOpenBrowser = !!config.dev.autoOpenBrowser;
+  const autoOpenBrowser = !!curEnvConfig.autoOpenBrowser;
 
   // 使用 express 启动一个服务
   const app = express();
@@ -52,9 +53,9 @@ module.exports = function (akfunConfig, _consoleTag) {
 
   // Define HTTP proxies to your custom API backend
   // https://github.com/chimurai/http-proxy-middleware
-  // 使用 config.dev.proxyTable 的配置作为 proxyTable 的代理配置
+  // 使用 curEnvConfig.proxyTable 的配置作为 proxyTable 的代理配置
   // 备注：需放connect-history-api-fallback前面，避免get请求的代理失效
-  const proxyTable = config.dev.proxyTable;
+  const proxyTable = curEnvConfig.proxyTable;
   if (proxyTable && JSON.stringify(proxyTable) !== '{}') {
     // 将 proxyTable 中的请求配置挂在到启动的 express 服务上
     // proxy api requests
@@ -74,7 +75,10 @@ module.exports = function (akfunConfig, _consoleTag) {
 
   // serve pure public assets
   // 拼接 public 文件夹的静态资源路径
-  const staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory);
+  const staticPath = path.posix.join(
+    curEnvConfig.assetsPublicPath,
+    curEnvConfig.assetsSubDirectory
+  );
   app.use(staticPath, express.static(resolve('public')));
 
   const compiler = webpack(webpackConfig); // 启动 webpack 进行编译
@@ -104,8 +108,8 @@ module.exports = function (akfunConfig, _consoleTag) {
     process.env.PORT = port;
 
     const uri = isHttps
-      ? `https://${config.dev.hostname}`
-      : `http://${config.dev.hostname}:${port}`;
+      ? `https://${curEnvConfig.hostname}`
+      : `http://${curEnvConfig.hostname}:${port}`;
 
     console.log(`> Listening at ${uri}\n`);
 
@@ -117,17 +121,23 @@ module.exports = function (akfunConfig, _consoleTag) {
     if (entryFiles.length > 0) {
       // 获取第一个入口文件
       const filename = entryFiles[0];
-      console.info(
-        `当前运行脚本:\n ${projPath}${filename}.js\n当前运行样式[可能不存在]:\n${projPath}${filename}.css`
-      );
+      const consoleInfo = curEnvConfig.consoleInfo || '当前运行脚本';
+
+      if (curEnvConfig.cssExtract || curEnvConfig.cssExtract === undefined) {
+        console.info(
+          `${consoleInfo}:\n ${projPath}${filename}.js\n当前可用样式[可能不存在]:\n${projPath}${filename}.css`
+        );
+      } else {
+        console.info(`${consoleInfo}:\n ${projPath}${filename}.js`);
+      }
       // 是否自动打开浏览器并跳转到第一个入口页面
-      if (!config.dev.closeHtmlWebpackPlugin && autoOpenBrowser) {
+      if (!curEnvConfig.closeHtmlWebpackPlugin && autoOpenBrowser) {
         open(`${projPath}${filename}.html`, { wait: true });
       }
     }
   };
 
-  if (config.dev.https) {
+  if (curEnvConfig.https) {
     const sslOptions = {
       key: fs.readFileSync(path.resolve(__dirname, './ssl/localhost.key')),
       cert: fs.readFileSync(path.resolve(__dirname, './ssl/localhost.cert')),

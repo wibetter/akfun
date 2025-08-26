@@ -71,15 +71,19 @@ exports.cssLoaders = function (options) {
     let loaders = [];
     // 生产环境使用MiniCssExtractPlugin提取css内容，用于提取css内容到一个独立的文件中
     if (options.environment === 'prod') {
-      // MiniCssExtractPlugin.loader需要配合MiniCssExtractPlugin使用
+      const curEnvConfig = options.envConfig || {};
+      const cssExtract = curEnvConfig.cssExtract || curEnvConfig.cssExtract === undefined;
+      // MiniCssExtractPlugin.loader 需要配合 MiniCssExtractPlugin 使用
       loaders = [
         VueCssLoader,
-        {
-          loader: MiniCssExtractPlugin.loader,
-          options: {
-            esModule: false // enable a CommonJS syntax using
-          }
-        },
+        cssExtract
+          ? {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                esModule: false // enable a CommonJS syntax using
+              }
+            }
+          : undefined,
         cssLoader,
         postCssLoader
       ];

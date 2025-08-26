@@ -15,6 +15,11 @@ const entrys2htmlWebpackPlugin = require('../utils/entrys2htmlWebpackPlugin');
 const projectConfig = require('../config/index');
 const getBaseWebpackConfig = require('./webpack.base.conf');
 
+/**
+ * 生产环境 webpack 配置，用于构建生产环境可运行的代码（构建后的脚本会注入到 html 中）
+ * @param {*} akfunConfig 当前项目配置
+ * @returns
+ */
 module.exports = (akfunConfig) => {
   let config = akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据
   const curEnvConfig = config.build || {}; // 当前执行环境配置
@@ -50,6 +55,7 @@ module.exports = (akfunConfig) => {
     },
     module: {
       rules: utils.styleLoaders({
+        envConfig: curEnvConfig, // 当前环境变量
         sourceMap: curEnvConfig.productionSourceMap,
         environment: 'prod',
         cssLoaderUrl: config.webpack.cssLoaderUrl,
@@ -87,22 +93,7 @@ module.exports = (akfunConfig) => {
         new CssMinimizerPlugin()
       ]
     },
-    plugins: [
-      new MiniCssExtractPlugin({
-        filename: utils.assetsPath('css/[name].[contenthash:8].css'),
-        ignoreOrder: false // Enable to remove warnings about conflicting order
-      })
-      // Compress extracted CSS. We are using this plugin so that possible
-      // duplicated CSS from different components can be deduped.
-      /**
-       * 该插件可以接收以下选项（它们都是可选的）：
-       * assetNameRegExp：表示应优化的资产的名称的正则表达式\最小化，默认为 /\.css$/g
-       * cssProcessor：用于优化\最小化CSS的CSS处理器，默认为cssnano。
-       * 这应该是cssnano.process接口之后的一个函数（接收一个CSS和options参数并返回一个Promise）。
-       * cssProcessorOptions：传递给cssProcessor的选项，默认为 {}
-       * canPrint：一个布尔值，指示插件是否可以将消息打印到控制台，默认为 true
-       */
-    ]
+    plugins: []
   });
 
   // 使用用户自定义的多入口配置，生产对应的多页面多模板
@@ -138,6 +129,26 @@ module.exports = (akfunConfig) => {
         minRatio: 0.8
       })
     );
+  }
+
+  // 支持 cssExtract 配置
+  if (curEnvConfig.cssExtract || curEnvConfig.cssExtract === undefined) {
+    webpackProdConfig.plugins.push(
+      new MiniCssExtractPlugin({
+        filename: utils.assetsPath('css/[name].[contenthash:8].css'),
+        ignoreOrder: false // Enable to remove warnings about conflicting order
+      })
+    );
+    // Compress extracted CSS. We are using this plugin so that possible
+    // duplicated CSS from different components can be deduped.
+    /**
+     * MiniCssExtractPlugin 插件可以接收以下选项（它们都是可选的）：
+     * assetNameRegExp：表示应优化的资产的名称的正则表达式\最小化，默认为 /\.css$/g
+     * cssProcessor：用于优化\最小化CSS的CSS处理器，默认为cssnano。
+     * 这应该是cssnano.process接口之后的一个函数（接收一个CSS和options参数并返回一个Promise）。
+     * cssProcessorOptions：传递给cssProcessor的选项，默认为 {}
+     * canPrint：一个布尔值，指示插件是否可以将消息打印到控制台，默认为 true
+     */
   }
 
   // 判断当前环境是否有自定义plugins

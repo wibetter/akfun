@@ -35,6 +35,7 @@ const BannerPack = new webpack.BannerPlugin({
 module.exports = (_curEnvConfig, _akfunConfig) => {
   const curEnvConfig = _curEnvConfig || {}; // 用于接收当前运行环境配置变量
   let config = _akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据
+  // 获取当前项目配置文件中的webpack配置
   const curWebpackConfig = config.webpack;
   // 获取当前项目目录
   const curProjectDir = getProjectDir(curWebpackConfig.projectDir);
@@ -75,12 +76,12 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
     resolve: curWebpackConfig.resolve,
     externals: curWebpackConfig.ignoreNodeModules
       ? [
-        nodeExternals({
-          importType: 'commonjs',
-          additionalModuleDirs: curWebpackConfig.additionalModuleDirs || [],
-          allowlist: curWebpackConfig.allowList ? curWebpackConfig.allowList : []
-        })
-      ].concat(curWebpackConfig.externals)
+          nodeExternals({
+            importType: 'commonjs',
+            additionalModuleDirs: curWebpackConfig.additionalModuleDirs || [],
+            allowlist: curWebpackConfig.allowList ? curWebpackConfig.allowList : []
+          })
+        ].concat(curWebpackConfig.externals)
       : curWebpackConfig.externals,
     module: {
       rules: [
@@ -89,7 +90,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
           use: [
             {
               loader: 'vue-loader',
-              options: vueLoaderConfig // 配置vue-loader相关的loader插件
+              options: vueLoaderConfig(curEnvConfig) // 配置vue-loader相关的loader插件
             }
           ]
         },
@@ -130,7 +131,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
           // 图片资源
           /*
             url-loader 功能类似于 file-loader，在文件大小（单位 byte）低于指定的限制时，可以返回一个 DataURL。
-           */
+          */
           test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
           type: 'asset',
           issuer: /\.s?css$/,
@@ -213,12 +214,13 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
     const externals = curEnvConfig.externals || curWebpackConfig.external || [];
     webpackConfig.externals = curEnvConfig.ignoreNodeModules
       ? [
-        nodeExternals({
-          importType: 'commonjs',
-          additionalModuleDirs: curEnvConfig.additionalModuleDirs || curWebpackConfig.additionalModuleDirs || [],
-          allowlist: allowList || []
-        })
-      ].concat(externals)
+          nodeExternals({
+            importType: 'commonjs',
+            additionalModuleDirs:
+              curEnvConfig.additionalModuleDirs || curWebpackConfig.additionalModuleDirs || [],
+            allowlist: allowList || []
+          })
+        ].concat(externals)
       : externals;
   }
   // 集成构建入口相关的配置（优先级更高）

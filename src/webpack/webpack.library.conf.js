@@ -10,6 +10,11 @@ const utils = require('./loaderUtils');
 const projectConfig = require('../config/index');
 const getBaseWebpackConfig = require('./webpack.base.conf');
 
+/**
+ * 第三方库 webpack 配置，用于构建第三方库（仅构建可用的 umd 模块，其构建产物不会注入到 html 中）
+ * @param {*} akfunConfig 当前项目配置
+ * @returns
+ */
 module.exports = (akfunConfig) => {
   let config = akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据
   const curEnvConfig = config.build2lib || {}; // 当前执行环境配置
@@ -29,7 +34,7 @@ module.exports = (akfunConfig) => {
       filename: '[name].umd.js',
       publicPath: '',
       library: {
-        type: 'umd', // 定义打包方式Universal Module Definition,同时支持在CommonJS、AMD和全局变量使用
+        type: 'umd', // 定义打包方式Universal Module Definition，同时支持在CommonJS、AMD和全局变量使用
         name: curEnvConfig.libraryName || '[name]'
       },
       // 指定类库名,主要用于直接引用的方式(比如使用script 标签)
@@ -37,6 +42,7 @@ module.exports = (akfunConfig) => {
     },
     module: {
       rules: utils.styleLoaders({
+        envConfig: curEnvConfig, // 当前环境变量
         sourceMap: curEnvConfig.productionSourceMap,
         environment: 'prod',
         cssLoaderUrl: config.webpack.cssLoaderUrl,
@@ -60,14 +66,7 @@ module.exports = (akfunConfig) => {
         new CssMinimizerPlugin()
       ]
     },
-    plugins: [
-      new MiniCssExtractPlugin({
-        // filename: utils.assetsPath('index.css'),
-        filename: '[name].css',
-        chunkFilename: '[name].css',
-        ignoreOrder: false
-      })
-    ]
+    plugins: []
   });
 
   // 优先使用当前环境配置中的output
@@ -84,6 +83,18 @@ module.exports = (akfunConfig) => {
         algorithm: 'gzip',
         threshold: 240,
         minRatio: 0.8
+      })
+    );
+  }
+
+  // 支持 cssExtract 配置
+  if (curEnvConfig.cssExtract || curEnvConfig.cssExtract === undefined) {
+    webpackLibConfig.plugins.push(
+      new MiniCssExtractPlugin({
+        // filename: utils.assetsPath('index.css'),
+        filename: '[name].css',
+        chunkFilename: '[name].css',
+        ignoreOrder: false
       })
     );
   }
