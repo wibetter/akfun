@@ -10,7 +10,7 @@ const defaultConfig = require('./config/default.config');
 const deepMergeConfig = require('./utils/deepMergeConfig');
 
 // 构建脚本：一般用于构建生产环境的代码
-module.exports = function (BuildType, akfunConfig, _consoleTag) {
+module.exports = function (BuildType, akfunConfig, _consoleTag, callbackFunc) {
   const consoleTag = _consoleTag || curConsoleTag;
   let config = projectConfig; // 默认使用执行命令目录下的配置数据
   if (akfunConfig) {
@@ -62,6 +62,11 @@ module.exports = function (BuildType, akfunConfig, _consoleTag) {
       }
 
       console.log(chalk.cyan('  构建完成.\n'));
+
+      // 如果用户传入了回调函数，则执行回调函数
+      if (callbackFunc) {
+        callbackFunc(curEnvConfig);
+      }
     });
   });
 };

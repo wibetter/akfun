@@ -12,10 +12,7 @@ const fileExists = function (fileDir) {
 module.exports = function (currentConfigDir) {
   let currentConfig = {};
   if (fileExists(currentConfigDir)) {
-    const configObj = require(currentConfigDir);
-    if (configObj) {
-      currentConfig = configObj;
-    }
+    currentConfig = require(currentConfigDir);
   }
   return currentConfig;
 };
