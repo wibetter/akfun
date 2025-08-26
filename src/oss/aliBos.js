@@ -4,9 +4,9 @@
 const BosClient = require('ali-oss');
 
 class aliBOS {
-  constructor(endpoint, region, bucket, accessKeyId, accessKeySecret) {
+  constructor(endpoint, bucket, accessKeyId, accessKeySecret) {
     this.endpoint = endpoint;
-    this.region = region;
+    // this.region = region;
     this.bucket = bucket;
     this.accessKeyId = accessKeyId;
     this.accessKeySecret = accessKeySecret;
