@@ -96,12 +96,17 @@ module.exports = (akfunConfig) => {
     plugins: []
   });
 
-  // 使用用户自定义的多入口配置，生产对应的多页面多模板
-  const htmlWebpackPluginList = entrys2htmlWebpackPlugin(webpackProdConfig.entry, curHtmlTemplate);
+  if (!curEnvConfig.closeHtmlWebpackPlugin) {
+    // 使用用户自定义的多入口配置，生产对应的多页面多模板
+    const htmlWebpackPluginList = entrys2htmlWebpackPlugin(
+      webpackProdConfig.entry,
+      curHtmlTemplate
+    );
 
-  htmlWebpackPluginList.forEach((htmlWebpackPlugin) => {
-    webpackProdConfig.plugins.push(htmlWebpackPlugin);
-  });
+    htmlWebpackPluginList.forEach((htmlWebpackPlugin) => {
+      webpackProdConfig.plugins.push(htmlWebpackPlugin);
+    });
+  }
 
   // 判断是否有public目录，如果有需要转移到dist目录下
   if (fs.existsSync(resolve('public'))) {
