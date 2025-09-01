@@ -58,6 +58,10 @@ module.exports = (akfunConfig) => {
        *  deterministic 在不同的编译中不变的短数字 id。有益于长期缓存。在生产模式中会默认开启。
        */
       chunkIds: 'named',
+      /**
+       * 当 optimization.splitChunks 未配置或设置为 false 时，
+       * webpack 会将所有模块打包到一个 JS 文件中（除了异步加载的模块）。
+       */
       emitOnErrors: true,
       // minimize: true,
       minimizer: [
