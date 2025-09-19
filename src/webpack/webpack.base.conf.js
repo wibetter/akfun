@@ -18,7 +18,7 @@ const projectConfig = require('../config/index');
 const babelConfig = require('../config/babel.config'); // Babel的配置文件
 const { buildBanner } = require('../utils/akfunParams');
 const getJsEntries = require('../utils/jsEntries');
-const { isArray, isFunction } = require('../utils/typeof');
+const { isArray, isFunction, isObject } = require('../utils/typeof');
 
 // 生成构建头部信息
 const BannerPack = new webpack.BannerPlugin({
@@ -29,7 +29,7 @@ const BannerPack = new webpack.BannerPlugin({
 /**
  * webpack.base.conf.js
  * 主要用于设置 rules 和 通用插件
- * _curEnvConfig: 执行环境中的配置，比如：dev、build、build2lib等；
+ * _curEnvConfig: 执行环境中的配置，用于记录 dev、build、build2lib 等对应的配置内容；
  * _akfunConfig：完整的配置对象
  */
 module.exports = (_curEnvConfig, _akfunConfig) => {
@@ -74,15 +74,7 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
      * 当webpack试图去加载模块的时候，它默认是查找以 .js 结尾的文件的
      */
     resolve: curWebpackConfig.resolve,
-    externals: curWebpackConfig.ignoreNodeModules
-      ? [
-          nodeExternals({
-            importType: 'commonjs',
-            additionalModuleDirs: curWebpackConfig.additionalModuleDirs || [],
-            allowlist: curWebpackConfig.allowList ? curWebpackConfig.allowList : []
-          })
-        ].concat(curWebpackConfig.externals)
-      : curWebpackConfig.externals,
+    externals: {},
     module: {
       rules: [
         {
@@ -208,28 +200,43 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
       new ProgressBarPlugin()
     ]
   };
+
+  let ignoreNodeModules = curWebpackConfig.ignoreNodeModules;
   // 优先使用执行环境中的配置
   if (curEnvConfig.ignoreNodeModules !== undefined) {
-    const allowList = curEnvConfig.allowList || curWebpackConfig.allowList;
-    const externals = curEnvConfig.externals || curWebpackConfig.external || [];
-    webpackConfig.externals = curEnvConfig.ignoreNodeModules
-      ? [
-          nodeExternals({
-            importType: 'commonjs',
-            additionalModuleDirs:
-              curEnvConfig.additionalModuleDirs || curWebpackConfig.additionalModuleDirs || [],
-            allowlist: allowList || []
-          })
-        ].concat(externals)
-      : externals;
+    ignoreNodeModules = curEnvConfig.ignoreNodeModules;
   }
+
+  // allowList 需要开启 ignoreNodeModules 后有效
+  let allowList = curWebpackConfig.allowList || [];
+  if (curEnvConfig.allowList) {
+    allowList = allowList.concat(curEnvConfig.allowList);
+  }
+  // 用户手动添加要剔除的依赖
+  let externals = curWebpackConfig.external || {};
+  if (curEnvConfig.externals && isObject(curEnvConfig.externals)) {
+    externals = Object.assign(externals, curEnvConfig.externals);
+  }
+
+  // 设置要剔除的依赖
+  webpackConfig.externals = ignoreNodeModules
+    ? [
+        nodeExternals({
+          importType: 'commonjs',
+          additionalModuleDirs:
+            curEnvConfig.additionalModuleDirs || curWebpackConfig.additionalModuleDirs || [],
+          allowlist: allowList || []
+        })
+      ].concat(externals)
+    : externals;
+
   // 集成构建入口相关的配置（优先级更高）
   if (curEnvConfig.entry) {
     webpackConfig.entry = curEnvConfig.entry; // 会覆盖config.webpack.entry的配置
   }
   // 多页面多模板支持能力
   let entryConfig = webpackConfig.entry || {}; // 获取构建入口配置
-  const entryFiles = (entryConfig && Object.keys(entryConfig)) || [];
+  const entryFiles = Object.keys(entryConfig);
 
   if (
     !webpackConfig.entry ||

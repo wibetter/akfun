@@ -92,15 +92,17 @@ module.exports = function (akfunConfig, _consoleTag) {
   // serve webpack bundle output
   app.use(devMiddleware);
 
-  // 启动 webpack-hot-middleware，也就是我们常说的 Hot-reload
-  const hotMiddleware = require('webpack-hot-middleware')(compiler, {
-    log: false,
-    heartbeat: 2000
-  });
+  if (!curEnvConfig.closeHotReload) {
+    // 启动 webpack-hot-middleware，也就是我们常说的 Hot-reload
+    const hotMiddleware = require('webpack-hot-middleware')(compiler, {
+      log: false,
+      heartbeat: 2000
+    });
 
-  // enable hot-reload and state-preserving
-  // compilation error display
-  app.use(hotMiddleware);
+    // enable hot-reload and state-preserving
+    // compilation error display
+    app.use(hotMiddleware);
+  }
 
   const afterCreateServerAction = (isHttps, port) => {
     spinner.succeed(`${consoleTag}调试模式已开启！`);

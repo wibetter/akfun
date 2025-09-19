@@ -81,10 +81,10 @@ module.exports = (akfunConfig) => {
     });
   }
 
-  // 开启热更新能力
-  const devClientPath = path.resolve(__dirname, '../dev-client'); // 从akfun中获取
-  // add hot-reload related code to entry chunks
   if (!curEnvConfig.closeHotReload && webpackDevConfig.entry) {
+    // 开启热更新能力
+    const devClientPath = path.resolve(__dirname, '../dev-client'); // 从akfun中获取
+    // add hot-reload related code to entry chunks
     Object.keys(webpackDevConfig.entry).forEach((name) => {
       webpackDevConfig.entry[name] = [devClientPath].concat(webpackDevConfig.entry[name]);
     });
