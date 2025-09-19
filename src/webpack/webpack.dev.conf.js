@@ -55,11 +55,23 @@ module.exports = (akfunConfig) => {
       emitOnErrors: true
       // minimize: false
     },
-    plugins: [
-      // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
-      new webpack.HotModuleReplacementPlugin()
-    ]
+    plugins: []
   });
+
+  if (!curEnvConfig.closeHotReload) {
+    // 开启热更新能力
+    // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
+    webpackDevConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+
+    // 所有入口文件添加 热更新入口文件
+    if (webpackDevConfig.entry) {
+      const devClientPath = path.resolve(__dirname, '../dev-client'); // 从 akfun 中获取
+      // add hot-reload related code to entry chunks
+      Object.keys(webpackDevConfig.entry).forEach((name) => {
+        webpackDevConfig.entry[name] = [devClientPath].concat(webpackDevConfig.entry[name]);
+      });
+    }
+  }
 
   // 支持 cssExtract 配置
   if (curEnvConfig.cssExtract || curEnvConfig.cssExtract === undefined) {
@@ -78,15 +90,6 @@ module.exports = (akfunConfig) => {
     const htmlWebpackPluginList = entrys2htmlWebpackPlugin(webpackDevConfig.entry, curHtmlTemplate);
     htmlWebpackPluginList.forEach((htmlWebpackPlugin) => {
       webpackDevConfig.plugins.push(htmlWebpackPlugin);
-    });
-  }
-
-  if (!curEnvConfig.closeHotReload && webpackDevConfig.entry) {
-    // 开启热更新能力
-    const devClientPath = path.resolve(__dirname, '../dev-client'); // 从akfun中获取
-    // add hot-reload related code to entry chunks
-    Object.keys(webpackDevConfig.entry).forEach((name) => {
-      webpackDevConfig.entry[name] = [devClientPath].concat(webpackDevConfig.entry[name]);
     });
   }
 

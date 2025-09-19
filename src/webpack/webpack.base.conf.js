@@ -70,6 +70,10 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
     output: {
       filename: '[name].js'
     },
+    watchOptions: {
+      ignored: /node_modules|\.git/, // 忽略 node_modules 和 .git
+      aggregateTimeout: 300 // 文件变化后延迟编译的时间(ms)
+    },
     /**
      * 当webpack试图去加载模块的时候，它默认是查找以 .js 结尾的文件的
      */
@@ -200,6 +204,11 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
       new ProgressBarPlugin()
     ]
   };
+
+  if (curEnvConfig.closeHotReload) {
+    // 关闭热更新，则忽略所有文件变化
+    webpackConfig.watchOptions.ignored = /.*/; // 忽略所有文件变化
+  }
 
   let ignoreNodeModules = curWebpackConfig.ignoreNodeModules;
   // 优先使用执行环境中的配置
