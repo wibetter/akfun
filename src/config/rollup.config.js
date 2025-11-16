@@ -71,7 +71,13 @@ module.exports = function (fileName, akfunConfig) {
       nodeResolve({
         extensions: curConfig.webpack.resolve.extensions
       }),
-      buildType === 'ts' ? typescript() : undefined,
+      buildType === 'ts'
+        ? typescript({
+            // 是否生成声明文件（默认 false）
+            declaration: build2esm.declaration !== undefined ? build2esm.declaration : false,
+            declarationDir: build2esm.declarationDir || './dist/types'
+          })
+        : undefined,
       babel(babelConfig), // 备注，需要先babel()再commjs()
       // jsx( {factory: 'React.createElement'} ),
       buildType === 'ts' ? undefined : jsx({ factory: 'React.createElement' }),
