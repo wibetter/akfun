@@ -6,8 +6,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const deepMergeConfig = require('../utils/deepMergeConfig');
 
 const utils = require('./loaderUtils');
-// 引入当前项目配置文件
-const projectConfig = require('../config/index');
+const getProjectConfig = require('../config/index'); // 用于获取当前项目配置文件
 const getBaseWebpackConfig = require('./webpack.base.conf');
 
 /**
@@ -16,14 +15,15 @@ const getBaseWebpackConfig = require('./webpack.base.conf');
  * @returns
  */
 module.exports = (akfunConfig) => {
-  let config = akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据
+  let config = akfunConfig || getProjectConfig(); // 优先使用外部传进来的项目配置
   const curEnvConfig = config.build2lib || {}; // 当前执行环境配置
   // 获取webpack基本配置
   const baseWebpackConfig = getBaseWebpackConfig(curEnvConfig, config, 'build2lib');
+  const curWebpackConfig = config.webpack || {};
 
   let curTarget = ['web', 'es5'];
-  if (config.webpack.target) {
-    curTarget = config.webpack.target; // akfun.config.js中的webpack配置
+  if (curWebpackConfig.target) {
+    curTarget = curWebpackConfig.target; // akfun.config.js中的webpack配置
   }
 
   const webpackLibConfig = merge(baseWebpackConfig, {
@@ -43,12 +43,7 @@ module.exports = (akfunConfig) => {
     module: {
       rules: utils.styleLoaders({
         envConfig: curEnvConfig, // 当前环境变量
-        sourceMap: curEnvConfig.productionSourceMap,
-        environment: 'prod',
-        cssLoaderUrl: config.webpack.cssLoaderUrl,
-        cssLoaderUrlDir: config.webpack.cssLoaderUrlDir,
-        cssLoaderOption: config.webpack.cssLoaderOption, // 用于自定义css-loader配置项（优先级最高）
-        postCssLoaderOption: config.webpack.postCssLoaderOption // 用于自定义postcss-loader配置项（优先级最高）
+        webpackConfig: curWebpackConfig // 当前webpack配置
       })
     },
     devtool: curEnvConfig.productionSourceMap ? curEnvConfig.devtool || 'source-map' : false, // 线上生成环境

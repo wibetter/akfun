@@ -203,7 +203,6 @@ class ConfigValidator {
    */
   _validateDev(dev) {
     if (!dev) {
-      this.errors.push('dev 配置缺失');
       return;
     }
 
@@ -245,7 +244,6 @@ class ConfigValidator {
    */
   _validateBuild(build) {
     if (!build) {
-      this.errors.push('build 配置缺失');
       return;
     }
 
@@ -379,9 +377,9 @@ class ConfigValidator {
       return;
     }
 
-    if (portNum < 1024 && process.platform !== 'win32') {
+    if (portNum < 1024 && process.platform === 'win32') {
       this.warnings.push(
-        `${fieldName} (${portNum}) 小于 1024，在非 Windows 系统上可能需要管理员权限`
+        `${fieldName} (${portNum}) 小于 1024，在 Windows 系统上可能需要管理员权限。`
       );
     }
   }

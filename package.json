@@ -1,6 +1,6 @@
 {
   "name": "akfun",
-  "version": "6.0.0",
+  "version": "5.1.21",
   "description": "前端脚手架：支持Vue技术栈和react技术栈",
   "keywords": [
     "前端工程",
@@ -51,6 +51,7 @@
   "dependencies": {
     "@babel/cli": "^7.17.0",
     "@babel/core": "^7.17.0",
+    "@babel/polyfill": "^7.10.1",
     "@babel/eslint-parser": "^7.17.0",
     "@babel/plugin-proposal-class-properties": "^7.16.7",
     "@babel/plugin-proposal-decorators": "^7.17.0",
@@ -68,7 +69,7 @@
     "@babel/preset-typescript": "^7.16.7",
     "@babel/register": "^7.17.0",
     "@mapbox/stylelint-processor-arbitrary-tags": "^0.4.0",
-    "@rollup/plugin-alias": "^6.0.0",
+    "@rollup/plugin-alias": "^5.1.1",
     "@rollup/plugin-babel": "^6.1.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-image": "^3.0.3",
@@ -88,7 +89,6 @@
     "chalk": "^4.0.0",
     "compression-webpack-plugin": "^9.2.0",
     "connect-history-api-fallback": "^2.0.0",
-    "core-js": "^3.47.0",
     "copy-webpack-plugin": "^10.2.4",
     "css-loader": "^6.6.0",
     "css-minimizer-webpack-plugin": "^3.4.1",

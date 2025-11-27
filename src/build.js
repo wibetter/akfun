@@ -5,18 +5,13 @@ const chalk = require('chalk');
 const webpack = require('webpack');
 const { curConsoleTag } = require('./utils/akfunParams');
 const checkVersion = require('./check-versions');
-const projectConfig = require('./config/index'); // 引入当前项目配置文件
-const defaultConfig = require('./config/default.config');
-const deepMergeConfig = require('./utils/deepMergeConfig');
+const getProjectConfig = require('./config/index'); // 用于获取当前项目配置文件
 
 // 构建脚本：一般用于构建生产环境的代码
 module.exports = function (BuildType, akfunConfig, _consoleTag, callbackFunc) {
   const consoleTag = _consoleTag || curConsoleTag;
-  let config = projectConfig; // 默认使用执行命令目录下的配置数据
-  if (akfunConfig) {
-    // 参数中的config配置优先级最高
-    config = deepMergeConfig(defaultConfig, akfunConfig);
-  }
+  // 获取项目配置文件
+  let config = getProjectConfig(akfunConfig);
   let curEnvConfig = config.build;
   // 检查当前npm版本号是否匹配
   checkVersion();

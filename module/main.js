@@ -13,7 +13,7 @@ const aliBOS = require('../src/oss/aliBos.js');
 const baiduBOS = require('../src/oss/baiduBos.js');
 
 // 新增：配置管理和环境管理
-const configManager = require('../src/config/ConfigManager');
+const configManager = require('../src/manage/ConfigManager');
 const { validateConfig } = require('../src/utils/configValidator');
 
 module.exports = {

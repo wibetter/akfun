@@ -4,12 +4,12 @@ module.exports = {
       '@babel/preset-env',
       {
         loose: true,
-        modules: false, // 是否启用将ES6模块语法转换为其他模块类型的功能，当前设置为false，以便webpack进行tree shaking。
+        modules: false // 是否启用将ES6模块语法转换为其他模块类型的功能，当前设置为false，以便webpack进行tree shaking。
+        /*
+        备注：后续升级babel版本时，再启用此配置
         useBuiltIns: 'usage', // 按需引入 polyfill，替代 @babel/polyfill
         corejs: 3, // 使用 core-js 3.x 版本
-        targets: {
-          browsers: ['> 1%', 'last 2 versions', 'not ie <= 8']
-        }
+        */
       }
     ],
     ['@babel/preset-react'],

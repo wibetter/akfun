@@ -1,15 +1,10 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 替换extract-text-webpack-plugin
 // const ExtractTextPlugin = require('extract-text-webpack-plugin'); // 不支持webpack4.0
-// 引入当前项目配置文件
-const config = require('../config/index');
 const postCssConfig = require('../config/postcss.config'); // PostCss的配置文件
 
 exports.assetsPath = function (_path) {
-  const assetsSubDirectory =
-    process.NODE_ENV === 'production'
-      ? config.build.assetsSubDirectory
-      : config.dev.assetsSubDirectory;
+  const assetsSubDirectory = '';
   return path.posix.join(assetsSubDirectory, _path);
 };
 
@@ -23,13 +18,29 @@ function getAssetsPath(url) {
   return newUrl;
 }
 
+/**
+ * 用于生成css-loader配置
+ * @param {*} options
+ * @param {Object} options.envConfig 当前环境配置
+ * @param {Object} options.webpackConfig 当前webpack配置
+ * @returns {Object} css-loader配置
+ * webpackConfig.cssLoaderUrl, // 用于自定义css-loader配置项[url]
+ * webpackConfig.cssLoaderUrlDir, // 用于设置css-loader配置项[url]的生效目录
+ * webpackConfig.cssLoaderOption, // 用于自定义css-loader配置项（优先级最高）
+ * webpackConfig.sassOptions, // 用于设置sass-loader配置项
+ * webpackConfig.productionSourceMap, // 生产环境sourceMap是true
+ * webpackConfig.NODE_ENV // 生产环境下：将相关的样式内容提取出来合并到一个文件中
+ * @returns {Object} css-loader 配置
+ */
 exports.cssLoaders = function (options) {
   options = options || {};
+  const curEnvConfig = options.envConfig || {};
+  const curWebpackConfig = options.webpackConfig || {};
 
   const VueCssLoader = {
     loader: 'vue-style-loader',
     options: {
-      sourceMap: options.sourceMap
+      sourceMap: curEnvConfig.productionSourceMap
     }
   };
 
@@ -39,22 +50,25 @@ exports.cssLoaders = function (options) {
       // url: false, // enables/disables url()/image-set() functions handling
       url: {
         filter: (url, resourcePath) => {
-          if (options.cssLoaderUrlDir && resourcePath.includes(options.cssLoaderUrlDir)) {
+          if (
+            curWebpackConfig.cssLoaderUrlDir &&
+            resourcePath.includes(curWebpackConfig.cssLoaderUrlDir)
+          ) {
             // 指定处理某类路径下的中相关 css 文件中的 url
             return true;
           }
           if (url.startsWith('data:')) {
             // 不处理 css 中的 bas64 url
             return false;
-          } else if (options.cssLoaderUrl !== undefined) {
+          } else if (curWebpackConfig.cssLoaderUrl !== undefined) {
             // cssLoaderUrl 为false 则不处理 css 中的 url
-            return options.cssLoaderUrl;
+            return curWebpackConfig.cssLoaderUrl;
           }
           return true;
         }
       },
-      sourceMap: options.sourceMap,
-      ...(options.cssLoaderOption || {})
+      sourceMap: curEnvConfig.productionSourceMap,
+      ...(curWebpackConfig.cssLoaderOption || {})
     }
   };
 
@@ -62,7 +76,7 @@ exports.cssLoaders = function (options) {
     loader: 'postcss-loader',
     options: {
       ...postCssConfig,
-      ...(options.postCssLoaderOption || {})
+      ...(curWebpackConfig.postCssLoaderOption || {})
     }
   };
 
@@ -70,8 +84,7 @@ exports.cssLoaders = function (options) {
   function generateLoaders(loader, loaderOptions) {
     let loaders = [];
     // 生产环境使用MiniCssExtractPlugin提取css内容，用于提取css内容到一个独立的文件中
-    if (options.environment === 'prod') {
-      const curEnvConfig = options.envConfig || {};
+    if (curEnvConfig.NODE_ENV === 'production') {
       const cssExtract = curEnvConfig.cssExtract || curEnvConfig.cssExtract === undefined;
       // MiniCssExtractPlugin.loader 需要配合 MiniCssExtractPlugin 使用
       loaders = [
@@ -94,20 +107,20 @@ exports.cssLoaders = function (options) {
     if (loader) {
       loaders.push({
         loader: `${loader}-loader`,
-        options: { ...loaderOptions, sourceMap: options.sourceMap }
+        options: { ...loaderOptions, sourceMap: curEnvConfig.productionSourceMap }
       });
     }
 
     // 如果是sass、scss文件，则增加sass-resources-loader
     if (
       (loader === 'sass' || loader === 'scss') &&
-      config.webpack.sassResources &&
-      config.webpack.sassResources.length > 0
+      curWebpackConfig.sassResources &&
+      curWebpackConfig.sassResources.length > 0
     ) {
       loaders.push({
         loader: 'sass-resources-loader',
         options: {
-          resources: config.webpack.sassResources || []
+          resources: curWebpackConfig.sassResources || []
         }
       });
     }
@@ -115,7 +128,7 @@ exports.cssLoaders = function (options) {
     return loaders;
   }
 
-  const sassOptions = options.sassOptions || {};
+  const sassOptions = curWebpackConfig.sassOptions || {};
 
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {

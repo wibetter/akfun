@@ -58,9 +58,9 @@ class ConfigManager {
    * 按优先级查找：akfun.config.js -> akfun.config.json
    * @returns {Object|null}
    */
-  autoLoadConfig() {
-    const configFiles = ['akfun.config.js', 'akfun.config.json', '.akfunrc.js', '.akfunrc.json'];
-
+  autoLoadConfig(
+    configFiles = ['akfun.config.js', 'akfun.config.json', '.akfunrc.js', '.akfunrc.json']
+  ) {
     for (const configFile of configFiles) {
       const configPath = path.resolve(process.cwd(), configFile);
       if (fs.existsSync(configPath)) {
@@ -68,7 +68,8 @@ class ConfigManager {
       }
     }
 
-    console.log(chalk.gray('   未找到配置文件，使用默认配置'));
+    // 待优化：eslint 配置中如何使用外部项目的 webpack 配置
+    // console.log(chalk.gray('   未找到项目配置文件，使用默认配置'));
     return null;
   }
 
@@ -150,12 +151,12 @@ class ConfigManager {
   }
 
   /**
-   * 验证配置
+   * 验证当前项目的配置（仅验证 userConfig 中的配置）
    * @returns {Object} 验证后的配置
    */
   validateConfig() {
-    if (!this.mergedConfig) {
-      this.mergeConfig();
+    if (!this.userConfig) {
+      return this.userConfig;
     }
 
     try {
@@ -165,7 +166,7 @@ class ConfigManager {
       // 如果有配置验证器，使用它
       try {
         const { validateConfig } = require('../utils/configValidator');
-        return validateConfig(this.mergedConfig);
+        return validateConfig(this.userConfig);
       } catch (error) {
         // 如果配置验证器不存在或出错，只进行基础验证
         if (process.env.AKFUN_DEBUG) {
@@ -173,7 +174,7 @@ class ConfigManager {
         }
       }
 
-      return this.mergedConfig;
+      return this.userConfig;
     } catch (error) {
       console.error(chalk.red('\n❌ 配置验证失败:'));
       console.error(chalk.red(`   ${error.message}\n`));
@@ -186,7 +187,7 @@ class ConfigManager {
    * @private
    */
   _validateBasicConfig() {
-    const config = this.mergedConfig;
+    const config = this.userConfig;
 
     // 验证必需的配置项
     if (config.dev && typeof config.dev !== 'object') {

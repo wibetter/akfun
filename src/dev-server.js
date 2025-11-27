@@ -9,21 +9,15 @@ const portfinder = require('portfinder');
 const checkVersion = require('./check-versions');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const { resolve } = require('./utils/pathUtils');
-// 引入当前项目配置文件
-const projectConfig = require('./config/index');
-const defaultConfig = require('./config/default.config');
+const getProjectConfig = require('./config/index'); // 用于获取当前项目配置文件
 const getDevWebpackConfig = require('./webpack/webpack.dev.conf');
-const deepMergeConfig = require('./utils/deepMergeConfig');
 const { curConsoleTag } = require('./utils/akfunParams');
 
 // 构建脚本：一般用于构建开发环境的代码（包含热更新、接口代理等功能）
 module.exports = function (akfunConfig, _consoleTag) {
   const consoleTag = _consoleTag || curConsoleTag;
-  let config = projectConfig; // 默认使用执行命令目录下的配置数据
-  if (akfunConfig) {
-    // 优先使用参数中的config配置
-    config = deepMergeConfig(defaultConfig, akfunConfig);
-  }
+  // 获取项目配置文件
+  let config = getProjectConfig(akfunConfig);
   const curEnvConfig = config.dev;
   // 检查当前npm版本号是否匹配
   checkVersion();

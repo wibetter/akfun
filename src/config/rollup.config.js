@@ -7,7 +7,7 @@ const commonjs = require('@rollup/plugin-commonjs'); // 识别cmd模块
 const vue = require('rollup-plugin-vue');
 const json = require('@rollup/plugin-json'); // 识别json类型文件
 const image = require('@rollup/plugin-image'); // 图片处理器
-const { terser } = require('@rollup/plugin-terser'); // 压缩
+const terser = require('@rollup/plugin-terser'); // 压缩
 const alias = require('@rollup/plugin-alias'); // 简写配置
 // css相关处理器
 const postcss = require('rollup-plugin-postcss');
@@ -21,7 +21,7 @@ const postcssPresetEnv = require('postcss-preset-env');
 const cssnano = require('cssnano');
 // 处理svg文件
 const svgr = require('@svgr/rollup');
-const { externals } = require('rollup-plugin-node-externals');
+const { nodeExternals } = require('rollup-plugin-node-externals');
 const { resolveToCurrentRoot, resolveToCurrentDist } = require('../utils/pathUtils'); // 统一路径解析
 const babelConfig = require('./babel.config'); // Babel的配置文件
 const projectConfig = require('./index'); // 引入当前项目配置文件
@@ -68,7 +68,7 @@ module.exports = function (fileName, akfunConfig) {
        * excludeList（在akfun.config.js中配置）
        * 设置打包中应该排除的依赖
        */
-      externals({
+      nodeExternals({
         include: build2esm.excludeList || []
         // exclude: ['./**', '../**'], // 排除所有相对路径模块
         // deps: true, // 只标记 node_modules 中的依赖

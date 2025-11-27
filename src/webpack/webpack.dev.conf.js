@@ -3,27 +3,27 @@ const path = require('path');
 const { merge } = require('webpack-merge');
 const utils = require('./loaderUtils');
 const getBaseWebpackConfig = require('./webpack.base.conf'); // 获取webpack基本配置
-// 引入当前项目配置文件
-const projectConfig = require('../config/index');
+const getProjectConfig = require('../config/index'); // 用于获取当前项目配置文件
 const entrys2htmlWebpackPlugin = require('../utils/entrys2htmlWebpackPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = (akfunConfig) => {
-  let config = akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据
+  let config = akfunConfig || getProjectConfig(); // 优先使用外部传进来的项目配置
   const curEnvConfig = config.dev || {}; // 当前执行环境配置
   // 获取webpack基本配置
   const baseWebpackConfig = getBaseWebpackConfig(curEnvConfig, config, 'dev');
+  const curWebpackConfig = config.webpack || {};
 
   // 获取页面模板地址
   let curHtmlTemplate = path.resolve(__dirname, '../initData/template/index.html');
-  if (config.webpack.template) {
-    curHtmlTemplate = config.webpack.template; // akfun.config.js中的webpack配置
+  if (curWebpackConfig.template) {
+    curHtmlTemplate = curWebpackConfig.template; // akfun.config.js中的webpack配置
   }
 
   let curTarget = ['web', 'es5'];
-  if (config.webpack.target) {
-    curTarget = config.webpack.target; // akfun.config.js中的webpack配置
+  if (curWebpackConfig.target) {
+    curTarget = curWebpackConfig.target; // akfun.config.js中的webpack配置
   }
 
   const webpackDevConfig = merge(baseWebpackConfig, {
@@ -40,12 +40,7 @@ module.exports = (akfunConfig) => {
     module: {
       rules: utils.styleLoaders({
         envConfig: curEnvConfig, // 当前环境变量
-        sourceMap: curEnvConfig.cssSourceMap,
-        environment: 'prod', // 'dev': 不会将css单独提取出来
-        cssLoaderUrl: config.webpack.cssLoaderUrl,
-        cssLoaderUrlDir: config.webpack.cssLoaderUrlDir,
-        cssLoaderOption: config.webpack.cssLoaderOption, // 用于自定义css-loader配置项（优先级最高）
-        postCssLoaderOption: config.webpack.postCssLoaderOption // 用于自定义postcss-loader配置项（优先级最高）
+        webpackConfig: curWebpackConfig // 当前webpack配置
       })
     },
     // devtool: '#cheap-module-eval-source-map', // 本地开发环境中的取值

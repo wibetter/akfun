@@ -13,8 +13,7 @@ const vueLoaderConfig = require('./vue-loader.conf');
 const { resolve, resolveToCurrentRoot } = require('../utils/pathUtils');
 const getProjectDir = require('../utils/getProjectDir');
 const catchVuePages = require('../utils/catchVuePages'); // 用于获取当前项目中的vue单文件
-// 引入当前项目配置文件
-const projectConfig = require('../config/index');
+const getProjectConfig = require('../config/index'); // 用于获取当前项目配置文件
 const babelConfig = require('../config/babel.config'); // Babel的配置文件
 const { buildBanner } = require('../utils/akfunParams');
 const getJsEntries = require('../utils/jsEntries');
@@ -34,7 +33,7 @@ const BannerPack = new webpack.BannerPlugin({
  */
 module.exports = (_curEnvConfig, _akfunConfig, buildMode = 'build') => {
   const curEnvConfig = _curEnvConfig || {}; // 用于接收当前运行环境配置变量
-  let config = _akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据
+  let config = _akfunConfig || getProjectConfig(); // 优先使用外部传进来的项目配置
   // 获取当前项目配置文件中的webpack配置
   const curWebpackConfig = config.webpack;
   // 获取当前项目目录
@@ -99,7 +98,7 @@ module.exports = (_curEnvConfig, _akfunConfig, buildMode = 'build') => {
           use: [
             {
               loader: 'vue-loader',
-              options: vueLoaderConfig(curEnvConfig) // 配置vue-loader相关的loader插件
+              options: vueLoaderConfig(curEnvConfig, curWebpackConfig) // 配置vue-loader相关的loader插件
             }
           ]
         },
