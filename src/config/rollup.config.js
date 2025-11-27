@@ -67,6 +67,10 @@ module.exports = function (fileName, akfunConfig) {
        */
       externals({
         include: build2esm.excludeList || []
+        // exclude: ['./**', '../**'], // 排除所有相对路径模块
+        // deps: true, // 只标记 node_modules 中的依赖
+        // devDeps: false, // 不标记 devDependencies
+        // peerDeps: true, // 标记 peerDependencies
       }),
       nodeResolve({
         extensions: curConfig.webpack.resolve.extensions
@@ -82,7 +86,11 @@ module.exports = function (fileName, akfunConfig) {
       // jsx( {factory: 'React.createElement'} ),
       buildType === 'ts' ? undefined : jsx({ factory: 'React.createElement' }),
       vue(),
-      commonjs(),
+      commonjs({
+        transformMixedEsModules: true, // 转换混合的 ES 模块和 CommonJS 模块
+        strictRequires: true, // 严格模式处理 require，确保所有 require 都被正确处理
+        ignoreDynamicRequires: true // 忽略动态 require
+      }),
       postcss({
         extensions: ['.css', '.scss', '.sass', '.styl', '.stylus', '.less'],
         // Or with custom file name, it will generate file relative to bundle.js in v3

@@ -1,15 +1,19 @@
-// 统一路径解析：
-const { resolve } = require('../utils/pathUtils');
-const defaultAKFunConfig = require('./default.config');
-const getConfigObj = require('../utils/getConfigObj');
-const deepMergeConfig = require('../utils/deepMergeConfig');
-
-/** akfun脚手架赋予当前项目的默认配置
- * 备注：项目根目录的akfun.config.js的配置内容优先级高于defultAKFunConfig
+/**
+ * 配置入口文件
+ * 统一加载和管理 AKFun 配置
  */
 
-// 从项目根目录获取当前项目的配置文件
-const curProjectConfig = getConfigObj(resolve('akfun.config.js'));
+// 使用新的配置管理器
+const configManager = require('../manage/ConfigManager');
 
-// 备注：数组类型则直接覆盖
-module.exports = deepMergeConfig(defaultAKFunConfig, curProjectConfig);
+// 自动加载用户配置文件
+configManager.autoLoadConfig();
+
+// 合并配置
+const mergedConfig = configManager.mergeConfig();
+
+// 导出合并后的配置（向后兼容）
+module.exports = mergedConfig;
+
+// 同时导出配置管理器实例，供高级用户使用
+module.exports.configManager = configManager;
