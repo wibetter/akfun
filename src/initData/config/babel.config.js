@@ -1,10 +1,12 @@
-module.export = {
+module.exports = {
   presets: [
     [
       '@babel/preset-env',
       {
         loose: false,
         modules: false,
+        useBuiltIns: 'usage', // 按需引入 polyfill，替代 @babel/polyfill
+        corejs: 3, // 使用 core-js 3.x 版本
         targets: {
           browsers: ['> 1%', 'last 2 versions', 'not ie <= 8']
         }

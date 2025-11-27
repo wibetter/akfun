@@ -12,6 +12,9 @@ configManager.autoLoadConfig();
 // 合并配置
 const mergedConfig = configManager.mergeConfig();
 
+// 校验当前项目配置
+configManager.validateConfig(mergedConfig);
+
 // 导出合并后的配置（向后兼容）
 module.exports = mergedConfig;
 

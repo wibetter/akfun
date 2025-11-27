@@ -5,6 +5,8 @@ module.exports = {
       {
         loose: true,
         modules: false, // 是否启用将ES6模块语法转换为其他模块类型的功能，当前设置为false，以便webpack进行tree shaking。
+        useBuiltIns: 'usage', // 按需引入 polyfill，替代 @babel/polyfill
+        corejs: 3, // 使用 core-js 3.x 版本
         targets: {
           browsers: ['> 1%', 'last 2 versions', 'not ie <= 8']
         }

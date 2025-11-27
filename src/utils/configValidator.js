@@ -35,7 +35,7 @@ class ConfigValidator {
 
     // 输出警告
     if (this.warnings.length > 0) {
-      console.log(chalk.yellow('\n⚠️  配置警告:'));
+      console.log(chalk.yellow('\n⚠️  配置异常提示:'));
       this.warnings.forEach((warning) => {
         console.log(chalk.yellow(`   - ${warning}`));
       });
@@ -81,23 +81,18 @@ class ConfigValidator {
    * @private
    */
   _validateWebpack(webpack) {
-    if (!webpack) {
-      this.errors.push('webpack 配置缺失');
-      return;
-    }
-
     // 验证 entry
-    if (webpack.entry !== undefined) {
+    if (webpack && webpack.entry !== undefined) {
       this._validateEntry(webpack.entry);
     }
 
     // 验证 resolve
-    if (webpack.resolve) {
+    if (webpack && webpack.resolve) {
       this._validateResolve(webpack.resolve);
     }
 
     // 验证 externals
-    if (webpack.externals !== undefined) {
+    if (webpack && webpack.externals !== undefined) {
       const validTypes = ['object', 'string', 'function'];
       if (!validTypes.includes(typeof webpack.externals)) {
         this.errors.push('webpack.externals 类型不正确');
@@ -105,14 +100,14 @@ class ConfigValidator {
     }
 
     // 验证 sassResources
-    if (webpack.sassResources !== undefined) {
+    if (webpack && webpack.sassResources !== undefined) {
       if (!Array.isArray(webpack.sassResources)) {
         this.errors.push('webpack.sassResources 必须是数组');
       }
     }
 
     // 验证 babelPlugins
-    if (webpack.babelPlugins !== undefined) {
+    if (webpack && webpack.babelPlugins !== undefined) {
       const validTypes = ['function', 'object'];
       const type = Array.isArray(webpack.babelPlugins) ? 'object' : typeof webpack.babelPlugins;
       if (!validTypes.includes(type)) {
@@ -121,12 +116,12 @@ class ConfigValidator {
     }
 
     // 验证 moduleRules
-    if (webpack.moduleRules !== undefined && !Array.isArray(webpack.moduleRules)) {
+    if (webpack && webpack.moduleRules !== undefined && !Array.isArray(webpack.moduleRules)) {
       this.errors.push('webpack.moduleRules 必须是数组');
     }
 
     // 验证 plugins
-    if (webpack.plugins !== undefined && !Array.isArray(webpack.plugins)) {
+    if (webpack && webpack.plugins !== undefined && !Array.isArray(webpack.plugins)) {
       this.errors.push('webpack.plugins 必须是数组');
     }
   }

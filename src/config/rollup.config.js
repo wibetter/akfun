@@ -7,7 +7,7 @@ const commonjs = require('@rollup/plugin-commonjs'); // 识别cmd模块
 const vue = require('rollup-plugin-vue');
 const json = require('@rollup/plugin-json'); // 识别json类型文件
 const image = require('@rollup/plugin-image'); // 图片处理器
-const { terser } = require('rollup-plugin-terser'); // 压缩
+const { terser } = require('@rollup/plugin-terser'); // 压缩
 const alias = require('@rollup/plugin-alias'); // 简写配置
 // css相关处理器
 const postcss = require('rollup-plugin-postcss');
@@ -57,9 +57,12 @@ module.exports = function (fileName, akfunConfig) {
     input: rollupInput,
     plugins: [
       alias({
-        resolve: curConfig.webpack.resolve.extensions,
-        extensions: curConfig.webpack.resolve.extensions,
-        entries: curConfig.webpack.resolve.alias
+        entries: Object.entries(curConfig.webpack.resolve.alias || {}).map(
+          ([find, replacement]) => ({
+            find,
+            replacement
+          })
+        )
       }),
       /**
        * excludeList（在akfun.config.js中配置）
@@ -72,6 +75,12 @@ module.exports = function (fileName, akfunConfig) {
         // devDeps: false, // 不标记 devDependencies
         // peerDeps: true, // 标记 peerDependencies
       }),
+      /**
+       * nodeResolve 插件用于解析模块路径
+       * extensions: 默认识别的文件后缀列表
+       * 默认值（来自 webpack.resolve.extensions）: ['.js', '.jsx', '.ts', '.tsx', '.vue', '.json']
+       * 如果不配置此插件，Rollup 默认只识别 .js 和 .mjs 文件
+       */
       nodeResolve({
         extensions: curConfig.webpack.resolve.extensions
       }),

@@ -1,6 +1,6 @@
 const ora = require('ora');
 const rollup = require('rollup');
-const { terser } = require('rollup-plugin-terser'); // 压缩
+const { terser } = require('@rollup/plugin-terser'); // 压缩
 const projectConfig = require('./config/index'); // 引入当前项目配置文件
 const defaultConfig = require('./config/default.config');
 const rollupConfig = require('./config/rollup.config'); // rollup的配置文件
@@ -12,18 +12,20 @@ async function build2esmFunc(options, curConfig) {
   // create a bundle
   const bundle = await rollup.rollup({
     input: options.input,
-    external: options.externals,
+    external: options.external || options.externals, // 兼容新旧两种写法
     plugins: options.plugins
   });
 
   if (isArray(options.output)) {
-    options.output.map((outputItem) => {
-      bundle.write(outputItem);
-    });
+    // 等待所有输出完成
+    await Promise.all(options.output.map((outputItem) => bundle.write(outputItem)));
   } else if (isObject(options.output)) {
     // or write the bundle to disk
     await bundle.write(options.output);
   }
+
+  // 关闭 bundle 以释放资源
+  await bundle.close();
 }
 
 // 构建脚本：一般用于构建生产环境的代码
@@ -60,8 +62,8 @@ module.exports = function (fileName, akfunConfig, _consoleTag) {
     externals = externals.concat(Object.keys(build2esmExternal));
   }
 
-  // 添加到 rollup 配置中
-  curRollupConfig.externals = externals;
+  // 添加到 rollup 配置中（rollup 使用 external 而不是 externals）
+  curRollupConfig.external = externals;
 
   if (build2esm && build2esm.output) {
     curRollupConfig.output = build2esm.output;

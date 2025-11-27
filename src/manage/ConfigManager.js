@@ -189,20 +189,20 @@ class ConfigManager {
     const config = this.mergedConfig;
 
     // 验证必需的配置项
-    if (!config.dev || typeof config.dev !== 'object') {
-      throw new Error('dev 配置缺失或格式错误');
+    if (config.dev && typeof config.dev !== 'object') {
+      throw new Error('dev 配置格式错误');
     }
 
-    if (!config.build || typeof config.build !== 'object') {
-      throw new Error('build 配置缺失或格式错误');
+    if (config.build && typeof config.build !== 'object') {
+      throw new Error('build 配置格式错误');
     }
 
-    if (!config.webpack || typeof config.webpack !== 'object') {
-      throw new Error('webpack 配置缺失或格式错误');
+    if (config.webpack && typeof config.webpack !== 'object') {
+      throw new Error('webpack 配置格式错误');
     }
 
     // 验证端口号
-    if (config.dev.port) {
+    if (config.dev && config.dev.port) {
       const port = parseInt(config.dev.port, 10);
       if (isNaN(port) || port < 1 || port > 65535) {
         throw new Error('dev.port 必须是 1-65535 之间的数字');
@@ -210,7 +210,7 @@ class ConfigManager {
     }
 
     // 验证路径
-    if (config.build.assetsRoot) {
+    if (config.build && config.build.assetsRoot) {
       const assetsRoot = config.build.assetsRoot;
       if (typeof assetsRoot !== 'string') {
         throw new Error('build.assetsRoot 必须是字符串类型的路径');
