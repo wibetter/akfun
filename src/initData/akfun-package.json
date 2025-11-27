@@ -107,7 +107,7 @@
     "http-proxy-middleware": "^2.0.2",
     "inquirer": "^8.2.0",
     "mini-css-extract-plugin": "^2.5.3",
-    "sass": "^1.49.7",
+    "sass": "^1.94.2",
     "open": "^8.4.0",
     "ora": "^4.0.4",
     "params-replace-loader": "^1.1.6",

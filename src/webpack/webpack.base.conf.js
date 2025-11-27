@@ -32,7 +32,7 @@ const BannerPack = new webpack.BannerPlugin({
  * _curEnvConfig: 执行环境中的配置，用于记录 dev、build、build2lib 等对应的配置内容；
  * _akfunConfig：完整的配置对象
  */
-module.exports = (_curEnvConfig, _akfunConfig) => {
+module.exports = (_curEnvConfig, _akfunConfig, buildMode = 'build') => {
   const curEnvConfig = _curEnvConfig || {}; // 用于接收当前运行环境配置变量
   let config = _akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据
   // 获取当前项目配置文件中的webpack配置
@@ -49,7 +49,20 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
     curWebpackConfig.babelPlugins(babelConfig.plugins);
   }
 
+  // 获取缓存目录路径
+  const cacheDirectory = resolveToCurrentRoot('./node_modules/.cache/webpack');
+
   const webpackConfig = {
+    // Webpack 5 持久化缓存配置
+    cache: {
+      type: 'filesystem',
+      cacheDirectory: cacheDirectory,
+      buildDependencies: {
+        config: [__filename] // 当配置文件改变时，使缓存失效
+      },
+      name: `${curEnvConfig.NODE_ENV || 'development'}--${buildMode}-cache`,
+      compression: 'gzip' // 使用 gzip 压缩缓存文件以节省磁盘空间
+    },
     stats: {
       // cachedModules: false,
       // providedExports: true,
@@ -96,7 +109,13 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
           use: [
             {
               loader: 'babel-loader',
-              options: babelConfig
+              options: {
+                ...babelConfig,
+                // Babel 缓存配置
+                cacheDirectory: true, // 启用缓存
+                cacheCompression: false, // 不压缩缓存文件以提升性能
+                cacheIdentifier: `${curEnvConfig.NODE_ENV || 'development'}--${buildMode}-babel`
+              }
             },
             {
               loader: 'ts-loader',
@@ -105,7 +124,11 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
                 compilerOptions: {
                   declaration: curWebpackConfig.createDeclaration || false,
                   outDir: curEnvConfig.assetsRoot || './dist'
-                }
+                },
+                // TypeScript 缓存配置
+                transpileOnly: true, // 只进行转译，不进行类型检查（提升性能）
+                experimentalWatchApi: true // 使用实验性的 watch API（提升性能）
+                // 注意：ts-loader 的缓存由 Webpack 5 的持久化缓存自动处理
               }
             }
           ],
@@ -117,7 +140,13 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
           use: [
             {
               loader: 'babel-loader',
-              options: babelConfig
+              options: {
+                ...babelConfig,
+                // Babel 缓存配置
+                cacheDirectory: true, // 启用缓存
+                cacheCompression: false, // 不压缩缓存文件以提升性能
+                cacheIdentifier: `${curEnvConfig.NODE_ENV || 'development'}--${buildMode}-babel`
+              }
             }
           ],
           // exclude: /node_modules/,
@@ -273,6 +302,9 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
   }
   // 是否开启ESLint
   if (config.settings.enableESLint) {
+    // ESLint 缓存目录
+    const eslintCacheLocation = resolveToCurrentRoot('./node_modules/.cache/eslint');
+
     // ts类型
     webpackConfig.plugins.push(
       new ESLintPlugin({
@@ -280,7 +312,9 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
         extensions: ['ts', 'tsx'],
         // include: curProjectDir, // [resolve('src')],
         // exclude: 'node_modules',
-        cache: true,
+        cache: true, // 启用缓存
+        cacheLocation: path.join(eslintCacheLocation, '.eslintcache-ts'), // 指定缓存位置
+        cacheStrategy: 'metadata', // 使用元数据缓存策略（更快）
         fix: config.settings.enableESLintFix || false,
         formatter: require('eslint-friendly-formatter'),
         overrideConfigFile: path.resolve(__dirname, '../config/.eslintrc.ts.js')
@@ -292,7 +326,9 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
         extensions: ['js', 'jsx'],
         // include: curProjectDir, // [resolve('src')],
         // exclude: 'node_modules',
-        cache: true,
+        cache: true, // 启用缓存
+        cacheLocation: path.join(eslintCacheLocation, '.eslintcache-js'), // 指定缓存位置
+        cacheStrategy: 'metadata', // 使用元数据缓存策略（更快）
         fix: config.settings.enableESLintFix || false,
         formatter: require('eslint-friendly-formatter'),
         overrideConfigFile: path.resolve(__dirname, '../config/.eslintrc.js')
@@ -304,7 +340,9 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
         extensions: ['vue'],
         // include: curProjectDir, // [resolve('src')],
         // exclude: 'node_modules',
-        cache: true,
+        cache: true, // 启用缓存
+        cacheLocation: path.join(eslintCacheLocation, '.eslintcache-vue'), // 指定缓存位置
+        cacheStrategy: 'metadata', // 使用元数据缓存策略（更快）
         fix: config.settings.enableESLintFix || false,
         formatter: require('eslint-friendly-formatter'),
         overrideConfigFile: path.resolve(__dirname, '../config/.eslintrc.vue.js')
@@ -313,6 +351,9 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
   }
   // 是否开启StyleLint: 用于验证scss文件里面的style规范
   if (config.settings.enableStyleLint) {
+    // StyleLint 缓存目录
+    const stylelintCacheLocation = resolveToCurrentRoot('./node_modules/.cache/stylelint');
+
     const vuePagesObj = catchVuePages();
     // 判断项目中是否有vue文件
     if (vuePagesObj && Object.keys(vuePagesObj).length > 0) {
@@ -321,8 +362,8 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
         new StyleLintPlugin({
           files: ['src/**/*.vue'],
           // quiet: true,
-          cache: true,
-          cacheLocation: resolveToCurrentRoot('./node_modules/stylelint/.vue-cache'),
+          cache: true, // 启用缓存
+          cacheLocation: path.join(stylelintCacheLocation, '.stylelintcache-vue'), // 统一缓存位置
           fix: config.settings.enableStyleLintFix,
           configFile: path.resolve(__dirname, '../config/.stylelintrc-vue')
         })
@@ -333,8 +374,8 @@ module.exports = (_curEnvConfig, _akfunConfig) => {
       new StyleLintPlugin({
         files: 'src/**/*.s?(a|c)ss',
         // quiet: true,
-        cache: true,
-        cacheLocation: resolveToCurrentRoot('./node_modules/stylelint/.cache'),
+        cache: true, // 启用缓存
+        cacheLocation: path.join(stylelintCacheLocation, '.stylelintcache-scss'), // 统一缓存位置
         fix: config.settings.enableStyleLintFix,
         configFile: path.resolve(__dirname, '../config/.stylelintrc')
       })

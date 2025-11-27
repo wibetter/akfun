@@ -8,7 +8,8 @@ AKFun 是一个基于 Webpack 与 Rollup 的多场景前端打包工具，支持
 - **灵活可配**: 支持入口、别名、代理、SASS 注入、ESLint/StyleLint、Babel/Loader/Plugin 扩展等配置；
 - **样式与规范**: 集成 Autoprefixer、Sass、PostCSS、ESLint、StyleLint；
 - **参数替换**: 支持基于 [params-replace-loader](https://www.npmjs.com/package/params-replace-loader) 的环境变量批量替换；
-- **模板支持**: 提供完整的 Vue/React 项目模板。
+- **模板支持**: 提供完整的 Vue/React 项目模板；
+- **内置缓存机制**: 内置缓存机制，提升二次构建速度。
 
 ## 快速开始
 

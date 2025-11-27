@@ -19,7 +19,7 @@ module.exports = (akfunConfig) => {
   let config = akfunConfig || projectConfig; // 默认使用执行命令目录下的配置数据
   const curEnvConfig = config.build2lib || {}; // 当前执行环境配置
   // 获取webpack基本配置
-  const baseWebpackConfig = getBaseWebpackConfig(curEnvConfig, config);
+  const baseWebpackConfig = getBaseWebpackConfig(curEnvConfig, config, 'build2lib');
 
   let curTarget = ['web', 'es5'];
   if (config.webpack.target) {
