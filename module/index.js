@@ -142,33 +142,41 @@ let argv = yargs
   )
   .command(
     'build2lib',
-    '构建lib库',
+    '构建 Library 库（UMD 模块）',
     (yargs) => {
       yargs
         .reset()
         .usage(titleTip('Usage') + ': $0 build2lib')
         .alias('h', 'help');
     },
-    (argv) => {
+    () => {
       mainAction.build('lib'); // 构建library
     },
   )
   .command(
     'build2esm',
-    '构建esm模块',
+    '构建 ESM 模块',
     (yargs) => {
       yargs
         .reset()
         .usage(titleTip('Usage') + ': $0 build2esm')
-        .option('fileName', {
-          alias: 'n',
-          describe: '输出的文件名',
-          default: '',
-        })
         .alias('h', 'help');
     },
-    (argv) => {
-      mainAction.build2esm(argv.fileName); // 构建esm
+    () => {
+      mainAction.build2esm();
+    },
+  )
+  .command(
+    'build2node',
+    '构建 Node 模块',
+    (yargs) => {
+      yargs
+        .reset()
+        .usage(titleTip('Usage') + ': $0 build2node')
+        .alias('h', 'help');
+    },
+    () => {
+      mainAction.build2node();
     },
   )
   .command(

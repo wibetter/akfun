@@ -2,6 +2,7 @@
 const buildAction = require('../src/build.js'); // 构建脚本：生产环境
 const devAction = require('../src/dev-server.js'); // 构建脚本：开发环境
 const build2esm = require('../src/build2esm.js'); // 构建esm输出模块
+const build2node = require('../src/build2node.js'); // 构建esm输出模块
 const inspect = require('./inspect.js');
 const gitClone = require('../src/utils/gitClone.js');
 const createFile = require('../src/utils/createFile');
@@ -21,6 +22,7 @@ module.exports = {
   dev: devAction,
   build: buildAction,
   build2esm,
+  build2node,
   inspect,
   
   // 工具方法

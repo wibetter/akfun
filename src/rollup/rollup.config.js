@@ -23,24 +23,40 @@ const cssnano = require('cssnano');
 const svgr = require('@svgr/rollup');
 const { nodeExternals } = require('rollup-plugin-node-externals');
 const { resolveToCurrentRoot, resolveToCurrentDist } = require('../utils/pathUtils'); // 统一路径解析
-const babelConfig = require('./babel.config'); // Babel的配置文件
-const projectConfig = require('./index'); // 引入当前项目配置文件
+const babelConfig = require('../config/babel.config'); // Babel的配置文件
 const { buildBanner } = require('../utils/akfunParams');
 
-module.exports = function (fileName, akfunConfig) {
-  const curConfig = akfunConfig || projectConfig;
-  const build2esm = curConfig.build2esm || {};
+/**
+ * 用于生成 rollup 配置
+ * @param {*} curConfig 当前项目配置
+ * @param {*} curEnvConfig 当前环境配置
+ *
+ * 支持的配置项目（curEnvConfig）
+ * - type: 项目构建类型（ts、js）
+ * - format: 构建格式（esm、cjs）
+ * - input: 构建入口文件
+ * - fileName: 构建输出文件名
+ * - outDir: 构建输出目录
+ * - excludeList: 构建排除列表
+ * - declaration: 是否生成声明文件
+ * - declarationDir: 声明文件输出目录
+ * - svgDir: svg文件输出目录
+ * - plugins: 自定义rollup插件
+ * - babelPlugins: 自定义babel插件
+ */
+module.exports = function (curConfig, curEnvConfig) {
   const curWebpackConfig = curConfig.webpack || {};
-  const buildType = build2esm.type || 'ts';
+  const buildType = curEnvConfig.type || 'ts';
+  const buildFormat = curEnvConfig.format || 'esm';
   // 获取用户配置的构建入口文件
   let rollupInput = resolveToCurrentRoot('src/main.js');
-  if (build2esm.input) {
-    rollupInput = build2esm.input;
+  if (curEnvConfig.input) {
+    rollupInput = curEnvConfig.input;
   }
-  let curFileName = fileName || 'index'; // 默认以"index.esm.js"输出
+  let curFileName = 'index'; // 默认以"index.esm.js"输出
   // 获取用户配置的构建输出文件名
-  if (build2esm.fileName) {
-    curFileName = build2esm.fileName;
+  if (curEnvConfig.fileName) {
+    curFileName = curEnvConfig.fileName;
   }
   // 增加babel配置
   babelConfig.babelHelpers = 'runtime';
@@ -53,7 +69,6 @@ module.exports = function (fileName, akfunConfig) {
 
   return {
     banner: buildBanner,
-    // format: build2esm.format || 'esm', // 生成包的格式
     input: rollupInput,
     plugins: [
       alias({
@@ -69,7 +84,7 @@ module.exports = function (fileName, akfunConfig) {
        * 设置打包中应该排除的依赖
        */
       nodeExternals({
-        include: build2esm.excludeList || []
+        include: curEnvConfig.excludeList || []
         // exclude: ['./**', '../**'], // 排除所有相对路径模块
         // deps: true, // 只标记 node_modules 中的依赖
         // devDeps: false, // 不标记 devDependencies
@@ -87,12 +102,11 @@ module.exports = function (fileName, akfunConfig) {
       buildType === 'ts'
         ? typescript({
             // 是否生成声明文件（默认 false）
-            declaration: build2esm.declaration !== undefined ? build2esm.declaration : false,
-            declarationDir: build2esm.declarationDir || './dist/types'
+            declaration: curEnvConfig.declaration !== undefined ? curEnvConfig.declaration : false,
+            declarationDir: curEnvConfig.declarationDir || './dist/types'
           })
         : undefined,
       babel(babelConfig), // 备注，需要先babel()再commjs()
-      // jsx( {factory: 'React.createElement'} ),
       buildType === 'ts' ? undefined : jsx({ factory: 'React.createElement' }),
       vue(),
       commonjs({
@@ -103,7 +117,7 @@ module.exports = function (fileName, akfunConfig) {
       postcss({
         extensions: ['.css', '.scss', '.sass', '.styl', '.stylus', '.less'],
         // Or with custom file name, it will generate file relative to bundle.js in v3
-        extract: resolveToCurrentDist(`${curFileName}.css`, build2esm.outDir),
+        extract: resolveToCurrentDist(`${curFileName}.css`, curEnvConfig.outDir),
         plugins: [
           simplevars(),
           nested(),
@@ -121,18 +135,18 @@ module.exports = function (fileName, akfunConfig) {
         dimensions: false
       }),
       image({
-        exclude: [build2esm.svgDir || 'src/icons/**']
+        exclude: [curEnvConfig.svgDir || 'src/icons/**']
       }),
       json()
     ],
     output: [
       {
-        file: resolveToCurrentDist(`${curFileName}.esm.js`, build2esm.outDir),
-        format: 'esm'
+        file: resolveToCurrentDist(`${curFileName}.${buildFormat}.js`, curEnvConfig.outDir),
+        format: buildFormat
       },
       {
-        file: resolveToCurrentDist(`${curFileName}.esm.min.js`, build2esm.outDir),
-        format: 'esm',
+        file: resolveToCurrentDist(`${curFileName}.${buildFormat}.min.js`, curEnvConfig.outDir),
+        format: buildFormat,
         plugins: [terser()]
       }
     ]

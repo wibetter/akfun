@@ -22,7 +22,7 @@ AKFun 是一个基于 Webpack 与 Rollup 的多场景前端打包工具，支持
 
 - **零配置**: 内置默认配置，开箱即用
 - **多技术栈**: 支持 Vue、React、React+TS 的调试与构建
-- **多构建场景**: 本地开发（含热更新/代理）、生产构建、库构建（UMD/ESM）
+- **多构建场景**: 本地开发（含热更新/代理）、生产构建、库构建（UMD/ESM）、Node 模块构建
 - **灵活可配**: 支持入口、别名、代理、SASS 注入、ESLint/StyleLint、Babel/Loader/Plugin 扩展等配置
 - **样式与规范**: 集成 Autoprefixer、Sass、PostCSS、ESLint、StyleLint
 - **参数替换**: 支持基于 [params-replace-loader](https://www.npmjs.com/package/params-replace-loader) 的环境变量批量替换
@@ -114,6 +114,7 @@ npm i akfun --save-dev
 | `akfun build` | 生产环境构建（压缩优化、可选分析） |
 | `akfun build2lib` | 构建 UMD 格式的库产物 |
 | `akfun build2esm` | 构建 ESM 格式的库产物 |
+| `akfun build2node` | 构建 Node 模块 |
 
 ---
 
@@ -375,6 +376,20 @@ module.exports = {
     input: resolve('src/main.js'),             // 入口文件
     fileName: 'index',                          // 输出的文件名称
     svgDir: 'src/icons/**'                     // 用于设置当前项目的 icon 所在目录，避免被 @rollup/plugin-image 编译成 base64 格式
+  }
+}
+```
+
+#### 构建 Node 模块
+
+构建 Node 模块，通常用于构建 node cli 工具：
+
+```javascript
+module.exports = {
+  build2node: {
+    input: resolve('src/main.js'),             // 入口文件
+    fileName: 'index',                          // 输出的文件名称
+    outDir: 'src' // 输出目录
   }
 }
 ```

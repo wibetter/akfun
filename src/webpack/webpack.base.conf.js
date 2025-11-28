@@ -250,7 +250,7 @@ module.exports = (_curEnvConfig, _akfunConfig, buildMode = 'build') => {
     allowList = allowList.concat(curEnvConfig.allowList);
   }
   // 用户手动添加要剔除的依赖
-  let externals = curWebpackConfig.external || {};
+  let externals = curWebpackConfig.externals || curWebpackConfig.external || {};
   if (curEnvConfig.externals && isObject(curEnvConfig.externals)) {
     externals = Object.assign(externals, curEnvConfig.externals);
   }
