@@ -1,4 +1,5 @@
 module.exports = {
+  extensions: ['.js', '.jsx', '.ts', '.tsx'],
   presets: [
     [
       '@babel/preset-env',
@@ -26,6 +27,8 @@ module.exports = {
     '@babel/plugin-syntax-dynamic-import',
     '@babel/plugin-syntax-import-meta',
     ['@babel/plugin-proposal-class-properties', { loose: true }],
-    '@babel/plugin-proposal-json-strings'
+    '@babel/plugin-proposal-json-strings',
+    '@babel/plugin-transform-optional-chaining', // 支持可选链操作符 ?.
+    '@babel/plugin-transform-nullish-coalescing-operator' // 支持空值合并操作符 ??
   ]
 };

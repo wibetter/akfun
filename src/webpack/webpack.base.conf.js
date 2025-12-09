@@ -39,13 +39,21 @@ module.exports = (_curEnvConfig, _akfunConfig, buildMode = 'build') => {
   // 获取当前项目目录
   const curProjectDir = getProjectDir(curWebpackConfig.projectDir);
 
+  // 避免引用 babelConfig 的原始数据，导致数据污染
+  const curBabelConfig = {
+    ...babelConfig
+  };
+
+  // 剔除掉 babel-loader 不需要的配置
+  delete curBabelConfig.extensions;
+
   // 判断是否有自定义 Babel plugins
   if (isArray(curWebpackConfig.babelPlugins)) {
     // 添加自定义babel插件
-    babelConfig.plugins.push(...curWebpackConfig.babelPlugins);
+    curBabelConfig.plugins.push(...curWebpackConfig.babelPlugins);
   } else if (isFunction(curWebpackConfig.babelPlugins)) {
     // 处理自定义babel插件
-    curWebpackConfig.babelPlugins(babelConfig.plugins);
+    curWebpackConfig.babelPlugins(curBabelConfig.plugins);
   }
 
   // 获取缓存目录路径
@@ -109,7 +117,7 @@ module.exports = (_curEnvConfig, _akfunConfig, buildMode = 'build') => {
             {
               loader: 'babel-loader',
               options: {
-                ...babelConfig,
+                ...curBabelConfig,
                 // Babel 缓存配置
                 cacheDirectory: true, // 启用缓存
                 cacheCompression: false, // 不压缩缓存文件以提升性能
@@ -140,7 +148,7 @@ module.exports = (_curEnvConfig, _akfunConfig, buildMode = 'build') => {
             {
               loader: 'babel-loader',
               options: {
-                ...babelConfig,
+                ...curBabelConfig,
                 // Babel 缓存配置
                 cacheDirectory: true, // 启用缓存
                 cacheCompression: false, // 不压缩缓存文件以提升性能

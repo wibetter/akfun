@@ -142,7 +142,8 @@ module.exports = function (curConfig, curEnvConfig) {
     output: [
       {
         file: resolveToCurrentDist(`${curFileName}.${buildFormat}.js`, curEnvConfig.outDir),
-        format: buildFormat
+        format: buildFormat,
+        notCompressed: true // 不压缩代码
       },
       {
         file: resolveToCurrentDist(`${curFileName}.${buildFormat}.min.js`, curEnvConfig.outDir),

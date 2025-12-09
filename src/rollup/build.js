@@ -66,6 +66,11 @@ module.exports = function (config, envConfig, _rollupConfig, _consoleTag) {
   }
   if (compress && isArray(curRollupConfig.output)) {
     curRollupConfig.output.map((outputItem) => {
+      if (outputItem.notCompressed) {
+        // 不压缩代码
+        delete outputItem.notCompressed; // 剔除掉 rollup 不能识别的配置
+        return;
+      }
       if (!outputItem.plugins) {
         outputItem.plugins = [terser()];
       } else {
@@ -74,7 +79,7 @@ module.exports = function (config, envConfig, _rollupConfig, _consoleTag) {
     });
   } else if (compress && isObject(curRollupConfig.output)) {
     if (!curRollupConfig.plugins) {
-      curRollupConfig.output.plugins = [terser()];
+      curRollupConfig.plugins = [terser()];
     } else {
       curRollupConfig.plugins.push(terser());
     }
