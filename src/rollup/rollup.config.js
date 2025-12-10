@@ -106,7 +106,10 @@ module.exports = function (curConfig, curEnvConfig) {
             declarationDir: curEnvConfig.declarationDir || './dist/types'
           })
         : undefined,
-      babel(babelConfig), // 备注，需要先babel()再commjs()
+      babel({
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        ...babelConfig
+      }), // 备注，需要先babel()再commjs()
       buildType === 'ts' ? undefined : jsx({ factory: 'React.createElement' }),
       vue(),
       commonjs({

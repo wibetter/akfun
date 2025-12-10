@@ -44,9 +44,6 @@ module.exports = (_curEnvConfig, _akfunConfig, buildMode = 'build') => {
     ...babelConfig
   };
 
-  // 剔除掉 babel-loader 不需要的配置
-  delete curBabelConfig.extensions;
-
   // 判断是否有自定义 Babel plugins
   if (isArray(curWebpackConfig.babelPlugins)) {
     // 添加自定义babel插件

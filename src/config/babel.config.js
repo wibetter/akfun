@@ -1,5 +1,4 @@
 module.exports = {
-  extensions: ['.js', '.jsx', '.ts', '.tsx'],
   presets: [
     [
       '@babel/preset-env',
