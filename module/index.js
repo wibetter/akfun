@@ -33,7 +33,6 @@ let argv = yargs
     '创建一个项目',
     (yargs) => {
       yargs
-        .reset()
         .usage(titleTip('Usage') + ': $0 init [options]')
         .option('type', {
           alias: 't',
@@ -106,7 +105,6 @@ let argv = yargs
     '初始化AKFun配置文件',
     (yargs) => {
       yargs
-        .reset()
         .usage(titleTip('Usage') + ': $0 config init')
         .alias('h', 'help');
     },
@@ -119,7 +117,6 @@ let argv = yargs
     '开启本地调试模式',
     (yargs) => {
       yargs
-        .reset()
         .usage(titleTip('Usage') + ': $0 dev')
         .alias('h', 'help');
     },
@@ -132,7 +129,6 @@ let argv = yargs
     '构建生产环境代码',
     (yargs) => {
       yargs
-        .reset()
         .usage(titleTip('Usage') + ': $0 build')
         .alias('h', 'help');
     },
@@ -145,7 +141,6 @@ let argv = yargs
     '构建 Library 库（UMD 模块）',
     (yargs) => {
       yargs
-        .reset()
         .usage(titleTip('Usage') + ': $0 build2lib')
         .alias('h', 'help');
     },
@@ -158,7 +153,6 @@ let argv = yargs
     '构建 ESM 模块',
     (yargs) => {
       yargs
-        .reset()
         .usage(titleTip('Usage') + ': $0 build2esm')
         .alias('h', 'help');
     },
@@ -171,7 +165,6 @@ let argv = yargs
     '构建 Node 模块',
     (yargs) => {
       yargs
-        .reset()
         .usage(titleTip('Usage') + ': $0 build2node')
         .alias('h', 'help');
     },
@@ -184,7 +177,6 @@ let argv = yargs
     '输出当前配置文件',
     (yargs) => {
       yargs
-        .reset()
         .usage(titleTip('Usage') + ': $0 inspect')
         .option('type', {
           alias: 't',
