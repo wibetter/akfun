@@ -14,7 +14,7 @@ const getDevWebpackConfig = require('./webpack/webpack.dev.conf');
 const { curConsoleTag } = require('./utils/akfunParams');
 
 // 构建脚本：一般用于构建开发环境的代码（包含热更新、接口代理等功能）
-module.exports = function (akfunConfig, _consoleTag) {
+module.exports = function (akfunConfig, _consoleTag, callbackFunc) {
   const consoleTag = _consoleTag || curConsoleTag;
   // 获取项目配置文件
   let config = getProjectConfig(akfunConfig);
@@ -114,22 +114,34 @@ module.exports = function (akfunConfig, _consoleTag) {
 
     let entryConfig = webpackConfig.entry || {}; // 获取构建入口配置
     const entryFiles = (entryConfig && Object.keys(entryConfig)) || [];
+    let firstAssetUrl = `${projPath}index.js`; // 首个构建入口配置
+
     if (entryFiles.length > 0) {
       // 获取第一个入口文件
       const filename = entryFiles[0];
       const consoleInfo = curEnvConfig.consoleInfo || '当前运行脚本';
+      firstAssetUrl = `${projPath}${filename}.js`;
 
       if (curEnvConfig.cssExtract || curEnvConfig.cssExtract === undefined) {
         console.info(
           `${consoleInfo}:\n ${projPath}${filename}.js\n当前可用样式[可能不存在]:\n${projPath}${filename}.css`
         );
       } else {
-        console.info(`${consoleInfo}:\n ${projPath}${filename}.js`);
+        console.info(`${consoleInfo}:\n ${firstAssetUrl}`);
       }
       // 是否自动打开浏览器并跳转到第一个入口页面
       if (!curEnvConfig.closeHtmlWebpackPlugin && autoOpenBrowser) {
         open(`${projPath}${filename}.html`, { wait: true });
       }
+    }
+
+    // 如果用户传入了回调函数，则执行回调函数
+    if (callbackFunc) {
+      callbackFunc({
+        config: curEnvConfig,
+        url: firstAssetUrl,
+        port: port
+      });
     }
   };
 
