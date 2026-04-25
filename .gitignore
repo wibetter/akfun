@@ -42,6 +42,7 @@ jscoverage_lib/
 temp/
 test/
 dist/
+docs/.vitepress/cache/
 package-lock.json
 
 # log files

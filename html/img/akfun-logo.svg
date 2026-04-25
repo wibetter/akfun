@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="bolt" x1="64" y1="8" x2="64" y2="96" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <clipPath id="roundClip">
+      <rect width="128" height="128" rx="28"/>
+    </clipPath>
+  </defs>
+
+  <!-- 圆角矩形背景 -->
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+
+  <!-- AK-47 枪械轮廓（斜放 + 淡化，距边沿约 6px） -->
+  <!-- 原始图形范围: x[-2,116] w=118, y[-6,34] h=40 -->
+  <!-- 旋转 -30° 后包围盒约 w=122, h=80 -->
+  <!-- 目标区域 116x116 (6px margin)，缩放 116/122 ≈ 0.95 再微调 -->
+  <g clip-path="url(#roundClip)">
+    <g transform="translate(64,54) rotate(-30) scale(1.2) translate(-58,-10)" opacity="0.2">
+      <!-- 枪托 -->
+      <path d="M0,6 L2,4 L18,4 L20,6 L20,10 L18,12 L6,12 L0,18 L-2,18 L-2,16 L4,10 L0,10 Z"
+            fill="white"/>
+      <!-- 机匣 -->
+      <path d="M18,4 L80,0 L82,2 L82,8 L80,10 L18,12 Z"
+            fill="white"/>
+      <!-- 导气管 -->
+      <path d="M52,0 L96,-4 L98,-2 L98,0 L52,2 Z"
+            fill="white"/>
+      <!-- 枪管 -->
+      <path d="M80,2 L108,0 L110,-1 L110,3 L108,4 L80,6 Z"
+            fill="white"/>
+      <!-- 准星 -->
+      <path d="M106,-1 L107,-6 L109,-6 L110,-1"
+            fill="white"/>
+      <!-- 消焰器 -->
+      <path d="M108,0 L116,-1 L116,3 L108,4 Z"
+            fill="white"/>
+      <!-- 弧形弹匣 -->
+      <path d="M42,10 L48,10 L52,28 L50,34 L44,34 L40,28 Z"
+            fill="white"/>
+      <!-- 扳机护圈 -->
+      <path d="M52,10 L60,10 L60,14 L56,18 L52,18 L50,14 Z"
+            fill="none" stroke="white" stroke-width="1.2"/>
+      <!-- 握把 -->
+      <path d="M56,10 L62,10 L64,14 L62,26 L58,28 L54,26 L54,14 Z"
+            fill="white"/>
+    </g>
+  </g>
+
+  <!-- 黄色闪电 ⚡ 水平+垂直居中 -->
+  <!-- 闪电原始范围: x[-8,24] center=8, y[-3,78] center=37.5 -->
+  <!-- 文字在 y=108，闪电可用垂直空间 0~96，中心 y=48 -->
+  <!-- translate(64-8, 48-37.5) = translate(56, 10.5) -->
+  <g transform="translate(56,10.5)">
+    <polygon points="14,-3 -8,38 6,38 -4,78 24,28 12,28"
+             fill="url(#bolt)" stroke="#f59e0b" stroke-width="0.5" stroke-linejoin="round" opacity="0.92"/>
+  </g>
+
+  <!-- 底部 AKFun 文字 -->
+  <text x="64" y="108" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="800" fill="white" opacity="0.95" letter-spacing="1.5">AKFun</text>
+</svg>

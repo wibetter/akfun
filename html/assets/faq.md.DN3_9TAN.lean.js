@@ -1,0 +1,1 @@
+import{_ as i,o as a,c as n,ag as l}from"./chunks/framework.SKJoNiAS.js";const o=JSON.parse('{"title":"常见问题","description":"","frontmatter":{},"headers":[],"relativePath":"faq.md","filePath":"faq.md"}'),t={name:"faq.md"};function p(h,s,e,k,r,d){return a(),n("div",null,[...s[0]||(s[0]=[l("",62)])])}const c=i(t,[["render",p]]);export{o as __pageData,c as default};
