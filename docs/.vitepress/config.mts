@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 // github部署地址：https://wibetter.github.io/akfun/html
 // netlify 部署地址：/
-const base = '/akfun/html'
+const base = '/'
 
 export default defineConfig({
   base,
