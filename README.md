@@ -2,6 +2,11 @@
 
 AKFun 是一个基于 Webpack 与 Rollup 的多场景前端打包工具，支持 Vue、React、React+TS 技术栈，致力于提供"零配置、开箱即用"的前端工程能力，让开发者专注于业务开发。
 
+## 在线使用手册
+[https://wibetter.github.io/akfun/](https://wibetter.github.io/akfun/)
+
+国内访问地址: [https://akfun-docs.netlify.app/](https://akfun-docs.netlify.app/)。
+
 ## 目录
 
 - [主要特性](#主要特性)
