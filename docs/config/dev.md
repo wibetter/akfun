@@ -26,22 +26,24 @@ module.exports = {
 
 | 配置项 | 类型 | 默认值 | 说明 |
 |--------|------|--------|------|
-| `NODE_ENV` | `string` | `'development'` | 环境模式，`development` 模式下不会启用代码压缩 |
-| `port` | `number` | `80` | 开发服务器监听的端口号 |
+| `NODE_ENV` | `string` | `'development'` | 环境模式。`development` 模式下不会启用代码压缩，并开启更详细的错误提示和调试信息 |
+| `port` | `number` | `80` | 开发服务器监听的端口号。如果端口被占用，可以更换为其他端口（如 `8080`、`3000`） |
 | `autoOpenBrowser` | `boolean` | `true` | 启动后是否自动在浏览器中打开项目页面 |
-| `hostname` | `string` | `'localhost'` | 自动打开页面时使用的主机名 |
-| `cssSourceMap` | `boolean` | `false` | 是否生成 CSS Source Map |
+| `hostname` | `string` | `'localhost'` | 开发服务器绑定的主机名。设为 `'0.0.0.0'` 可让同一局域网内的其他设备（如手机）通过 IP 地址访问 |
+| `cssSourceMap` | `boolean` | `false` | 是否生成 CSS Source Map。开启后可在浏览器开发者工具中定位到原始 `.scss` / `.less` 源码位置，方便调试样式 |
 
 ### 静态资源路径
 
 | 配置项 | 类型 | 默认值 | 说明 |
 |--------|------|--------|------|
-| `assetsPublicPath` | `string` | `'/'` | 静态资源的引用根路径 |
-| `assetsSubDirectory` | `string` | `''` | 静态资源的二级路径 |
+| `assetsPublicPath` | `string` | `'/'` | 静态资源的引用根路径。所有资源的 URL 都会以此值为前缀，大多数情况下保持 `'/'` 即可 |
+| `assetsSubDirectory` | `string` | `''` | 静态资源的二级路径，会拼接在 `assetsPublicPath` 之后，用于将静态资源放入子目录（如 `'static'`） |
 
 ## 接口代理
 
 通过 `proxyTable` 配置接口代理，解决本地开发时的跨域问题。底层使用 [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware)。
+
+代理功能在你有独立的后端 API 服务器，并且希望在同域名下发送 API 请求时非常有用。
 
 ### 基本用法
 
@@ -51,7 +53,7 @@ module.exports = {
     proxyTable: {
       '/api': {
         target: 'http://api.example.com',  // 目标服务器地址
-        changeOrigin: true                  // 修改请求头中的 Origin
+        changeOrigin: true                  // 修改请求头中的 Origin，避免后端校验来源时拒绝请求
       }
     }
   }
@@ -110,7 +112,7 @@ module.exports = {
 
 ### 多个代理
 
-可以同时配置多个代理规则：
+可以同时配置多个代理规则，将不同路径前缀的请求转发到不同的后端服务：
 
 ```javascript
 module.exports = {
@@ -127,6 +129,24 @@ module.exports = {
       '/upload': {
         target: 'http://upload.example.com',
         changeOrigin: true
+      }
+    }
+  }
+}
+```
+
+### 代理到 HTTPS 后端
+
+如果后端使用了自签名证书的 HTTPS，需要设置 `secure: false` 以接受无效证书：
+
+```javascript
+module.exports = {
+  dev: {
+    proxyTable: {
+      '/api': {
+        target: 'https://api.example.com',
+        changeOrigin: true,
+        secure: false  // 接受自签名证书
       }
     }
   }
